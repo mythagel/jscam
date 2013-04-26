@@ -4,6 +4,8 @@
 
 int main()
 {
+	Machine machine{Machine::Type::Mill, "LinuxCNC"};
+
 	using namespace v8;
 
 	HandleScope handle_scope;
