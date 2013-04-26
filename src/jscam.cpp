@@ -1,6 +1,6 @@
 #include <cstdio>
 #include <v8.h>
-//#include "Machine.h"
+#include "Machine.h"
 
 int main()
 {
