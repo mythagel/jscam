@@ -8,4 +8,7 @@ ENDIF()
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/deps/cxxcam/include)
 
 ADD_EXECUTABLE(${PROJECT_NAME} jscam.cpp)
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} v8 cxxcam)
+
+# Addition of boost_system is required for an unknown reason
+# on my ubuntu system.
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} v8 cxxcam boost_system)
