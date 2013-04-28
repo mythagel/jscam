@@ -28,7 +28,6 @@ js api
 	"spindle": "0-100,300,500-1000,3000"
 }
 
-void setup(object, string);
 setup(machine, "LinuxCNC")
 
 exact_path()
@@ -60,6 +59,8 @@ end_block(restore)
 optional_pause(comment)
 
 rapid(xyzabc)
+rapid( {"x": "5"}, {"y": "50"} )
+
 linear(xyzabc)
 
 arc(...)
