@@ -32,12 +32,41 @@ v8::Handle<v8::String> read_file(const char* name)
 namespace js
 {
 
+v8::Local<v8::Value> v8_argument_iterator_adapter::iterator::operator*()
+{
+	return a.args[index];
+}
+v8_argument_iterator_adapter::iterator& v8_argument_iterator_adapter::iterator::operator++()
+{
+	++index;
+	return *this;
+}
+bool v8_argument_iterator_adapter::iterator::operator!=(const iterator& o) const
+{
+	return index != o.index;
+}
+
+v8_argument_iterator_adapter::iterator begin(const v8_argument_iterator_adapter& a)
+{
+	return {a, 0};
+}
+v8_argument_iterator_adapter::iterator end(const v8_argument_iterator_adapter& a)
+{
+	return {a, a.args.Length()};
+}
+
+v8_argument_iterator_adapter arguments(const v8::Arguments& args)
+{
+	return { args };
+}
+
 v8::Handle<v8::Value> print(const v8::Arguments& args)
 {
 	using namespace v8;
+	HandleScope handle_scope;
 
 	bool first = true;
-	for (int i = 0; i != args.Length(); ++i)
+	for(auto arg : arguments(args))
 	{
 		HandleScope handle_scope;
 		if (first)
@@ -45,12 +74,12 @@ v8::Handle<v8::Value> print(const v8::Arguments& args)
 		else
 			std::cout << ' ';
 
-		String::Utf8Value str(args[i]);
+		String::Utf8Value str(arg);
 		std::cout << *str;
 	}
 	std::cout << std::endl;
 
-	return Undefined();
+	return handle_scope.Close(Undefined());
 }
 v8::Handle<v8::Value> read(const v8::Arguments& args)
 {
@@ -72,11 +101,12 @@ v8::Handle<v8::Value> read(const v8::Arguments& args)
 v8::Handle<v8::Value> load(const v8::Arguments& args)
 {
 	using namespace v8;
+	HandleScope handle_scope;
 
-	for (int i = 0; i != args.Length(); ++i)
+	for(auto arg : arguments(args))
 	{
 		HandleScope handle_scope;
-		String::Utf8Value file(args[i]);
+		String::Utf8Value file(arg);
 		if (*file == nullptr)
 			return ThrowException(String::New("Expected: string"));
 
@@ -87,7 +117,7 @@ v8::Handle<v8::Value> load(const v8::Arguments& args)
 		if (!exec(source, String::New(*file)))
 			return ThrowException(String::New("Unable to execute file"));
 	}
-	return Undefined();
+	return handle_scope.Close(Undefined());
 }
 
 bool exec(v8::Handle<v8::String> source, v8::Handle<v8::Value> name)
