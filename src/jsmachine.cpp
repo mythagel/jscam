@@ -25,10 +25,7 @@ Handle<Value> init(const Arguments& args)
 
 	auto config = args[0]->ToObject();
 	auto variant = js::to_string(args[1]);
-
 	auto type = js::to_string(config->Get(String::NewSymbol("type")));
-	auto tools = config->Get(String::NewSymbol("tools"));
-	auto spindle = config->Get(String::NewSymbol("spindle"));
 
 	if(type == "mill")
 		machine = std::make_shared<Machine>(Machine::Type::Mill, variant);
@@ -37,24 +34,29 @@ Handle<Value> init(const Arguments& args)
 	else
 		return ThrowException(String::New("variant - mill / lathe"));
 
-//	"tools":
-//	[
-//		{
-//			"name": "tool_name",
-//			"type": "mill/lathe",
-//
-//			"center_cutting": "true/false",
-//			"flutes": "int",
-//			"flute_length": "",
-//			"cutting_length": "",
-//			"mill_diameter": "",
-//			"shank_diameter": "",
-//			"core_diameter": "",
-//			"length": ""
-//		},
-//		{...}
-//	],
-//	"spindle": "0-100,300,500-1000,3000"
+	{
+		//	"tools":
+		//	[
+		//		{
+		//			"name": "tool_name",
+		//			"type": "mill/lathe",
+		//
+		//			"center_cutting": "true/false",
+		//			"flutes": "int",
+		//			"flute_length": "",
+		//			"cutting_length": "",
+		//			"mill_diameter": "",
+		//			"shank_diameter": "",
+		//			"core_diameter": "",
+		//			"length": ""
+		//		},
+		//		{...}
+		//	],
+		//	"spindle": "0-100,300,500-1000,3000"
+
+		auto tools = config->Get(String::NewSymbol("tools"));
+		auto spindle = config->Get(String::NewSymbol("spindle"));
+	}
 	// TODO this function has to create the global machine pointer reference.
 	return {};
 }
