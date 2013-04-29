@@ -43,6 +43,18 @@ std::string to_string(v8::Local<v8::Value> s)
 	return {*ascii, *ascii + ascii.length()};
 }
 
+double to_double(v8::Local<v8::Value> d)
+{
+	auto dbl = d->ToNumber();
+	return dbl->Value();
+}
+
+int32_t toint32(v8::Local<v8::Value> i)
+{
+	auto j = i->ToInt32();
+	return j->Value();
+}
+
 Local<Value> v8_argument_iterator_adapter::iterator::operator*()
 {
 	return a.args[index];

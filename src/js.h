@@ -9,11 +9,14 @@
 #define JS_H_
 #include <v8.h>
 #include <string>
+#include <cstdint>
 
 namespace js
 {
 
 std::string to_string(v8::Local<v8::Value> s);
+double to_double(v8::Local<v8::Value> d);
+int32_t toint32(v8::Local<v8::Value> i);
 
 struct v8_argument_iterator_adapter
 {

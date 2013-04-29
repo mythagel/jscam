@@ -37,8 +37,6 @@ Handle<Value> init(const Arguments& args)
 	else
 		return ThrowException(String::New("variant - mill / lathe"));
 
-
-
 //	"tools":
 //	[
 //		{
@@ -90,15 +88,15 @@ Handle<Value> path_blend(const Arguments& args)
 	}
 	else if(args.Length() == 1)
 	{
-		auto p = args[0]->ToNumber();
-		machine->AccuracyPathBlending(p->Value());
+		auto p = js::to_double(args[0]);
+		machine->AccuracyPathBlending(p);
 		return {};
 	}
 	else if(args.Length() == 2)
 	{
-		auto p = args[0]->ToNumber();
-		auto q = args[1]->ToNumber();
-		machine->AccuracyPathBlending(p->Value(), q->Value());
+		auto p = js::to_double(args[0]);
+		auto q = js::to_double(args[1]);
+		machine->AccuracyPathBlending(p, q);
 		return {};
 	}
 
@@ -148,8 +146,8 @@ Handle<Value> feed_rate(const Arguments& args)
 
 	if(args.Length() == 1)
 	{
-		auto f = args[0]->ToNumber();
-		machine->SetFeedRate(f->Value());
+		auto f = js::to_double(args[0]);
+		machine->SetFeedRate(f);
 		return {};
 	}
 
@@ -180,8 +178,8 @@ Handle<Value> load_tool(const Arguments& args)
 
 	if(args.Length() == 1)
 	{
-		auto id = args[0]->ToInt32();
-		machine->SetTool(id->Value());
+		auto id = js::toint32(args[0]);
+		machine->SetTool(id);
 		return {};
 	}
 
@@ -195,8 +193,8 @@ Handle<Value> tool_change(const Arguments& args)
 
 	if(args.Length() == 1)
 	{
-		auto id = args[0]->ToInt32();
-		machine->ToolChange(id->Value());
+		auto id = js::toint32(args[0]);
+		machine->ToolChange(id);
 		return {};
 	}
 
