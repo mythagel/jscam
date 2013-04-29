@@ -10,6 +10,8 @@
 #include <fstream>
 #include <iterator>
 
+using namespace v8;
+
 /*
  * Much of this code is based on v8 examples.
  */
@@ -17,14 +19,14 @@
 namespace
 {
 
-v8::Handle<v8::String> read_file(const char* name)
+Handle<String> read_file(const char* name)
 {
 	std::ifstream ifs(name);
 	if(!ifs)
 		return {};
 
 	auto str = std::string(std::istreambuf_iterator<char>(ifs.rdbuf()), std::istreambuf_iterator<char>());
-	return v8::String::New(str.c_str(), str.size());
+	return String::New(str.c_str(), str.size());
 }
 
 }
@@ -32,7 +34,7 @@ v8::Handle<v8::String> read_file(const char* name)
 namespace js
 {
 
-v8::Local<v8::Value> v8_argument_iterator_adapter::iterator::operator*()
+Local<Value> v8_argument_iterator_adapter::iterator::operator*()
 {
 	return a.args[index];
 }
@@ -55,14 +57,13 @@ v8_argument_iterator_adapter::iterator end(const v8_argument_iterator_adapter& a
 	return {a, a.args.Length()};
 }
 
-v8_argument_iterator_adapter arguments(const v8::Arguments& args)
+v8_argument_iterator_adapter arguments(const Arguments& args)
 {
 	return { args };
 }
 
-v8::Handle<v8::Value> print(const v8::Arguments& args)
+Handle<Value> print(const Arguments& args)
 {
-	using namespace v8;
 	HandleScope handle_scope;
 
 	bool first = true;
@@ -81,10 +82,8 @@ v8::Handle<v8::Value> print(const v8::Arguments& args)
 
 	return handle_scope.Close(Undefined());
 }
-v8::Handle<v8::Value> read(const v8::Arguments& args)
+Handle<Value> read(const Arguments& args)
 {
-	using namespace v8;
-
 	if (args.Length() != 1)
 		return ThrowException(String::New("Expected: filename"));
 
@@ -98,9 +97,8 @@ v8::Handle<v8::Value> read(const v8::Arguments& args)
 
 	return source;
 }
-v8::Handle<v8::Value> load(const v8::Arguments& args)
+Handle<Value> load(const Arguments& args)
 {
-	using namespace v8;
 	HandleScope handle_scope;
 
 	for(auto arg : arguments(args))
@@ -120,10 +118,8 @@ v8::Handle<v8::Value> load(const v8::Arguments& args)
 	return handle_scope.Close(Undefined());
 }
 
-bool exec(v8::Handle<v8::String> source, v8::Handle<v8::Value> name)
+bool exec(Handle<String> source, Handle<Value> name)
 {
-	using namespace v8;
-
 	HandleScope handle_scope;
 	TryCatch try_catch;
 
@@ -148,10 +144,8 @@ bool exec(v8::Handle<v8::String> source, v8::Handle<v8::Value> name)
 	return true;
 }
 
-void bind(v8::Handle<v8::ObjectTemplate> global)
+void bind(Handle<ObjectTemplate> global)
 {
-	using namespace v8;
-
 	global->Set(String::New("print"), FunctionTemplate::New(print));
 	global->Set(String::New("read"), FunctionTemplate::New(read));
 	global->Set(String::New("load"), FunctionTemplate::New(load));

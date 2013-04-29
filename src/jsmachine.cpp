@@ -6,107 +6,174 @@
  */
 
 #include "jsmachine.h"
+#include <memory>
+#include "Machine.h"
+
+using namespace v8;
 
 namespace jscam
 {
 
-v8::Handle<v8::Value> setup(const v8::Arguments& args)
+std::shared_ptr<Machine> machine;
+
+Handle<Value> init(const Arguments& args)
 {
+	machine = std::make_shared<Machine>(Machine::Type::Mill, "LinuxCNC");
 	// TODO this function has to create the global machine pointer reference.
 	return {};
 }
 
-v8::Handle<v8::Value> exact_path(const v8::Arguments& args)
+Handle<Value> exact_path(const Arguments& args)
 {
+	if(!machine)
+		return ThrowException(String::New("Machine uninitialised."));
+
 	return {};
 }
-v8::Handle<v8::Value> exact_stop(const v8::Arguments& args)
+Handle<Value> exact_stop(const Arguments& args)
 {
+	if(!machine)
+		return ThrowException(String::New("Machine uninitialised."));
+
 	return {};
 }
-v8::Handle<v8::Value> path_blend(const v8::Arguments& args)
+Handle<Value> path_blend(const Arguments& args)
 {
+	if(!machine)
+		return ThrowException(String::New("Machine uninitialised."));
+
 	return {};
 }
 
-v8::Handle<v8::Value> motion(const v8::Arguments& args)
+Handle<Value> motion(const Arguments& args)
 {
+	if(!machine)
+		return ThrowException(String::New("Machine uninitialised."));
+
 	return {};
 }
-v8::Handle<v8::Value> arc_motion(const v8::Arguments& args)
+Handle<Value> arc_motion(const Arguments& args)
 {
+	if(!machine)
+		return ThrowException(String::New("Machine uninitialised."));
+
 	return {};
 }
-v8::Handle<v8::Value> units(const v8::Arguments& args)
+Handle<Value> units(const Arguments& args)
 {
+	if(!machine)
+		return ThrowException(String::New("Machine uninitialised."));
+
 	return {};
 }
-v8::Handle<v8::Value> plane(const v8::Arguments& args)
+Handle<Value> plane(const Arguments& args)
 {
+	if(!machine)
+		return ThrowException(String::New("Machine uninitialised."));
+
 	return {};
 }
-v8::Handle<v8::Value> feed_rate_mode(const v8::Arguments& args)
+Handle<Value> feed_rate_mode(const Arguments& args)
 {
+	if(!machine)
+		return ThrowException(String::New("Machine uninitialised."));
+
 	return {};
 }
-v8::Handle<v8::Value> feed_rate(const v8::Arguments& args)
+Handle<Value> feed_rate(const Arguments& args)
 {
+	if(!machine)
+		return ThrowException(String::New("Machine uninitialised."));
+
 	return {};
 }
 
-v8::Handle<v8::Value> spindle_on(const v8::Arguments& args)
+Handle<Value> spindle_on(const Arguments& args)
 {
+	if(!machine)
+		return ThrowException(String::New("Machine uninitialised."));
+
 	return {};
 }
-v8::Handle<v8::Value> spindle_off(const v8::Arguments& args)
+Handle<Value> spindle_off(const Arguments& args)
 {
+	if(!machine)
+		return ThrowException(String::New("Machine uninitialised."));
+
 	return {};
 }
 
-v8::Handle<v8::Value> load_tool(const v8::Arguments& args)
+Handle<Value> load_tool(const Arguments& args)
 {
+	if(!machine)
+		return ThrowException(String::New("Machine uninitialised."));
+
 	return {};
 }
-v8::Handle<v8::Value> tool_change(const v8::Arguments& args)
+Handle<Value> tool_change(const Arguments& args)
 {
+	if(!machine)
+		return ThrowException(String::New("Machine uninitialised."));
+
 	return {};
 }
 
-v8::Handle<v8::Value> begin_block(const v8::Arguments& args)
+Handle<Value> begin_block(const Arguments& args)
 {
+	if(!machine)
+		return ThrowException(String::New("Machine uninitialised."));
+
 	return {};
 }
-v8::Handle<v8::Value> end_block(const v8::Arguments& args)
+Handle<Value> end_block(const Arguments& args)
 {
+	if(!machine)
+		return ThrowException(String::New("Machine uninitialised."));
+
 	return {};
 }
 
-v8::Handle<v8::Value> optional_pause(const v8::Arguments& args)
+Handle<Value> optional_pause(const Arguments& args)
 {
+	if(!machine)
+		return ThrowException(String::New("Machine uninitialised."));
+
 	return {};
 }
-v8::Handle<v8::Value> rapid(const v8::Arguments& args)
+Handle<Value> rapid(const Arguments& args)
 {
+	if(!machine)
+		return ThrowException(String::New("Machine uninitialised."));
+
 	return {};
 }
-v8::Handle<v8::Value> linear(const v8::Arguments& args)
+Handle<Value> linear(const Arguments& args)
 {
+	if(!machine)
+		return ThrowException(String::New("Machine uninitialised."));
+
 	return {};
 }
-v8::Handle<v8::Value> arc(const v8::Arguments& args)
+Handle<Value> arc(const Arguments& args)
 {
+	if(!machine)
+		return ThrowException(String::New("Machine uninitialised."));
+
 	return {};
 }
-v8::Handle<v8::Value> plunge(const v8::Arguments& args)
+Handle<Value> plunge(const Arguments& args)
 {
+	if(!machine)
+		return ThrowException(String::New("Machine uninitialised."));
+
 	return {};
 }
 
-void bind(v8::Handle<v8::ObjectTemplate> global)
+void bind(Handle<ObjectTemplate> global)
 {
 	using namespace v8;
 
-	global->Set(String::New("setup"), FunctionTemplate::New(setup));
+	global->Set(String::New("init"), FunctionTemplate::New(init));
 	global->Set(String::New("exact_path"), FunctionTemplate::New(exact_path));
 	global->Set(String::New("exact_stop"), FunctionTemplate::New(exact_stop));
 	global->Set(String::New("path_blend"), FunctionTemplate::New(path_blend));
