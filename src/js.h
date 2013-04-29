@@ -8,9 +8,12 @@
 #ifndef JS_H_
 #define JS_H_
 #include <v8.h>
+#include <string>
 
 namespace js
 {
+
+std::string to_string(v8::Local<v8::Value> s);
 
 struct v8_argument_iterator_adapter
 {

@@ -1,4 +1,7 @@
-init();
+init(
+{
+	"type": "mill"
+}, "LinuxCNC");
 
 begin_block("setup");
 	feed_rate(100);

@@ -8,6 +8,7 @@
 #include "jsmachine.h"
 #include <memory>
 #include "Machine.h"
+#include "js.h"
 
 using namespace v8;
 
@@ -18,7 +19,44 @@ std::shared_ptr<Machine> machine;
 
 Handle<Value> init(const Arguments& args)
 {
-	machine = std::make_shared<Machine>(Machine::Type::Mill, "LinuxCNC");
+	HandleScope handle_scope;
+	if(args.Length() != 2)
+		return ThrowException(String::New("expected init(json config, string variant)"));
+
+	auto config = args[0]->ToObject();
+	auto variant = js::to_string(args[1]);
+
+	auto type = js::to_string(config->Get(String::NewSymbol("type")));
+	auto tools = config->Get(String::NewSymbol("tools"));
+	auto spindle = config->Get(String::NewSymbol("spindle"));
+
+	if(type == "mill")
+		machine = std::make_shared<Machine>(Machine::Type::Mill, variant);
+	else if(type == "lathe")
+		machine = std::make_shared<Machine>(Machine::Type::Lathe, variant);
+	else
+		return ThrowException(String::New("variant - mill / lathe"));
+
+
+
+//	"tools":
+//	[
+//		{
+//			"name": "tool_name",
+//			"type": "mill/lathe",
+//
+//			"center_cutting": "true/false",
+//			"flutes": "int",
+//			"flute_length": "",
+//			"cutting_length": "",
+//			"mill_diameter": "",
+//			"shank_diameter": "",
+//			"core_diameter": "",
+//			"length": ""
+//		},
+//		{...}
+//	],
+//	"spindle": "0-100,300,500-1000,3000"
 	// TODO this function has to create the global machine pointer reference.
 	return {};
 }
@@ -173,9 +211,8 @@ Handle<Value> begin_block(const Arguments& args)
 
 	if(args.Length() == 1)
 	{
-		auto nm = args[0]->ToString();
-		String::AsciiValue name(nm);
-		machine->NewBlock({*name, static_cast<std::string::size_type>(name.length())});
+		auto name = js::to_string(args[0]);
+		machine->NewBlock(name);
 		return {};
 	}
 
@@ -213,9 +250,8 @@ Handle<Value> optional_pause(const Arguments& args)
 	}
 	else if(args.Length() == 1)
 	{
-		auto cmt = args[0]->ToString();
-		String::AsciiValue comment(cmt);
-		machine->OptionalPause({*comment, static_cast<std::string::size_type>(comment.length())});
+		auto comment = js::to_string(args[0]);
+		machine->OptionalPause(comment);
 		return {};
 	}
 

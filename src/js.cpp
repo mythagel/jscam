@@ -34,6 +34,15 @@ Handle<String> read_file(const char* name)
 namespace js
 {
 
+std::string to_string(v8::Local<v8::Value> s)
+{
+	if(!s->IsString())
+		return {};
+	auto str = s->ToString();
+	String::AsciiValue ascii(str);
+	return {*ascii, *ascii + ascii.length()};
+}
+
 Local<Value> v8_argument_iterator_adapter::iterator::operator*()
 {
 	return a.args[index];
