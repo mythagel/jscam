@@ -23,26 +23,48 @@ Handle<Value> init(const Arguments& args)
 	return {};
 }
 
-Handle<Value> exact_path(const Arguments& args)
+Handle<Value> exact_path(const Arguments&)
 {
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
+	machine->AccuracyExactPath();
 	return {};
 }
-Handle<Value> exact_stop(const Arguments& args)
+Handle<Value> exact_stop(const Arguments&)
 {
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
+	machine->AccuracyExactStop();
 	return {};
 }
 Handle<Value> path_blend(const Arguments& args)
 {
+	HandleScope handle_scope;
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
-	return {};
+	if(args.Length() == 0)
+	{
+		machine->AccuracyPathBlending();
+		return {};
+	}
+	else if(args.Length() == 1)
+	{
+		auto p = args[0]->ToNumber();
+		machine->AccuracyPathBlending(p->Value());
+		return {};
+	}
+	else if(args.Length() == 2)
+	{
+		auto p = args[0]->ToNumber();
+		auto q = args[1]->ToNumber();
+		machine->AccuracyPathBlending(p->Value(), q->Value());
+		return {};
+	}
+
+	return ThrowException(String::New("expected path_blend(void / double p / double p, double q)"));
 }
 
 Handle<Value> motion(const Arguments& args)
@@ -82,10 +104,18 @@ Handle<Value> feed_rate_mode(const Arguments& args)
 }
 Handle<Value> feed_rate(const Arguments& args)
 {
+	HandleScope handle_scope;
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
-	return {};
+	if(args.Length() == 1)
+	{
+		auto f = args[0]->ToNumber();
+		machine->SetFeedRate(f->Value());
+		return {};
+	}
+
+	return ThrowException(String::New("expected feed_rate(double feedrate)"));
 }
 
 Handle<Value> spindle_on(const Arguments& args)
@@ -100,45 +130,96 @@ Handle<Value> spindle_off(const Arguments& args)
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
+	machine->StopSpindle();
 	return {};
 }
 
 Handle<Value> load_tool(const Arguments& args)
 {
+	HandleScope handle_scope;
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
-	return {};
+	if(args.Length() == 1)
+	{
+		auto id = args[0]->ToInt32();
+		machine->SetTool(id->Value());
+		return {};
+	}
+
+	return ThrowException(String::New("expected load_tool(int id)"));
 }
 Handle<Value> tool_change(const Arguments& args)
 {
+	HandleScope handle_scope;
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
-	return {};
+	if(args.Length() == 1)
+	{
+		auto id = args[0]->ToInt32();
+		machine->ToolChange(id->Value());
+		return {};
+	}
+
+	return ThrowException(String::New("expected tool_change(int id)"));
 }
 
 Handle<Value> begin_block(const Arguments& args)
 {
+	HandleScope handle_scope;
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
-	return {};
+	if(args.Length() == 1)
+	{
+		auto nm = args[0]->ToString();
+		String::AsciiValue name(nm);
+		machine->NewBlock({*name, static_cast<std::string::size_type>(name.length())});
+		return {};
+	}
+
+	return ThrowException(String::New("expected begin_block(string name)"));
 }
 Handle<Value> end_block(const Arguments& args)
 {
+	HandleScope handle_scope;
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
-	return {};
+	if(args.Length() == 0)
+	{
+		machine->EndBlock();
+		return {};
+	}
+	else if(args.Length() == 1)
+	{
+		// TODO
+	}
+
+	return ThrowException(String::New("expected end_block(void / restore)"));
 }
 
 Handle<Value> optional_pause(const Arguments& args)
 {
+	HandleScope handle_scope;
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
-	return {};
+	if(args.Length() == 0)
+	{
+		machine->OptionalPause();
+		return {};
+	}
+	else if(args.Length() == 1)
+	{
+		auto cmt = args[0]->ToString();
+		String::AsciiValue comment(cmt);
+		machine->OptionalPause({*comment, static_cast<std::string::size_type>(comment.length())});
+		return {};
+	}
+
+	return ThrowException(String::New("expected optional_pause(string comment)"));
 }
 Handle<Value> rapid(const Arguments& args)
 {
