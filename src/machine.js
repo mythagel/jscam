@@ -1,10 +1,12 @@
-machine.Type
+var machine = {};
+
+machine.Type =
 {
 	Mill  : "mill",
 	Lathe : "lathe"
 }
 
-machine.BlockRestore
+machine.BlockRestore =
 {
 	Preserve : "preserve",
 	RestoreAll : "restore",
@@ -19,13 +21,13 @@ machine.BlockRestore
 	RestorePosition : "position"
 }
 
-machine.Units
+machine.Units =
 {
 	Metric   : "metric",
 	Imperial : "imperial"
 }
 
-machine.Plane
+machine.Plane =
 {
     XY : "XY",
     ZX : "ZX",
@@ -35,27 +37,27 @@ machine.Plane
     VW : "VW"
 }
 
-machine.Motion
+machine.Motion =
 {
 	Absolute    : "absoloute",
 	Incremental : "incremental"
 }
 
-machine.FeedRateMode
+machine.FeedRateMode =
 {
 	InverseTime        : "inverse",
 	UnitsPerMinute     : "upm",
 	UnitsPerRevolution : "upr"
 }
 
-machine.Rotation
+machine.Rotation =
 {
 	Stop             : "stop",
 	Clockwise        : "clockwise",
 	CounterClockwise : "counterclockwise"
 }
 
-machine.Direction
+machine.Direction =
 {
 	Clockwise        : "clockwise",
 	CounterClockwise : "counterclockwise"
