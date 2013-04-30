@@ -27,6 +27,6 @@ begin_block("Setup");
 	load_tool(1);
 	tool_change(1);
 	optional_pause("Post Setup");
-end_block();
+end_block("tool", "feedrate");
 
 

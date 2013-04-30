@@ -303,9 +303,43 @@ Handle<Value> end_block(const Arguments& args)
 		machine->EndBlock();
 		return {};
 	}
-	else if(args.Length() == 1)
+	else
 	{
-		// TODO
+		int restore(0);
+		for(auto arg : js::arguments(args))
+		{
+			auto res = js::to_string(arg);
+			if(res == "preserve")
+			{
+				machine->EndBlock(Machine::block_PreserveState);
+				return {};
+			}
+			else if(res == "restore")
+			{
+				machine->EndBlock(Machine::block_RestoreState);
+				return {};
+			}
+			else if(res == "units")
+				restore |= Machine::block_RestoreUnits;
+			else if(res == "plane")
+				restore |= Machine::block_RestorePlane;
+			else if(res == "motion")
+				restore |= Machine::block_RestoreMotion;
+			else if(res == "arc_motion")
+				restore |= Machine::block_RestoreArcMotion;
+			else if(res == "feedrate_mode")
+				restore |= Machine::block_RestoreFeedRateMode;
+			else if(res == "feedrate")
+				restore |= Machine::block_RestoreFeedRate;
+			else if(res == "spindle")
+				restore |= Machine::block_RestoreSpindle;
+			else if(res == "tool")
+				restore |= Machine::block_RestoreTool;
+			else if(res == "position")
+				restore |= Machine::block_RestorePosition;
+		}
+		machine->EndBlock(restore);
+		return {};
 	}
 
 	return ThrowException(String::New("expected end_block(void / restore)"));
