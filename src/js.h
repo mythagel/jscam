@@ -10,9 +10,12 @@
 #include <v8.h>
 #include <string>
 #include <cstdint>
+#include <iosfwd>
 
 namespace js
 {
+
+v8::Handle<v8::String> read_stream(std::istream& is);
 
 std::string to_string(v8::Local<v8::Value> s);
 double to_double(v8::Local<v8::Value> d);

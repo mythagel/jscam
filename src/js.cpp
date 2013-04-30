@@ -16,23 +16,17 @@ using namespace v8;
  * Much of this code is based on v8 examples.
  */
 
-namespace
-{
-
-Handle<String> read_file(const char* name)
-{
-	std::ifstream ifs(name);
-	if(!ifs)
-		return {};
-
-	auto str = std::string(std::istreambuf_iterator<char>(ifs.rdbuf()), std::istreambuf_iterator<char>());
-	return String::New(str.c_str(), str.size());
-}
-
-}
-
 namespace js
 {
+
+Handle<String> read_stream(std::istream& is)
+{
+	if(!is)
+		return {};
+
+	auto str = std::string(std::istreambuf_iterator<char>(is.rdbuf()), std::istreambuf_iterator<char>());
+	return String::New(str.c_str(), str.size());
+}
 
 std::string to_string(Local<Value> s)
 {
@@ -152,7 +146,8 @@ Handle<Value> read(const Arguments& args)
 	if (*file == nullptr)
 		return ThrowException(String::New("Expected: string"));
 
-	auto source = read_file(*file);
+	std::ifstream ifs(*file);
+	auto source = read_stream(ifs);
 	if (source.IsEmpty())
 		return ThrowException(String::New("Unable to read file"));
 
@@ -169,7 +164,8 @@ Handle<Value> load(const Arguments& args)
 		if (*file == nullptr)
 			return ThrowException(String::New("Expected: string"));
 
-		auto source = read_file(*file);
+		std::ifstream ifs(*file);
+		auto source = read_stream(ifs);
 		if (source.IsEmpty())
 			return ThrowException(String::New("Unable to read file"));
 
