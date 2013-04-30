@@ -16,7 +16,8 @@ namespace js
 
 std::string to_string(v8::Local<v8::Value> s);
 double to_double(v8::Local<v8::Value> d);
-int32_t toint32(v8::Local<v8::Value> i);
+int32_t to_int32(v8::Local<v8::Value> i);
+uint32_t to_uint32(v8::Local<v8::Value> i);
 
 namespace detail
 {

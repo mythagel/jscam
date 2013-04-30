@@ -20,6 +20,7 @@ std::shared_ptr<Machine> machine;
 Handle<Value> init(const Arguments& args)
 {
 	HandleScope handle_scope;
+	std::shared_ptr<Machine> machine;
 
 	auto config = args[0]->ToObject();
 	auto variant = js::to_string(args[1]);
@@ -48,9 +49,9 @@ Handle<Value> init(const Arguments& args)
 			tool = Tool(name, Tool::type_Lathe);
 
 		// TODO set params (needs work in cxxcam)
-		auto id = js::toint32(tool_obj->Get(String::NewSymbol("id")));
+		auto id = js::to_int32(tool_obj->Get(String::NewSymbol("id")));
 		auto center_cutting = tool_obj->Get(String::NewSymbol("center_cutting"));
-		auto flutes = js::toint32(tool_obj->Get(String::NewSymbol("flutes")));
+		auto flutes = js::to_uint32(tool_obj->Get(String::NewSymbol("flutes")));
 		auto flute_length = js::to_double(tool_obj->Get(String::NewSymbol("flute_length")));
 		auto cutting_length = js::to_double(tool_obj->Get(String::NewSymbol("cutting_length")));
 		auto mill_diameter = js::to_double(tool_obj->Get(String::NewSymbol("mill_diameter")));
@@ -61,22 +62,32 @@ Handle<Value> init(const Arguments& args)
 		machine->AddTool(id, tool);
 	}
 
-	//	"spindle": [ "0-100", 300, "500-1000", 3000]
 	auto spindle_speeds = config->Get(String::NewSymbol("spindle"));
 	for(auto s : js::array(spindle_speeds))
 	{
 		if(s->IsNumber())
 		{
-			auto speed = js::toint32(s);
+			auto speed = js::to_uint32(s);
 			machine->AddSpindleDiscrete(speed);
 		}
 		else
 		{
 			auto speed = js::to_string(s);
-			// TODO
-			//machine->AddSpindleRange(start, end);
+			auto dash_pos = speed.find('-');
+			if(dash_pos != std::string::npos)
+			{
+				auto start = speed.substr(0, dash_pos);
+				auto end = speed.substr(dash_pos+1);
+				machine->AddSpindleRange(std::stoul(start), std::stoul(end));
+			}
+			else
+			{
+				return ThrowException(String::New("range: 'start-end'"));
+			}
 		}
 	}
+
+	jscam::machine = machine;
 	return {};
 }
 
@@ -148,6 +159,7 @@ Handle<Value> arc_motion(const Arguments& args)
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
+	// TODO
 	return {};
 }
 Handle<Value> units(const Arguments& args)
@@ -155,6 +167,7 @@ Handle<Value> units(const Arguments& args)
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
+	// TODO
 	return {};
 }
 Handle<Value> plane(const Arguments& args)
@@ -162,6 +175,7 @@ Handle<Value> plane(const Arguments& args)
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
+	// TODO
 	return {};
 }
 Handle<Value> feed_rate_mode(const Arguments& args)
@@ -169,6 +183,7 @@ Handle<Value> feed_rate_mode(const Arguments& args)
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
+	// TODO
 	return {};
 }
 Handle<Value> feed_rate(const Arguments& args)
@@ -189,12 +204,40 @@ Handle<Value> feed_rate(const Arguments& args)
 
 Handle<Value> spindle_on(const Arguments& args)
 {
+	HandleScope handle_scope;
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
-	return {};
+	if(args.Length() == 1)
+	{
+		auto s = js::to_uint32(args[0]);
+		machine->StartSpindle(s);
+		return {};
+	}
+	else if(args.Length() == 2)
+	{
+		auto s = js::to_uint32(args[0]);
+		auto r = js::to_string(args[1]);
+		if(r == "stop")
+		{
+			machine->StartSpindle(s, Machine::Rotation::Stop);
+			return {};
+		}
+		else if(r == "clockwise")
+		{
+			machine->StartSpindle(s, Machine::Rotation::Clockwise);
+			return {};
+		}
+		else if(r == "counterclockwise")
+		{
+			machine->StartSpindle(s, Machine::Rotation::CounterClockwise);
+			return {};
+		}
+	}
+
+	return ThrowException(String::New("expected spindle_on(uint s, r = machine.Rotation.Clockwise)"));
 }
-Handle<Value> spindle_off(const Arguments& args)
+Handle<Value> spindle_off(const Arguments&)
 {
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
@@ -211,7 +254,7 @@ Handle<Value> load_tool(const Arguments& args)
 
 	if(args.Length() == 1)
 	{
-		auto id = js::toint32(args[0]);
+		auto id = js::to_uint32(args[0]);
 		machine->SetTool(id);
 		return {};
 	}
@@ -226,7 +269,7 @@ Handle<Value> tool_change(const Arguments& args)
 
 	if(args.Length() == 1)
 	{
-		auto id = js::toint32(args[0]);
+		auto id = js::to_uint32(args[0]);
 		machine->ToolChange(id);
 		return {};
 	}
@@ -293,6 +336,7 @@ Handle<Value> rapid(const Arguments& args)
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
+	// TODO
 	return {};
 }
 Handle<Value> linear(const Arguments& args)
@@ -300,6 +344,7 @@ Handle<Value> linear(const Arguments& args)
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
+	// TODO
 	return {};
 }
 Handle<Value> arc(const Arguments& args)
@@ -307,6 +352,7 @@ Handle<Value> arc(const Arguments& args)
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
+	// TODO
 	return {};
 }
 Handle<Value> plunge(const Arguments& args)
@@ -314,6 +360,7 @@ Handle<Value> plunge(const Arguments& args)
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
+	// TODO
 	return {};
 }
 

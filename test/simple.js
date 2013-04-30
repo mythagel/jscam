@@ -18,13 +18,12 @@ var config = {
 		}
 	],
 	spindle: [ "0-100", 300, "500-1000", 3000]
-} 
-
+}
 init(config, "LinuxCNC");
 
-begin_block("setup");
+begin_block("Setup");
 	feed_rate(100);
-	spindle_on(300);
+	spindle_on(250);
 	load_tool(1);
 	tool_change(1);
 	optional_pause("Post Setup");

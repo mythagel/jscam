@@ -49,9 +49,15 @@ double to_double(Local<Value> d)
 	return dbl->Value();
 }
 
-int32_t toint32(Local<Value> i)
+int32_t to_int32(Local<Value> i)
 {
 	auto j = i->ToInt32();
+	return j->Value();
+}
+
+uint32_t to_uint32(v8::Local<v8::Value> i)
+{
+	auto j = i->ToUint32();
 	return j->Value();
 }
 
