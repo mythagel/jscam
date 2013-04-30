@@ -22,6 +22,7 @@ API Sketch
 	[
 		{
 			"name": "tool_name",
+			"id": "int",
 			"type": "mill/lathe",
 
 			"center_cutting": "true/false",
@@ -35,7 +36,7 @@ API Sketch
 		},
 		{...}
 	],
-	"spindle": "0-100,300,500-1000,3000"
+	"spindle": [ "0-100", 300, "500-1000", 3000]
 }
 
 init(machine, "LinuxCNC")

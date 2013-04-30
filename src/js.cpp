@@ -34,7 +34,7 @@ Handle<String> read_file(const char* name)
 namespace js
 {
 
-std::string to_string(v8::Local<v8::Value> s)
+std::string to_string(Local<Value> s)
 {
 	if(!s->IsString())
 		return {};
@@ -43,18 +43,20 @@ std::string to_string(v8::Local<v8::Value> s)
 	return {*ascii, *ascii + ascii.length()};
 }
 
-double to_double(v8::Local<v8::Value> d)
+double to_double(Local<Value> d)
 {
 	auto dbl = d->ToNumber();
 	return dbl->Value();
 }
 
-int32_t toint32(v8::Local<v8::Value> i)
+int32_t toint32(Local<Value> i)
 {
 	auto j = i->ToInt32();
 	return j->Value();
 }
 
+namespace detail
+{
 Local<Value> v8_argument_iterator_adapter::iterator::operator*()
 {
 	return a.args[index];
@@ -78,9 +80,41 @@ v8_argument_iterator_adapter::iterator end(const v8_argument_iterator_adapter& a
 	return {a, a.args.Length()};
 }
 
-v8_argument_iterator_adapter arguments(const Arguments& args)
+Local<Value> v8_object_iterator_adapter::iterator::operator*()
+{
+	return a.obj->Get(index);
+}
+v8_object_iterator_adapter::iterator& v8_object_iterator_adapter::iterator::operator++()
+{
+	++index;
+	return *this;
+}
+bool v8_object_iterator_adapter::iterator::operator!=(const iterator& o) const
+{
+	return index != o.index;
+}
+
+v8_object_iterator_adapter::iterator begin(const v8_object_iterator_adapter& a)
+{
+	return {a, 0};
+}
+v8_object_iterator_adapter::iterator end(const v8_object_iterator_adapter& a)
+{
+	if(a.obj->IsUndefined())
+		return {a, 0};
+	return {a, a.obj->Length()};
+}
+
+}
+
+detail::v8_argument_iterator_adapter arguments(const Arguments& args)
 {
 	return { args };
+}
+
+detail::v8_object_iterator_adapter array(Local<Value> obj)
+{
+	return { Array::Cast(*obj) };
 }
 
 Handle<Value> print(const Arguments& args)

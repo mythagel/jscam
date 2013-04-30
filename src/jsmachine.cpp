@@ -20,11 +20,10 @@ std::shared_ptr<Machine> machine;
 Handle<Value> init(const Arguments& args)
 {
 	HandleScope handle_scope;
-	if(args.Length() != 2)
-		return ThrowException(String::New("expected init(json config, string variant)"));
 
 	auto config = args[0]->ToObject();
 	auto variant = js::to_string(args[1]);
+
 	auto type = js::to_string(config->Get(String::NewSymbol("type")));
 
 	if(type == "mill")
@@ -32,32 +31,52 @@ Handle<Value> init(const Arguments& args)
 	else if(type == "lathe")
 		machine = std::make_shared<Machine>(Machine::Type::Lathe, variant);
 	else
-		return ThrowException(String::New("variant - mill / lathe"));
+		return ThrowException(String::New("type - mill / lathe"));
 
+	auto tools = config->Get(String::NewSymbol("tools"));
+	for(auto t : js::array(tools))
 	{
-		//	"tools":
-		//	[
-		//		{
-		//			"name": "tool_name",
-		//			"type": "mill/lathe",
-		//
-		//			"center_cutting": "true/false",
-		//			"flutes": "int",
-		//			"flute_length": "",
-		//			"cutting_length": "",
-		//			"mill_diameter": "",
-		//			"shank_diameter": "",
-		//			"core_diameter": "",
-		//			"length": ""
-		//		},
-		//		{...}
-		//	],
-		//	"spindle": "0-100,300,500-1000,3000"
+		Tool tool;
+		auto tool_obj = t->ToObject();
 
-		auto tools = config->Get(String::NewSymbol("tools"));
-		auto spindle = config->Get(String::NewSymbol("spindle"));
+		auto name = js::to_string(tool_obj->Get(String::NewSymbol("name")));
+		auto type = js::to_string(tool_obj->Get(String::NewSymbol("type")));
+
+		if(type == "mill")
+			tool = Tool(name, Tool::type_Mill);
+		else if(type == "lathe")
+			tool = Tool(name, Tool::type_Lathe);
+
+		// TODO set params (needs work in cxxcam)
+		auto id = js::toint32(tool_obj->Get(String::NewSymbol("id")));
+		auto center_cutting = tool_obj->Get(String::NewSymbol("center_cutting"));
+		auto flutes = js::toint32(tool_obj->Get(String::NewSymbol("flutes")));
+		auto flute_length = js::to_double(tool_obj->Get(String::NewSymbol("flute_length")));
+		auto cutting_length = js::to_double(tool_obj->Get(String::NewSymbol("cutting_length")));
+		auto mill_diameter = js::to_double(tool_obj->Get(String::NewSymbol("mill_diameter")));
+		auto shank_diameter = js::to_double(tool_obj->Get(String::NewSymbol("shank_diameter")));
+		auto core_diameter = js::to_double(tool_obj->Get(String::NewSymbol("core_diameter")));
+		auto length = js::to_double(tool_obj->Get(String::NewSymbol("length")));
+
+		machine->AddTool(id, tool);
 	}
-	// TODO this function has to create the global machine pointer reference.
+
+	//	"spindle": [ "0-100", 300, "500-1000", 3000]
+	auto spindle_speeds = config->Get(String::NewSymbol("spindle"));
+	for(auto s : js::array(spindle_speeds))
+	{
+		if(s->IsNumber())
+		{
+			auto speed = js::toint32(s);
+			machine->AddSpindleDiscrete(speed);
+		}
+		else
+		{
+			auto speed = js::to_string(s);
+			// TODO
+			//machine->AddSpindleRange(start, end);
+		}
+	}
 	return {};
 }
 
@@ -110,7 +129,19 @@ Handle<Value> motion(const Arguments& args)
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
-	return {};
+	auto motion = js::to_string(args[0]);
+	if(motion == "absolute")
+	{
+		machine->SetMotion(Machine::Motion::Absolute);
+		return {};
+	}
+	else if(motion == "incremental")
+	{
+		machine->SetMotion(Machine::Motion::Incremental);
+		return {};
+	}
+
+	return ThrowException(String::New("expected motion(absolute / incremental)"));
 }
 Handle<Value> arc_motion(const Arguments& args)
 {

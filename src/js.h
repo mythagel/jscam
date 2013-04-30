@@ -18,6 +18,9 @@ std::string to_string(v8::Local<v8::Value> s);
 double to_double(v8::Local<v8::Value> d);
 int32_t toint32(v8::Local<v8::Value> i);
 
+namespace detail
+{
+
 struct v8_argument_iterator_adapter
 {
 	const v8::Arguments& args;
@@ -36,7 +39,28 @@ struct v8_argument_iterator_adapter
 v8_argument_iterator_adapter::iterator begin(const v8_argument_iterator_adapter& a);
 v8_argument_iterator_adapter::iterator end(const v8_argument_iterator_adapter& a);
 
-v8_argument_iterator_adapter arguments(const v8::Arguments& args);
+struct v8_object_iterator_adapter
+{
+	v8::Local<v8::Array> obj;
+
+	struct iterator
+	{
+		const v8_object_iterator_adapter& a;
+		uint32_t index;
+
+		v8::Local<v8::Value> operator*();
+		iterator& operator++();
+		bool operator!=(const iterator& o) const;
+	};
+};
+
+v8_object_iterator_adapter::iterator begin(const v8_object_iterator_adapter& a);
+v8_object_iterator_adapter::iterator end(const v8_object_iterator_adapter& a);
+
+}
+
+detail::v8_argument_iterator_adapter arguments(const v8::Arguments& args);
+detail::v8_object_iterator_adapter array(v8::Local<v8::Value> obj);
 
 bool exec(v8::Handle<v8::String> source, v8::Handle<v8::Value> name);
 void bind(v8::Handle<v8::ObjectTemplate> global);

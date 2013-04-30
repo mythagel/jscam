@@ -39,7 +39,7 @@ machine.Plane =
 
 machine.Motion =
 {
-	Absolute    : "absoloute",
+	Absolute    : "absolute",
 	Incremental : "incremental"
 }
 
