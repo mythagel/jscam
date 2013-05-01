@@ -159,32 +159,101 @@ Handle<Value> arc_motion(const Arguments& args)
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
-	// TODO
-	return {};
+	auto motion = js::to_string(args[0]);
+	if(motion == "absolute")
+	{
+		machine->SetArcMotion(Machine::Motion::Absolute);
+		return {};
+	}
+	else if(motion == "incremental")
+	{
+		machine->SetArcMotion(Machine::Motion::Incremental);
+		return {};
+	}
+
+	return ThrowException(String::New("expected arc_motion(absolute / incremental)"));
 }
 Handle<Value> units(const Arguments& args)
 {
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
-	// TODO
-	return {};
+	auto units = js::to_string(args[0]);
+	if(units == "metric")
+	{
+		machine->SetUnits(Machine::Units::Metric);
+		return {};
+	}
+	else if(units == "imperial")
+	{
+		machine->SetUnits(Machine::Units::Imperial);
+		return {};
+	}
+
+	return ThrowException(String::New("expected units(metric / imperial)"));
 }
 Handle<Value> plane(const Arguments& args)
 {
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
-	// TODO
-	return {};
+	auto plane = js::to_string(args[0]);
+	if(plane == "XY")
+	{
+		machine->SetPlane(Machine::Plane::XY);
+		return {};
+	}
+	else if(plane == "ZX")
+	{
+		machine->SetPlane(Machine::Plane::ZX);
+		return {};
+	}
+	else if(plane == "YZ")
+	{
+		machine->SetPlane(Machine::Plane::YZ);
+		return {};
+	}
+	else if(plane == "UV")
+	{
+		machine->SetPlane(Machine::Plane::UV);
+		return {};
+	}
+	else if(plane == "WU")
+	{
+		machine->SetPlane(Machine::Plane::WU);
+		return {};
+	}
+	else if(plane == "VW")
+	{
+		machine->SetPlane(Machine::Plane::VW);
+		return {};
+	}
+
+	return ThrowException(String::New("expected plane(XY / ZX / YZ / UV / WU / VW)"));
 }
 Handle<Value> feed_rate_mode(const Arguments& args)
 {
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
-	// TODO
-	return {};
+	auto mode = js::to_string(args[0]);
+	if(mode == "inverse")
+	{
+		machine->SetFeedRateMode(Machine::FeedRateMode::InverseTime);
+		return {};
+	}
+	else if(mode == "upm")
+	{
+		machine->SetFeedRateMode(Machine::FeedRateMode::UnitsPerMinute);
+		return {};
+	}
+	else if(mode == "upr")
+	{
+		machine->SetFeedRateMode(Machine::FeedRateMode::UnitsPerRevolution);
+		return {};
+	}
+
+	return ThrowException(String::New("expected feed_rate_mode(inverse / upm / upr)"));
 }
 Handle<Value> feed_rate(const Arguments& args)
 {
