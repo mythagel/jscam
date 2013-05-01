@@ -450,20 +450,20 @@ Handle<Value> linear(const Arguments& args)
 	// TODO
 	return {};
 }
-Handle<Value> arc(const Arguments& args)
+Handle<Value> arc(const Arguments&)
 {
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
-	// TODO
+	// TODO missing in cxxcam
 	return {};
 }
-Handle<Value> plunge(const Arguments& args)
+Handle<Value> plunge(const Arguments&)
 {
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
-	// TODO
+	// TODO missing in cxxcam
 	return {};
 }
 
