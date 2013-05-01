@@ -440,6 +440,11 @@ Handle<Value> rapid(const Arguments& args)
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
+	/*
+	 * TODO
+	 * atm these will silently ignore unrecognised parameters - BAD.
+	 * Change to iterate over the object and throw on unrecognised error
+	 */
 	std::vector<Axis> axes;
 	for(auto arg : js::arguments(args))
 	{
