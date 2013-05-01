@@ -48,7 +48,7 @@ motion("absolute");
 //m.Rapid(X(0), Y(0), Z(0));
 //m.Linear(X(5), Y(5), Z(5));
 
-feed_rate_mode("inverse_time");
+feed_rate_mode("inverse");
 //m.Linear(X(5), Y(5), Z(5));
 
 end_block("restore");
