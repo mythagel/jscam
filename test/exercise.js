@@ -45,28 +45,33 @@ begin_block("Cutting");
 spindle_on(100);
 feed_rate(100);
 motion("absolute");
-//m.Rapid(X(0), Y(0), Z(0));
-//m.Linear(X(5), Y(5), Z(5));
+rapid({x: 0, y: 0, z: 0});
+linear({x: 5, y: 5, z: 5});
 
 feed_rate_mode("inverse");
-//m.Linear(X(5), Y(5), Z(5));
+linear({x: 5, y: 5, z: 5});
 
 end_block("restore");
 
 begin_block("Epilogue");
 spindle_off();
 
-/*
+
 {
-	Machine m(Machine::Type::Lathe, "LinuxCNC");
+	var config = {
+		type: "lathe",
+		tools: [],
+		spindle: [100, 250]
+	}
+	init(config, "LinuxCNC");
 
-	m.SetUnits(Machine::Units::Imperial);
-	m.SetFeedRate(100);
-	m.AccuracyExactStop();
-	m.SetUnits(Machine::Units::Metric);
-	m.SetFeedRate(100);
-	m.AccuracyExactPath();
+	units("imperial");
+	feed_rate(100);
+	exact_stop();
+	units("metric");
+	feed_rate(100);
+	exact_path();
 
-	m.SetMotion(Machine::Motion::Incremental);
+	motion("incremental");
 }
-*/
+
