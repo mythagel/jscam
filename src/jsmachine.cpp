@@ -44,9 +44,9 @@ Handle<Value> init(const Arguments& args)
 		auto type = js::to_string(tool_obj->Get(String::NewSymbol("type")));
 
 		if(type == "mill")
-			tool = Tool(name, Tool::type_Mill);
+			tool = Tool(name, Tool::Type::Mill);
 		else if(type == "lathe")
-			tool = Tool(name, Tool::type_Lathe);
+			tool = Tool(name, Tool::Type::Lathe);
 
 		// TODO set params (needs work in cxxcam)
 		auto id = js::to_int32(tool_obj->Get(String::NewSymbol("id")));
