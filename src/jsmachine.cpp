@@ -436,10 +436,47 @@ Handle<Value> optional_pause(const Arguments& args)
 }
 Handle<Value> rapid(const Arguments& args)
 {
+	HandleScope handle_scope;
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
-	// TODO
+	std::vector<Axis> axes;
+	for(auto arg : js::arguments(args))
+	{
+		auto axis = arg->ToObject();
+		auto x = axis->Get(String::NewSymbol("x"));
+		if(!x->IsUndefined())
+			axes.push_back(X(js::to_double(x)));
+		auto y = axis->Get(String::NewSymbol("y"));
+		if(!y->IsUndefined())
+			axes.push_back(Y(js::to_double(y)));
+		auto z = axis->Get(String::NewSymbol("z"));
+		if(!z->IsUndefined())
+			axes.push_back(Z(js::to_double(z)));
+
+		auto a = axis->Get(String::NewSymbol("a"));
+		if(!a->IsUndefined())
+			axes.push_back(Z(js::to_double(a)));
+		auto b = axis->Get(String::NewSymbol("b"));
+		if(!b->IsUndefined())
+			axes.push_back(B(js::to_double(b)));
+		auto c = axis->Get(String::NewSymbol("c"));
+		if(!c->IsUndefined())
+			axes.push_back(C(js::to_double(c)));
+
+		// UVW unimplemented in cxxcam
+//		auto u = axis->Get(String::NewSymbol("u"));
+//		if(!u->IsUndefined())
+//			axes.push_back(U(js::to_double(u)));
+//		auto v = axis->Get(String::NewSymbol("v"));
+//		if(!v->IsUndefined())
+//			axes.push_back(V(js::to_double(v)));
+//		auto w = axis->Get(String::NewSymbol("w"));
+//		if(!w->IsUndefined())
+//			axes.push_back(W(js::to_double(w)));
+	}
+	machine->Rapid(axes);
+
 	return {};
 }
 Handle<Value> linear(const Arguments& args)
@@ -447,7 +484,43 @@ Handle<Value> linear(const Arguments& args)
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
-	// TODO
+	std::vector<Axis> axes;
+	for(auto arg : js::arguments(args))
+	{
+		auto axis = arg->ToObject();
+		auto x = axis->Get(String::NewSymbol("x"));
+		if(!x->IsUndefined())
+			axes.push_back(X(js::to_double(x)));
+		auto y = axis->Get(String::NewSymbol("y"));
+		if(!y->IsUndefined())
+			axes.push_back(Y(js::to_double(y)));
+		auto z = axis->Get(String::NewSymbol("z"));
+		if(!z->IsUndefined())
+			axes.push_back(Z(js::to_double(z)));
+
+		auto a = axis->Get(String::NewSymbol("a"));
+		if(!a->IsUndefined())
+			axes.push_back(Z(js::to_double(a)));
+		auto b = axis->Get(String::NewSymbol("b"));
+		if(!b->IsUndefined())
+			axes.push_back(B(js::to_double(b)));
+		auto c = axis->Get(String::NewSymbol("c"));
+		if(!c->IsUndefined())
+			axes.push_back(C(js::to_double(c)));
+
+		// UVW unimplemented in cxxcam
+//		auto u = axis->Get(String::NewSymbol("u"));
+//		if(!u->IsUndefined())
+//			axes.push_back(U(js::to_double(u)));
+//		auto v = axis->Get(String::NewSymbol("v"));
+//		if(!v->IsUndefined())
+//			axes.push_back(V(js::to_double(v)));
+//		auto w = axis->Get(String::NewSymbol("w"));
+//		if(!w->IsUndefined())
+//			axes.push_back(W(js::to_double(w)));
+	}
+	machine->Linear(axes);
+
 	return {};
 }
 Handle<Value> arc(const Arguments&)

@@ -25,7 +25,7 @@ begin_block("Program");
 optional_pause("Pause before program");
 tool_change(5);
 load_tool(4);
-//m.Rapid(Y(5), X(6), A(1.0/3.0));
+rapid({y: 5, x: 6, a: (1.0/3.0) });
 tool_change(4);
 spindle_on(300);
 
@@ -33,11 +33,11 @@ begin_block("Positioning");
 spindle_off();
 tool_change(5);
 motion("incremental");
-//m.Rapid(X(1), Y(1));
-//m.Rapid(X(1));
-//m.Rapid(X(1));
-//m.Rapid(X(1), Z(2));
-//m.Rapid(X(1));
+rapid({x: 1}, {y: 1});
+rapid({x: 1});
+rapid({x: 1});
+rapid({x: 1, z: 2});
+rapid({x: 1});
 end_block("spindle"); // Don't restore tool
 
 
