@@ -33,9 +33,13 @@
  * Plunge motion (Primitive function?)
  * Restore position
     - Ensure move is safe (no intersection with tool or clamps)
- * Export generated GCode as lines and sequences of words (needed for js post-processing)
+ * GCode Generation
+    - Export generated GCode as lines and sequences of words (needed for js post-processing)
     - Export generated GCode as string
+    - Aligned comments within a gcode block
+    - Generate according to Variant (e.g. gcode case and precision are unimplemented)
 
 ### Code ###
  * Ensure exceptions do not change state (to allow recovery)
+ * Change private / protected static methods to free functions.
 
