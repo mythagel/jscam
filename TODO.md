@@ -42,4 +42,5 @@
 ### Code ###
  * Ensure exceptions do not change state (to allow recovery)
  * Change private / protected static methods to free functions.
+ * Formalise result of nef glide when result is not 2-manifold
 
