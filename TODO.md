@@ -17,6 +17,7 @@
 
 ### High Level ###
  * Auto feedrate / spindle speeds
+    - Enhance spindle to report spindle speed requests outside of some specified tolerance. (i.e. 30,000rpm request for machine with max 500rpm)
  * Complete Tool class
     - Needs nef model loading / generation
     - Store properties for different tool types
