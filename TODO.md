@@ -11,7 +11,7 @@
  * Catch cxxcam exceptions and propagate as js exceptions
 
 ## cxxcam ##
-Auto feedrate / spindle speeds
+ * Auto feedrate / spindle speeds
  * Complete Tool class
     - Needs nef model loading / generation
     - Store properties for different tool types
