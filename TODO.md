@@ -25,6 +25,7 @@
     - Needs model loading & generation
     - Needs intersection tests
     - Needs material properties
+    - Top of stock check at Z0
  * Represent workholding, clamps, etc. (for intersection tests)
  * Toolpath expansion & intersection tests for rapids
  * Material removal volume for each operation
@@ -38,6 +39,8 @@
     - Export generated GCode as string
     - Aligned comments within a gcode block
     - Generate according to Variant (e.g. gcode case and precision are unimplemented)
+    - Document in comments relevant parameters (Stock dimensions, position, tools used, etc.)
+ * Machine zero & Limits
 
 ### Code ###
  * Ensure exceptions do not change state (to allow recovery)
