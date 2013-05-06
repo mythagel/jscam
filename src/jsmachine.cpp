@@ -8,6 +8,8 @@
 #include "jsmachine.h"
 #include <memory>
 #include "Machine.h"
+#include "Axis.h"
+#include "Tool.h"
 #include "js.h"
 
 using namespace v8;
