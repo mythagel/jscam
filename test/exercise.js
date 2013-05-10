@@ -6,11 +6,27 @@ var config = {
 			name: "3mm End Mill",
 			id: 4,
 			type: "mill",
+			center_cutting: true,
+			flutes: 4,
+			flute_length: 25,
+			cutting_length: 20,
+			mill_diameter: 3,
+			shank_diameter: 6,
+			core_diameter: 3,
+			length: 60
 		},
 		{
 			name: "1mm Ball End Mill",
 			id: 5,
 			type: "mill",
+			center_cutting: true,
+			flutes: 4,
+			flute_length: 12,
+			cutting_length: 10,
+			mill_diameter: 1,
+			shank_diameter: 3,
+			core_diameter: 0.5,
+			length: 40
 		}
 	],
 	spindle: [ 100, 250]
