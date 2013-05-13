@@ -9,4 +9,4 @@
 
 ### Code ###
  * Catch cxxcam exceptions and propagate as js exceptions
-
+ * Catch v8 exceptions and handle correct (currently just segfault in some cases of invalid input)
