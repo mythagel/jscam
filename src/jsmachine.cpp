@@ -44,22 +44,30 @@ Handle<Value> init(const Arguments& args)
 
 		auto name = js::to_string(tool_obj->Get(String::NewSymbol("name")));
 		auto type = js::to_string(tool_obj->Get(String::NewSymbol("type")));
-
-		if(type == "mill")
-			tool = Tool(name, Tool::Type::Mill);
-		else if(type == "lathe")
-			tool = Tool(name, Tool::Type::Lathe);
-
-		// TODO set params (needs work in cxxcam)
 		auto id = js::to_int32(tool_obj->Get(String::NewSymbol("id")));
-		auto center_cutting = tool_obj->Get(String::NewSymbol("center_cutting"));
-		auto flutes = js::to_uint32(tool_obj->Get(String::NewSymbol("flutes")));
-		auto flute_length = js::to_double(tool_obj->Get(String::NewSymbol("flute_length")));
-		auto cutting_length = js::to_double(tool_obj->Get(String::NewSymbol("cutting_length")));
-		auto mill_diameter = js::to_double(tool_obj->Get(String::NewSymbol("mill_diameter")));
-		auto shank_diameter = js::to_double(tool_obj->Get(String::NewSymbol("shank_diameter")));
-		auto core_diameter = js::to_double(tool_obj->Get(String::NewSymbol("core_diameter")));
-		auto length = js::to_double(tool_obj->Get(String::NewSymbol("length")));
+		
+		if(type == "mill")
+		{
+			auto spec = Tool::Mill();
+
+			spec.type = Tool::Mill::Type::End;
+			spec.center_cutting = js::to_bool(tool_obj->Get(String::NewSymbol("center_cutting")));
+			spec.flutes = js::to_uint32(tool_obj->Get(String::NewSymbol("flutes")));
+			spec.flute_length = js::to_double(tool_obj->Get(String::NewSymbol("flute_length")));
+			spec.cutting_length = js::to_double(tool_obj->Get(String::NewSymbol("cutting_length")));
+			spec.mill_diameter = js::to_double(tool_obj->Get(String::NewSymbol("mill_diameter")));
+			spec.shank_diameter = js::to_double(tool_obj->Get(String::NewSymbol("shank_diameter")));
+			spec.core_diameter = js::to_double(tool_obj->Get(String::NewSymbol("core_diameter")));
+			spec.length = js::to_double(tool_obj->Get(String::NewSymbol("length")));
+			
+			tool = Tool(name, spec);
+		}
+		else if(type == "lathe")
+		{
+			// TODO fill spec from js
+			auto spec = Tool::Lathe();
+			tool = Tool(name, spec);
+		}
 
 		machine->AddTool(id, tool);
 	}

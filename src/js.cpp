@@ -39,20 +39,22 @@ std::string to_string(Local<Value> s)
 
 double to_double(Local<Value> d)
 {
-	auto dbl = d->ToNumber();
-	return dbl->Value();
+	return d->NumberValue();
 }
 
 int32_t to_int32(Local<Value> i)
 {
-	auto j = i->ToInt32();
-	return j->Value();
+	return i->IntegerValue();
 }
 
 uint32_t to_uint32(v8::Local<v8::Value> i)
 {
-	auto j = i->ToUint32();
-	return j->Value();
+	return i->Uint32Value();
+}
+
+bool to_bool(v8::Local<v8::Value> b)
+{
+	return b->BooleanValue();
 }
 
 namespace detail

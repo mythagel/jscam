@@ -21,6 +21,7 @@ std::string to_string(v8::Local<v8::Value> s);
 double to_double(v8::Local<v8::Value> d);
 int32_t to_int32(v8::Local<v8::Value> i);
 uint32_t to_uint32(v8::Local<v8::Value> i);
+bool to_bool(v8::Local<v8::Value> b);
 
 namespace detail
 {
