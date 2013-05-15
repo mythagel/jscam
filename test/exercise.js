@@ -69,6 +69,11 @@ linear({x: 5, y: 5, z: 5});
 
 end_block("restore");
 
+begin_block("Arcs");
+rapid({x: 0, y: 0, z: 0});
+feed_rate(100);
+arc("clockwise", {x:1, y:1, i:1});
+
 begin_block("Epilogue");
 spindle_off();
 

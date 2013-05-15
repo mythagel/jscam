@@ -9,6 +9,7 @@
 #include <memory>
 #include "Machine.h"
 #include "Axis.h"
+#include "Offset.h"
 #include "Tool.h"
 #include "js.h"
 
@@ -493,6 +494,7 @@ Handle<Value> rapid(const Arguments& args)
 }
 Handle<Value> linear(const Arguments& args)
 {
+	HandleScope handle_scope;
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
@@ -536,12 +538,96 @@ Handle<Value> linear(const Arguments& args)
 
 	return {};
 }
-Handle<Value> arc(const Arguments&)
+Handle<Value> arc(const Arguments& args)
 {
+	HandleScope handle_scope;
 	if(!machine)
 		return ThrowException(String::New("Machine uninitialised."));
 
-	// TODO missing in cxxcam
+	Machine::Direction dir = Machine::Direction::Clockwise;
+	std::vector<Axis> end_pos;
+	std::vector<Offset> center;
+	unsigned int turns = 1;
+
+	/*
+	 * TODO this is messy and horrible.
+	 * Define a common binding strategy and stick to it.
+	 */
+	unsigned int index(0);
+	for(auto arg : js::arguments(args))
+	{
+		++index;
+
+		if(index == 1)
+		{
+			auto d = js::to_string(arg);
+			if(d == "clockwise")
+			{
+				dir = Machine::Direction::Clockwise;
+			}
+			else if(d == "counterclockwise")
+			{
+				dir = Machine::Direction::CounterClockwise;
+			}
+			else
+			{
+				return ThrowException(String::New("Unrecognised direction"));
+			}
+		}
+		else if(arg->IsObject())
+		{
+			auto axis_value = arg->ToObject();
+			auto keys = axis_value->GetPropertyNames();
+
+			for(auto key : js::array(keys))
+			{
+				auto axis = js::to_string(key);
+				auto value = axis_value->Get(key);
+
+				if(axis == "x")
+					end_pos.push_back(X(js::to_double(value)));
+				else if(axis == "y")
+					end_pos.push_back(Y(js::to_double(value)));
+				else if(axis == "z")
+					end_pos.push_back(Z(js::to_double(value)));
+
+				else if(axis == "a")
+					end_pos.push_back(A(js::to_double(value)));
+				else if(axis == "b")
+					end_pos.push_back(B(js::to_double(value)));
+				else if(axis == "c")
+					end_pos.push_back(C(js::to_double(value)));
+
+				// UVW unimplemented in cxxcam
+	//			else if(axis == "u")
+	//				end_pos.push_back(U(js::to_double(value)));
+	//			else if(axis == "v")
+	//				end_pos.push_back(V(js::to_double(value)));
+	//			else if(axis == "w")
+	//				end_pos.push_back(W(js::to_double(value)));
+
+				// Offsets
+				else if(axis == "i")
+					center.push_back(I(js::to_double(value)));
+				else if(axis == "j")
+					center.push_back(J(js::to_double(value)));
+				else if(axis == "k")
+					center.push_back(K(js::to_double(value)));
+
+				else if(axis == "turns")
+					turns = js::to_uint32(value);
+
+				else
+					return ThrowException(String::New("Unrecognised axis / offset / turns."));
+			}
+		}
+		else
+		{
+
+		}
+	}
+	machine->Arc(dir, end_pos, center, turns);
+
 	return {};
 }
 Handle<Value> plunge(const Arguments&)
