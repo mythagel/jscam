@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
 				break;
 			}
 
-			result = js::exec(source, String::New(arg.c_str(), args.size()));
+			result = js::exec(source, String::New(arg.c_str(), arg.size()));
 			if(!result)
 			{
 				std::cerr << "Unable to execute source file " << arg << '\n';
