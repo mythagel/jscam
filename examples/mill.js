@@ -1,10 +1,10 @@
-var config = {
+var mill = {
 	type: "mill",
 	tools:
 	[
 		{
 			name: "3mm End Mill",
-			id: 4,
+			id: 0,
 			type: "mill",
 			center_cutting: true,
 			flutes: 4,
@@ -17,5 +17,5 @@ var config = {
 		}
 	],
 	spindle: ["100-1000", "2000-6000"]
-}
-init(config, "LinuxCNC");
+};
+
