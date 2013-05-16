@@ -25,6 +25,7 @@ int main(int argc, char* argv[])
 		auto source = js::read_stream(std::cin);
 		result = js::exec(source, String::NewSymbol("stdin"));
 
+		js::exec(String::New("deinit();"), String::NewSymbol("jscam"));
 		context.Dispose();
 	}
 	else
@@ -52,7 +53,7 @@ int main(int argc, char* argv[])
 			}
 		}
 
-		js::exec(String::New("deinit();"), String::NewSymbol("stdin"));
+		js::exec(String::New("deinit();"), String::NewSymbol("jscam"));
 		context.Dispose();
 	}
 
