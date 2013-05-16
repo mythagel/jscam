@@ -102,6 +102,12 @@ Handle<Value> init(const Arguments& args)
 	return {};
 }
 
+Handle<Value> deinit(const Arguments&)
+{
+	machine.reset();
+	return {};
+}
+
 Handle<Value> exact_path(const Arguments&)
 {
 	if(!machine)
@@ -644,6 +650,7 @@ void bind(Handle<ObjectTemplate> global)
 	using namespace v8;
 
 	global->Set(String::New("init"), FunctionTemplate::New(init));
+	global->Set(String::New("deinit"), FunctionTemplate::New(deinit));
 	global->Set(String::New("exact_path"), FunctionTemplate::New(exact_path));
 	global->Set(String::New("exact_stop"), FunctionTemplate::New(exact_stop));
 	global->Set(String::New("path_blend"), FunctionTemplate::New(path_blend));

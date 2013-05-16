@@ -52,6 +52,7 @@ int main(int argc, char* argv[])
 			}
 		}
 
+		js::exec(String::New("deinit();"), String::NewSymbol("stdin"));
 		context.Dispose();
 	}
 
