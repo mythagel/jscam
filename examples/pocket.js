@@ -25,8 +25,32 @@ function rubbish()
 	end_block(machine.BlockRestore.RestoreAll);
 }
 
+function polygon(sides, size, center, depth)
+{
+	begin_block("polygon");
+	rapid ({x: center.x + size * Math.cos(0), y: center.y + size * Math.sin(0)});         
+	linear({z: depth});
+
+	for (var side = 1; side <= sides; ++side)
+	{
+		var x = center.x + size * Math.cos(side * 2 * Math.PI / sides);
+		var y = center.y + size * Math.sin(side * 2 * Math.PI / sides);
+		linear({x: x, y: y});
+	}
+	end_block(machine.BlockRestore.RestoreAll);
+}
+
 begin_block("main");
 feed_rate(100);
 spindle_on(100);
 rubbish();
+end_block(machine.BlockRestore.RestoreAll);
+
+begin_block("polygon test");
+
+feed_rate(100);
+spindle_on(100);
+
+polygon(6, 20, {x: 10, y: 10}, -1);
+
 end_block(machine.BlockRestore.RestoreAll);
