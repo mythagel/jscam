@@ -52,5 +52,6 @@ feed_rate(100);
 spindle_on(100);
 
 polygon(6, 20, {x: 10, y: 10}, -1);
+polygon(5000, 100, {x: 0, y: 0}, -1);
 
 end_block(machine.BlockRestore.RestoreAll);
