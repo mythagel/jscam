@@ -1,11 +1,13 @@
+load("machine.js");
+
 var mill = {
-	type: "mill",
+	type: machine.Type.Mill,
 	tools:
 	[
 		{
 			name: "3mm End Mill",
 			id: 0,
-			type: "mill",
+			type: machine.Type.Mill,
 			center_cutting: true,
 			flutes: 4,
 			flute_length: 25,

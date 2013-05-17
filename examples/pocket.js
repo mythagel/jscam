@@ -1,10 +1,16 @@
+load("mill.js");
+init(mill, "LinuxCNC");
+
 /*
 pocket.js
 =========
-
-Example. Causes a crash that needs to be investigated
-
 */
-load("mill.js");
-init(mill, "LinuxCNC");
+function pocket()
+{
+	begin_block("Rectangular Pocket dimensions...");
+	// TODO
+	end_block(machine.BlockRestore.restore);
+}
+
+pocket();
 
