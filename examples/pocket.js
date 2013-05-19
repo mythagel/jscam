@@ -27,7 +27,7 @@ function rubbish()
 
 function polygon(sides, size, center, depth)
 {
-	begin_block("polygon");
+	begin_block("polygon od " + size + " @ (" + center.x + "," + center.y + ")");
 	rapid ({x: center.x + size * Math.cos(0), y: center.y + size * Math.sin(0)});         
 	linear({z: depth});
 
@@ -52,6 +52,13 @@ feed_rate(100);
 spindle_on(100);
 
 polygon(6, 20, {x: 10, y: 10}, -1);
-polygon(5000, 100, {x: 0, y: 0}, -1);
+
+begin_block("polygon grid");
+for(var i = 0; i < 10; ++i)
+{
+	polygon(6, 10, {x: 10*i, y: 0}, -1);
+}
+end_block();
 
 end_block(machine.BlockRestore.RestoreAll);
+
