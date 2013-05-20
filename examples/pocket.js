@@ -8,22 +8,6 @@ pocket.js
 Lessons learnt in planning already:
 Need to be able to access properties from cxxcam, i.e. active tool diameter.
 */
-function rubbish()
-{
-	begin_block("Rectangular Pocket dimensions...");
-	for(var x = 0; x != 10 ; ++x)
-	{
-		rapid({z: 5});
-		rapid({x: x, y: 0});
-		if(x % 2 == 0)
-			linear({z: -1});
-		else
-			linear({z: -2});
-		linear({x: x, y: 10});
-	}
-	
-	end_block(machine.BlockRestore.RestoreAll);
-}
 
 function polygon(sides, size, center, depth)
 {
@@ -40,23 +24,15 @@ function polygon(sides, size, center, depth)
 	end_block(machine.BlockRestore.RestoreAll);
 }
 
-begin_block("main");
-feed_rate(100);
-spindle_on(100);
-rubbish();
-end_block(machine.BlockRestore.RestoreAll);
-
 begin_block("polygon test");
 
 feed_rate(100);
 spindle_on(100);
 
-polygon(6, 20, {x: 10, y: 10}, -1);
-
 begin_block("polygon grid");
 for(var i = 0; i < 10; ++i)
 {
-	polygon(6, 10, {x: 10*i, y: 0}, -1);
+	polygon(6, 10, {x: (20*i) + 5, y: 0}, -1);
 }
 end_block();
 
