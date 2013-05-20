@@ -645,32 +645,79 @@ Handle<Value> plunge(const Arguments&)
 	return {};
 }
 
+template <typename T, typename... Args>
+Persistent<Object> new_instance(Handle<Function>& ctor, Args&&... args)
+{
+	auto obj_ = ctor->NewInstance();
+	auto x = new T(std::forward<Args>(args)...);
+	obj_->SetInternalField(0, External::New(x));
+
+	auto obj = Persistent<Object>::New(obj_);
+	obj.MakeWeak(x, [](Persistent<Value> obj, void* data)
+	{
+		auto x = static_cast<T*>(data);
+		delete x;
+
+		obj.Dispose();
+		obj.Clear();
+	});
+
+	return obj;
+}
+
+//Handle<Value> GetPointX(Local<String> property, const AccessorInfo &info)
+//{
+//	Local<Object> self = info.Holder();
+//	Local<External> wrap = Local<External>::Cast(self->GetInternalField(0));
+//	void* ptr = wrap->Value();
+//	int value = static_cast<Point*>(ptr)->x_;
+//	return Integer::New(value);
+//}
+
+void bind_machine()
+{
+	auto ctor = FunctionTemplate::New();
+	auto prototype = ctor->PrototypeTemplate();
+	prototype.Set(
+		String::New("wheels"),
+		FunctionTemplate::New(MyWheelsMethodCallback)->GetFunction();
+	);
+		global->Set(String::New("exact_path"), FunctionTemplate::New(exact_path));
+	prototype->Set(String::New("exact_stop"), FunctionTemplate::New(exact_stop));
+	prototype->Set(String::New("path_blend"), FunctionTemplate::New(path_blend));
+	prototype->Set(String::New("motion"), FunctionTemplate::New(motion));
+	prototype->Set(String::New("arc_motion"), FunctionTemplate::New(arc_motion));
+	prototype->Set(String::New("units"), FunctionTemplate::New(units));
+	prototype->Set(String::New("plane"), FunctionTemplate::New(plane));
+	prototype->Set(String::New("feed_rate_mode"), FunctionTemplate::New(feed_rate_mode));
+	prototype->Set(String::New("feed_rate"), FunctionTemplate::New(feed_rate));
+	prototype->Set(String::New("spindle_on"), FunctionTemplate::New(spindle_on));
+	prototype->Set(String::New("spindle_off"), FunctionTemplate::New(spindle_off));
+	prototype->Set(String::New("load_tool"), FunctionTemplate::New(load_tool));
+	prototype->Set(String::New("tool_change"), FunctionTemplate::New(tool_change));
+	prototype->Set(String::New("begin_block"), FunctionTemplate::New(begin_block));
+	prototype->Set(String::New("end_block"), FunctionTemplate::New(end_block));
+	prototype->Set(String::New("optional_pause"), FunctionTemplate::New(optional_pause));
+	prototype->Set(String::New("rapid"), FunctionTemplate::New(rapid));
+	prototype->Set(String::New("linear"), FunctionTemplate::New(linear));
+	prototype->Set(String::New("arc"), FunctionTemplate::New(arc));
+	prototype->Set(String::New("plunge"), FunctionTemplate::New(plunge));
+	
+//	prototype.SetAccessor(String::NewSymbol("x"), GetPointX, SetPointX);
+	
+	// code in ctor
+	Point* p = ...;
+	Local<Object> obj = point_templ->NewInstance();
+	obj->SetInternalField(0, External::New(p));
+}
+
 void bind(Handle<ObjectTemplate> global)
 {
-	using namespace v8;
+	v8::Handle<v8::Function> ctor;
+	new_instance<std::string>(ctor, "hello");
 
 	global->Set(String::New("init"), FunctionTemplate::New(init));
 	global->Set(String::New("deinit"), FunctionTemplate::New(deinit));
-	global->Set(String::New("exact_path"), FunctionTemplate::New(exact_path));
-	global->Set(String::New("exact_stop"), FunctionTemplate::New(exact_stop));
-	global->Set(String::New("path_blend"), FunctionTemplate::New(path_blend));
-	global->Set(String::New("motion"), FunctionTemplate::New(motion));
-	global->Set(String::New("arc_motion"), FunctionTemplate::New(arc_motion));
-	global->Set(String::New("units"), FunctionTemplate::New(units));
-	global->Set(String::New("plane"), FunctionTemplate::New(plane));
-	global->Set(String::New("feed_rate_mode"), FunctionTemplate::New(feed_rate_mode));
-	global->Set(String::New("feed_rate"), FunctionTemplate::New(feed_rate));
-	global->Set(String::New("spindle_on"), FunctionTemplate::New(spindle_on));
-	global->Set(String::New("spindle_off"), FunctionTemplate::New(spindle_off));
-	global->Set(String::New("load_tool"), FunctionTemplate::New(load_tool));
-	global->Set(String::New("tool_change"), FunctionTemplate::New(tool_change));
-	global->Set(String::New("begin_block"), FunctionTemplate::New(begin_block));
-	global->Set(String::New("end_block"), FunctionTemplate::New(end_block));
-	global->Set(String::New("optional_pause"), FunctionTemplate::New(optional_pause));
-	global->Set(String::New("rapid"), FunctionTemplate::New(rapid));
-	global->Set(String::New("linear"), FunctionTemplate::New(linear));
-	global->Set(String::New("arc"), FunctionTemplate::New(arc));
-	global->Set(String::New("plunge"), FunctionTemplate::New(plunge));
 }
 
 }

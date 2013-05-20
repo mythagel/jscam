@@ -15,7 +15,7 @@ namespace jscam
 /*
 API Sketch
 
-"machine":
+"mill":
 {
 	"type": "mill/lathe",
 	"tools":
@@ -39,7 +39,9 @@ API Sketch
 	"spindle": [ "0-100", 300, "500-1000", 3000]
 }
 
-init(machine, "LinuxCNC")
+var m = new Machine(mill, "LinuxCNC");
+
+m.trajectory = exact_path / exact_stop / blend;
 
 exact_path()
 exact_stop()
@@ -47,36 +49,36 @@ path_blend()
 path_blend(p)
 path_blend(p, q)
 
-motion(absoloute/incremental)
-arc_motion(absoloute/incremental)
+m.motion = absoloute/incremental;
+m.arc_motion = absoloute/incremental;
 
-units(metric/imperial)
+m.units = metric/imperial;
 
-plane(XY/XZ...)
+m.plane = XY/XZ...;
 
-feed_rate_mode(...)
+m.feed_rate_mode = ...;
 
-feed_rate(30.5);
+m.feed_rate = 30.5;
 
-spindle_on(speed, direction)
-spindle_off()
+m.spindle = { dir: stop/clockwise/counterclockwise, speed: x };
 
-load_tool(id)
-tool_change(id)
 
-begin_block(name)
-end_block(restore)
+m.load_tool(id)
+m.tool = id;
 
-optional_pause(comment)
+begin_block(name);
+end_block(restore);
 
-rapid(xyzabc)
-rapid( {"x": "5"}, {"y": "50"} )
+m.optional_pause(comment);
 
-linear(xyzabc)
+m.rapid(xyzabc)
+m.rapid( {"x": "5"}, {"y": "50"} )
 
-arc(...)
+m.linear(xyzabc)
 
-plunge(...)
+m.arc(...)
+
+m.plunge(...)
 
  */
 void bind(v8::Handle<v8::ObjectTemplate> global);
