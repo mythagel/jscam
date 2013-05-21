@@ -676,39 +676,36 @@ Persistent<Object> new_instance(Handle<Function>& ctor, Args&&... args)
 
 void bind_machine()
 {
-	auto ctor = FunctionTemplate::New();
+	auto ctor = FunctionTemplate::New(init);
 	auto prototype = ctor->PrototypeTemplate();
-	prototype.Set(
-		String::New("wheels"),
-		FunctionTemplate::New(MyWheelsMethodCallback)->GetFunction();
-	);
-		global->Set(String::New("exact_path"), FunctionTemplate::New(exact_path));
-	prototype->Set(String::New("exact_stop"), FunctionTemplate::New(exact_stop));
-	prototype->Set(String::New("path_blend"), FunctionTemplate::New(path_blend));
-	prototype->Set(String::New("motion"), FunctionTemplate::New(motion));
-	prototype->Set(String::New("arc_motion"), FunctionTemplate::New(arc_motion));
-	prototype->Set(String::New("units"), FunctionTemplate::New(units));
-	prototype->Set(String::New("plane"), FunctionTemplate::New(plane));
-	prototype->Set(String::New("feed_rate_mode"), FunctionTemplate::New(feed_rate_mode));
-	prototype->Set(String::New("feed_rate"), FunctionTemplate::New(feed_rate));
-	prototype->Set(String::New("spindle_on"), FunctionTemplate::New(spindle_on));
-	prototype->Set(String::New("spindle_off"), FunctionTemplate::New(spindle_off));
-	prototype->Set(String::New("load_tool"), FunctionTemplate::New(load_tool));
-	prototype->Set(String::New("tool_change"), FunctionTemplate::New(tool_change));
-	prototype->Set(String::New("begin_block"), FunctionTemplate::New(begin_block));
-	prototype->Set(String::New("end_block"), FunctionTemplate::New(end_block));
-	prototype->Set(String::New("optional_pause"), FunctionTemplate::New(optional_pause));
-	prototype->Set(String::New("rapid"), FunctionTemplate::New(rapid));
-	prototype->Set(String::New("linear"), FunctionTemplate::New(linear));
-	prototype->Set(String::New("arc"), FunctionTemplate::New(arc));
-	prototype->Set(String::New("plunge"), FunctionTemplate::New(plunge));
+	
+	prototype->Set(String::New("exact_path"), FunctionTemplate::New(exact_path)->GetFunction());
+	prototype->Set(String::New("exact_stop"), FunctionTemplate::New(exact_stop)->GetFunction());
+	prototype->Set(String::New("path_blend"), FunctionTemplate::New(path_blend)->GetFunction());
+	prototype->Set(String::New("motion"), FunctionTemplate::New(motion)->GetFunction());
+	prototype->Set(String::New("arc_motion"), FunctionTemplate::New(arc_motion)->GetFunction());
+	prototype->Set(String::New("units"), FunctionTemplate::New(units)->GetFunction());
+	prototype->Set(String::New("plane"), FunctionTemplate::New(plane)->GetFunction());
+	prototype->Set(String::New("feed_rate_mode"), FunctionTemplate::New(feed_rate_mode)->GetFunction());
+	prototype->Set(String::New("feed_rate"), FunctionTemplate::New(feed_rate)->GetFunction());
+	prototype->Set(String::New("spindle_on"), FunctionTemplate::New(spindle_on)->GetFunction());
+	prototype->Set(String::New("spindle_off"), FunctionTemplate::New(spindle_off)->GetFunction());
+	prototype->Set(String::New("load_tool"), FunctionTemplate::New(load_tool)->GetFunction());
+	prototype->Set(String::New("tool_change"), FunctionTemplate::New(tool_change)->GetFunction());
+	prototype->Set(String::New("begin_block"), FunctionTemplate::New(begin_block)->GetFunction());
+	prototype->Set(String::New("end_block"), FunctionTemplate::New(end_block)->GetFunction());
+	prototype->Set(String::New("optional_pause"), FunctionTemplate::New(optional_pause)->GetFunction());
+	prototype->Set(String::New("rapid"), FunctionTemplate::New(rapid)->GetFunction());
+	prototype->Set(String::New("linear"), FunctionTemplate::New(linear)->GetFunction());
+	prototype->Set(String::New("arc"), FunctionTemplate::New(arc)->GetFunction());
+	prototype->Set(String::New("plunge"), FunctionTemplate::New(plunge)->GetFunction());
 	
 //	prototype.SetAccessor(String::NewSymbol("x"), GetPointX, SetPointX);
 	
 	// code in ctor
-	Point* p = ...;
-	Local<Object> obj = point_templ->NewInstance();
-	obj->SetInternalField(0, External::New(p));
+//	Point* p = ...;
+//	Local<Object> obj = point_templ->NewInstance();
+//	obj->SetInternalField(0, External::New(p));
 }
 
 void bind(Handle<ObjectTemplate> global)
