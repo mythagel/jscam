@@ -70,6 +70,39 @@ detail::v8_object_iterator_adapter array(v8::Local<v8::Value> obj);
 bool exec(v8::Handle<v8::String> source, v8::Handle<v8::Value> name);
 void bind(v8::Handle<v8::ObjectTemplate> global);
 
+/*
+ * Retrieve the c++ object pointer from the js object
+ */
+template <typename T>
+static T* unwrap(const v8::Arguments& args)
+{
+	auto self = args.Holder();
+	auto wrap = v8::Local<v8::External>::Cast(self->GetInternalField(0));
+	return static_cast<T*>(wrap->Value());
+}
+
+/*
+ * Construct a new c++ object and wrap it in a js object
+ */
+template <typename T, typename... Args>
+static v8::Persistent<v8::Object> make_object(v8::Handle<v8::Object> object, Args&&... args)
+{
+	auto x = new T(std::forward<Args>(args)...);
+	auto obj = v8::Persistent<v8::Object>::New(object);
+	obj->SetInternalField(0, v8::External::New(x));
+
+	obj.MakeWeak(x, [](v8::Persistent<v8::Value> obj, void* data)
+	{
+		auto x = static_cast<T*>(data);
+		delete x;
+
+		obj.Dispose();
+		obj.Clear();
+	});
+
+	return obj;
+}
+
 }
 
 #endif /* JS_H_ */
