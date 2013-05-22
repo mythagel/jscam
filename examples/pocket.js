@@ -39,4 +39,6 @@ m.end_block();
 
 m.end_block(machine.BlockRestore.RestoreAll);
 
+print(JSON.stringify(m.generate()));
+
 m = null;

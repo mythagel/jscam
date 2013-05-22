@@ -62,6 +62,7 @@ m.rapid({x: 5, y: 50})
 m.linear(xyzabc)
 m.arc(...)
 m.plunge(...)
+m.generate();
 
  */
 void bind(v8::Handle<v8::Object> global);
