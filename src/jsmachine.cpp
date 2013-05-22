@@ -546,47 +546,33 @@ Handle<Value> generate(const Arguments& args)
 		js_word->Set(String::NewSymbol(c.c_str(), c.size()), Number::New(word.Value()));
 		
 		if(!word.Comment().empty())
-		{
-			auto c = word.Comment();
-			js_word->Set(String::NewSymbol("comment"), String::New(c.c_str(), c.size()));
-		}
+			js_word->Set(String::NewSymbol("comment"), String::New(word.Comment().c_str(), word.Comment().size()));
 		
 		return js_word;
 	};
-	auto line2js = [word2js](const Machine::block_t::line_t& line) -> Handle<Array>
+	auto line2js = [word2js](const Machine::line_t& line) -> Handle<Array>
 	{
+		if(line.empty())
+			return Array::New();
+		
 		auto js_line = Array::New(line.words.size() + (line.comment.empty() ? 0 : 1));
 
-		for(std::size_t w_id = 0; w_id != line.words.size(); ++w_id)
-			js_line->Set(w_id, word2js(line.words[w_id]));
+		for(std::size_t w = 0; w != line.words.size(); ++w)
+			js_line->Set(w, word2js(line.words[w]));
 		
 		if(!line.comment.empty())
-		{
 			js_line->Set(line.words.size(), String::New(line.comment.c_str(), line.comment.size()));
-		}
 		
 		return js_line;
 	};
-	auto block2js = [line2js](const Machine::block_t& block) -> Handle<Array>
-	{
-		auto js_block = Array::New(block.lines.size() + (block.name.empty() ? 0 : 1));
-
-		std::size_t idx(0);
-		if(!block.name.empty())
-			js_block->Set(idx++, String::New(block.name.c_str(), block.name.size()));
-		
-		for(auto& line : block.lines)
-			js_block->Set(idx++, line2js(line));
-		
-		return js_block;
-	};
 	
-	auto blocks = machine->Generate();
-	auto js_blocks = Array::New(blocks.size());
-	for(std::size_t b_id = 0; b_id != blocks.size(); ++b_id)
-		js_blocks->Set(b_id, block2js(blocks[b_id]));
+	auto lines = machine->Generate();
+	
+	auto js_lines = Array::New(lines.size());
+	for(std::size_t l = 0; l != lines.size(); ++l)
+		js_lines->Set(l, line2js(lines[l]));
 
-	return handle_scope.Close(js_blocks);
+	return handle_scope.Close(js_lines);
 }
 
 //Handle<Value> GetPointX(Local<String> property, const AccessorInfo &info)
