@@ -541,7 +541,7 @@ Handle<Value> plunge(const Arguments&)
 //	return Integer::New(value);
 //}
 
-void bind(Handle<ObjectTemplate> global)
+void bind(Handle<Object> global)
 {
 	// Name the class in js
 	auto name = String::NewSymbol("Machine");
@@ -636,26 +636,26 @@ void bind(Handle<ObjectTemplate> global)
 	
 	auto prototype = tpl->PrototypeTemplate();
 	
-	prototype->Set(String::NewSymbol("exact_path"), FunctionTemplate::New(exact_path));
-	prototype->Set(String::NewSymbol("exact_stop"), FunctionTemplate::New(exact_stop));
-	prototype->Set(String::NewSymbol("path_blend"), FunctionTemplate::New(path_blend));
-	prototype->Set(String::NewSymbol("motion"), FunctionTemplate::New(motion));
-	prototype->Set(String::NewSymbol("arc_motion"), FunctionTemplate::New(arc_motion));
-	prototype->Set(String::NewSymbol("units"), FunctionTemplate::New(units));
-	prototype->Set(String::NewSymbol("plane"), FunctionTemplate::New(plane));
-	prototype->Set(String::NewSymbol("feed_rate_mode"), FunctionTemplate::New(feed_rate_mode));
-	prototype->Set(String::NewSymbol("feed_rate"), FunctionTemplate::New(feed_rate));
-	prototype->Set(String::NewSymbol("spindle_on"), FunctionTemplate::New(spindle_on));
-	prototype->Set(String::NewSymbol("spindle_off"), FunctionTemplate::New(spindle_off));
-	prototype->Set(String::NewSymbol("load_tool"), FunctionTemplate::New(load_tool));
-	prototype->Set(String::NewSymbol("tool_change"), FunctionTemplate::New(tool_change));
-	prototype->Set(String::NewSymbol("begin_block"), FunctionTemplate::New(begin_block));
-	prototype->Set(String::NewSymbol("end_block"), FunctionTemplate::New(end_block));
-	prototype->Set(String::NewSymbol("optional_pause"), FunctionTemplate::New(optional_pause));
-	prototype->Set(String::NewSymbol("rapid"), FunctionTemplate::New(rapid));
-	prototype->Set(String::NewSymbol("linear"), FunctionTemplate::New(linear));
-	prototype->Set(String::NewSymbol("arc"), FunctionTemplate::New(arc));
-	prototype->Set(String::NewSymbol("plunge"), FunctionTemplate::New(plunge));
+	prototype->Set(String::NewSymbol("exact_path"), FunctionTemplate::New(exact_path)->GetFunction());
+	prototype->Set(String::NewSymbol("exact_stop"), FunctionTemplate::New(exact_stop)->GetFunction());
+	prototype->Set(String::NewSymbol("path_blend"), FunctionTemplate::New(path_blend)->GetFunction());
+	prototype->Set(String::NewSymbol("motion"), FunctionTemplate::New(motion)->GetFunction());
+	prototype->Set(String::NewSymbol("arc_motion"), FunctionTemplate::New(arc_motion)->GetFunction());
+	prototype->Set(String::NewSymbol("units"), FunctionTemplate::New(units)->GetFunction());
+	prototype->Set(String::NewSymbol("plane"), FunctionTemplate::New(plane)->GetFunction());
+	prototype->Set(String::NewSymbol("feed_rate_mode"), FunctionTemplate::New(feed_rate_mode)->GetFunction());
+	prototype->Set(String::NewSymbol("feed_rate"), FunctionTemplate::New(feed_rate)->GetFunction());
+	prototype->Set(String::NewSymbol("spindle_on"), FunctionTemplate::New(spindle_on)->GetFunction());
+	prototype->Set(String::NewSymbol("spindle_off"), FunctionTemplate::New(spindle_off)->GetFunction());
+	prototype->Set(String::NewSymbol("load_tool"), FunctionTemplate::New(load_tool)->GetFunction());
+	prototype->Set(String::NewSymbol("tool_change"), FunctionTemplate::New(tool_change)->GetFunction());
+	prototype->Set(String::NewSymbol("begin_block"), FunctionTemplate::New(begin_block)->GetFunction());
+	prototype->Set(String::NewSymbol("end_block"), FunctionTemplate::New(end_block)->GetFunction());
+	prototype->Set(String::NewSymbol("optional_pause"), FunctionTemplate::New(optional_pause)->GetFunction());
+	prototype->Set(String::NewSymbol("rapid"), FunctionTemplate::New(rapid)->GetFunction());
+	prototype->Set(String::NewSymbol("linear"), FunctionTemplate::New(linear)->GetFunction());
+	prototype->Set(String::NewSymbol("arc"), FunctionTemplate::New(arc)->GetFunction());
+	prototype->Set(String::NewSymbol("plunge"), FunctionTemplate::New(plunge)->GetFunction());
 	
 	auto constructor = Persistent<Function>::New(tpl->GetFunction());
 	global->Set(name, constructor);

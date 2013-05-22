@@ -64,7 +64,7 @@ m.arc(...)
 m.plunge(...)
 
  */
-void bind(v8::Handle<v8::ObjectTemplate> global);
+void bind(v8::Handle<v8::Object> global);
 
 }
 
