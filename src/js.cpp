@@ -176,6 +176,44 @@ Handle<Value> load(const Arguments& args)
 	}
 	return handle_scope.Close(Undefined());
 }
+Handle<Value> require(const Arguments& args)
+{
+	HandleScope handle_scope;
+
+	String::Utf8Value file(args[0]);
+	if (*file == nullptr)
+		return ThrowException(String::New("Expected: string"));
+
+	std::ifstream ifs(*file);
+	auto source = read_stream(ifs);
+	if (source.IsEmpty())
+		return ThrowException(String::New("Unable to read file"));
+
+	TryCatch try_catch;
+
+	auto name = String::New(*file);
+	auto script = Script::Compile(source, name);
+	if (script.IsEmpty())
+	{
+		auto exception = try_catch.Exception();
+		String::AsciiValue exception_str(exception);
+		std::cerr << *exception_str << std::endl;
+		
+		return ThrowException(exception);
+	}
+
+	auto result = script->Run();
+	if (result.IsEmpty())
+	{
+		auto exception = try_catch.Exception();
+		String::AsciiValue exception_str(exception);
+		std::cerr << *exception_str << std::endl;
+		
+		return ThrowException(exception);
+	}
+
+	return handle_scope.Close(result);
+}
 
 bool exec(Handle<String> source, Handle<Value> name)
 {
@@ -208,6 +246,7 @@ void bind(Handle<ObjectTemplate> global)
 	global->Set(String::New("print"), FunctionTemplate::New(print));
 	global->Set(String::New("read"), FunctionTemplate::New(read));
 	global->Set(String::New("load"), FunctionTemplate::New(load));
+	global->Set(String::New("require"), FunctionTemplate::New(require));
 }
 
 }
