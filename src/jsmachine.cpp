@@ -546,7 +546,7 @@ void bind(Handle<Object> global)
 	// Name the class in js
 	auto name = String::NewSymbol("Machine");
 	
-	auto tpl = FunctionTemplate::New([&](const Arguments& args) -> Handle<Value>
+	auto tpl = FunctionTemplate::New([](const Arguments& args) -> Handle<Value>
 	{
 		if (!args.IsConstructCall())
 			return ThrowException(String::New("Cannot call constructor as function"));
@@ -554,6 +554,8 @@ void bind(Handle<Object> global)
 		HandleScope scope;
 
 		auto config = args[0]->ToObject();
+		if(config.IsEmpty())
+			return ThrowException(String::New("Expected config, variant."));
 		auto variant = js::to_string(args[1]);
 
 		auto type = js::to_string(config->Get(String::NewSymbol("type")));
