@@ -11,7 +11,10 @@
 #include "Axis.h"
 #include "Offset.h"
 #include "Tool.h"
+#include "Stock.h"
+#include "nef/io.h"
 #include "js.h"
+#include <stdexcept>
 
 using namespace v8;
 
@@ -577,14 +580,57 @@ Handle<Value> generate(const Arguments& args)
 	return handle_scope.Close(js_lines);
 }
 
+/*
+ * Format: https://github.com/mrdoob/three.js/wiki/JSON-Model-format-3.1
+ */
 Handle<Value> generate_model(const Arguments& args)
 {
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
+	auto stock = machine->GetStock();
+	auto stock_object = to_object(stock.Model);
 	
-	// TODO
+	auto obj = Object::New();
 	
-	return {};
+	{
+		auto vertices = Array::New(stock_object.vertices.size()*3);
+		std::size_t idx{0};
+		for(auto& vertex : stock_object.vertices)
+		{
+			vertices->Set(idx++, Number::New(vertex.x));
+			vertices->Set(idx++, Number::New(vertex.y));
+			vertices->Set(idx++, Number::New(vertex.z));
+		}
+		obj->Set("vertices"_sym, vertices);
+	}
+	
+	std::vector<std::size_t> all_faces;
+	for(auto& face : stock_object.faces)
+	{
+		if(face.size() == 3)
+		{
+			all_faces.push_back(0);
+			all_faces.insert(all_faces.end(), begin(face), end(face));
+		}
+		else if(face.size() == 4)
+		{
+			all_faces.push_back(0);
+			all_faces.insert(all_faces.end(), begin(face), end(face));
+		}
+		else
+		{
+			throw std::runtime_error("Unhandled face geometry.");
+		}
+	}
+	
+	{
+		auto faces = Array::New(all_faces.size());
+		for(std::size_t f = 0; f != all_faces.size(); ++f)
+			faces->Set(f, Number::New(all_faces[f]));
+		obj->Set("faces"_sym, faces);
+	}
+	
+	return handle_scope.Close(obj);
 }
 
 //Handle<Value> GetPointX(Local<String> property, const AccessorInfo &info)

@@ -86,3 +86,6 @@ function generate(m)
 
 print(generate(m));
 
+// Crashes - some memory issue
+//print(JSON.stringify(m.generate_model()));
+
