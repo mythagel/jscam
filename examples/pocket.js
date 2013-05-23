@@ -10,6 +10,14 @@ Lessons learnt in planning already:
 Need to be able to access properties from cxxcam, i.e. active tool diameter.
 */
 
+function isObject(obj)
+{
+	if( Object.prototype.toString.call( obj ) === '[object Object]' )
+		return true;
+		
+	return false;
+}
+
 function polygon(sides, size, center, depth)
 {
 	m.begin_block("polygon od " + size + " @ (" + center.x + "," + center.y + ")");
@@ -39,6 +47,41 @@ m.end_block();
 
 m.end_block(machine.BlockRestore.RestoreAll);
 
-print(JSON.stringify(m.generate()));
+function generate(m)
+{
+	var lines = m.generate();
+	var s = "";
 
-m = null;
+	lines.forEach(function(line)
+	{
+		line.forEach(function(word)
+		{
+			if(isObject(word))
+			{
+				for(var code in word)
+				{
+					if(code == "comment")
+					{
+						s += "(" + word[code] + ")";
+					}
+					else
+					{
+						s += code + parseFloat(word[code].toFixed(6));
+					}
+				}
+				s += " ";
+			}
+			else
+			{
+				// Comment is only allowed at end of line.
+				s += "; " + word;
+			}
+		});
+		s += "\n";
+	});
+
+	return s;
+}
+
+print(generate(m));
+
