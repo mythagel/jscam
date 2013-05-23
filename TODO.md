@@ -6,6 +6,9 @@
  * Bind Tool loading from json (pending work in cxxcam)
  * JS function library
  * Bind functions to retrieve generated GCode
+ * WebGL export of model
+ * Unchecked pure js Machine interface (for browser things)
+ * Toolpath export
 
 ### Code ###
  * Catch cxxcam exceptions and propagate as js exceptions
