@@ -15,6 +15,8 @@
 
 using namespace v8;
 
+using js::operator"" _sym;
+
 namespace jscam
 {
 
@@ -546,7 +548,7 @@ Handle<Value> generate(const Arguments& args)
 		js_word->Set(String::NewSymbol(c.c_str(), c.size()), Number::New(word.Value()));
 		
 		if(!word.Comment().empty())
-			js_word->Set(String::NewSymbol("comment"), String::New(word.Comment().c_str(), word.Comment().size()));
+			js_word->Set("comment"_sym, String::New(word.Comment().c_str(), word.Comment().size()));
 		
 		return js_word;
 	};
@@ -575,6 +577,16 @@ Handle<Value> generate(const Arguments& args)
 	return handle_scope.Close(js_lines);
 }
 
+Handle<Value> generate_model(const Arguments& args)
+{
+	HandleScope handle_scope;
+	auto machine = js::unwrap<Machine>(args);
+	
+	// TODO
+	
+	return {};
+}
+
 //Handle<Value> GetPointX(Local<String> property, const AccessorInfo &info)
 //{
 //	Local<Object> self = info.Holder();
@@ -587,7 +599,7 @@ Handle<Value> generate(const Arguments& args)
 void bind(Handle<Object> global)
 {
 	// Name the class in js
-	auto name = String::NewSymbol("Machine");
+	auto name = "Machine"_sym;
 	
 	auto tpl = FunctionTemplate::New([](const Arguments& args) -> Handle<Value>
 	{
@@ -601,7 +613,7 @@ void bind(Handle<Object> global)
 			return ThrowException(String::New("Expected config, variant."));
 		auto variant = js::to_string(args[1]);
 
-		auto type = js::to_string(config->Get(String::NewSymbol("type")));
+		auto type = js::to_string(config->Get("type"_sym));
 
 		if(type == "mill")
 			js::make_object<Machine>(args.This(), Machine::Type::Mill, variant);
@@ -612,29 +624,29 @@ void bind(Handle<Object> global)
 
 		auto machine = js::unwrap<Machine>(args);
 
-		auto tools = config->Get(String::NewSymbol("tools"));
+		auto tools = config->Get("tools"_sym);
 		for(auto t : js::array(tools))
 		{
 			Tool tool;
 			auto tool_obj = t->ToObject();
 
-			auto name = js::to_string(tool_obj->Get(String::NewSymbol("name")));
-			auto type = js::to_string(tool_obj->Get(String::NewSymbol("type")));
-			auto id = js::to_int32(tool_obj->Get(String::NewSymbol("id")));
+			auto name = js::to_string(tool_obj->Get("name"_sym));
+			auto type = js::to_string(tool_obj->Get("type"_sym));
+			auto id = js::to_int32(tool_obj->Get("id"_sym));
 		
 			if(type == "mill")
 			{
 				auto spec = Tool::Mill();
 
 				spec.type = Tool::Mill::Type::End;
-				spec.center_cutting = js::to_bool(tool_obj->Get(String::NewSymbol("center_cutting")));
-				spec.flutes = js::to_uint32(tool_obj->Get(String::NewSymbol("flutes")));
-				spec.flute_length = js::to_double(tool_obj->Get(String::NewSymbol("flute_length")));
-				spec.cutting_length = js::to_double(tool_obj->Get(String::NewSymbol("cutting_length")));
-				spec.mill_diameter = js::to_double(tool_obj->Get(String::NewSymbol("mill_diameter")));
-				spec.shank_diameter = js::to_double(tool_obj->Get(String::NewSymbol("shank_diameter")));
-				spec.core_diameter = js::to_double(tool_obj->Get(String::NewSymbol("core_diameter")));
-				spec.length = js::to_double(tool_obj->Get(String::NewSymbol("length")));
+				spec.center_cutting = js::to_bool(tool_obj->Get("center_cutting"_sym));
+				spec.flutes = js::to_uint32(tool_obj->Get("flutes"_sym));
+				spec.flute_length = js::to_double(tool_obj->Get("flute_length"_sym));
+				spec.cutting_length = js::to_double(tool_obj->Get("cutting_length"_sym));
+				spec.mill_diameter = js::to_double(tool_obj->Get("mill_diameter"_sym));
+				spec.shank_diameter = js::to_double(tool_obj->Get("shank_diameter"_sym));
+				spec.core_diameter = js::to_double(tool_obj->Get("core_diameter"_sym));
+				spec.length = js::to_double(tool_obj->Get("length"_sym));
 			
 				tool = Tool(name, spec);
 			}
@@ -648,7 +660,7 @@ void bind(Handle<Object> global)
 			machine->AddTool(id, tool);
 		}
 
-		auto spindle_speeds = config->Get(String::NewSymbol("spindle"));
+		auto spindle_speeds = config->Get("spindle"_sym);
 		for(auto s : js::array(spindle_speeds))
 		{
 			if(s->IsNumber())
@@ -681,27 +693,28 @@ void bind(Handle<Object> global)
 	
 	auto prototype = tpl->PrototypeTemplate();
 	
-	prototype->Set(String::NewSymbol("exact_path"), FunctionTemplate::New(exact_path)->GetFunction());
-	prototype->Set(String::NewSymbol("exact_stop"), FunctionTemplate::New(exact_stop)->GetFunction());
-	prototype->Set(String::NewSymbol("path_blend"), FunctionTemplate::New(path_blend)->GetFunction());
-	prototype->Set(String::NewSymbol("motion"), FunctionTemplate::New(motion)->GetFunction());
-	prototype->Set(String::NewSymbol("arc_motion"), FunctionTemplate::New(arc_motion)->GetFunction());
-	prototype->Set(String::NewSymbol("units"), FunctionTemplate::New(units)->GetFunction());
-	prototype->Set(String::NewSymbol("plane"), FunctionTemplate::New(plane)->GetFunction());
-	prototype->Set(String::NewSymbol("feed_rate_mode"), FunctionTemplate::New(feed_rate_mode)->GetFunction());
-	prototype->Set(String::NewSymbol("feed_rate"), FunctionTemplate::New(feed_rate)->GetFunction());
-	prototype->Set(String::NewSymbol("spindle_on"), FunctionTemplate::New(spindle_on)->GetFunction());
-	prototype->Set(String::NewSymbol("spindle_off"), FunctionTemplate::New(spindle_off)->GetFunction());
-	prototype->Set(String::NewSymbol("load_tool"), FunctionTemplate::New(load_tool)->GetFunction());
-	prototype->Set(String::NewSymbol("tool_change"), FunctionTemplate::New(tool_change)->GetFunction());
-	prototype->Set(String::NewSymbol("begin_block"), FunctionTemplate::New(begin_block)->GetFunction());
-	prototype->Set(String::NewSymbol("end_block"), FunctionTemplate::New(end_block)->GetFunction());
-	prototype->Set(String::NewSymbol("optional_pause"), FunctionTemplate::New(optional_pause)->GetFunction());
-	prototype->Set(String::NewSymbol("rapid"), FunctionTemplate::New(rapid)->GetFunction());
-	prototype->Set(String::NewSymbol("linear"), FunctionTemplate::New(linear)->GetFunction());
-	prototype->Set(String::NewSymbol("arc"), FunctionTemplate::New(arc)->GetFunction());
-	prototype->Set(String::NewSymbol("plunge"), FunctionTemplate::New(plunge)->GetFunction());
-	prototype->Set(String::NewSymbol("generate"), FunctionTemplate::New(generate)->GetFunction());
+	prototype->Set("exact_path"_sym, FunctionTemplate::New(exact_path)->GetFunction());
+	prototype->Set("exact_stop"_sym, FunctionTemplate::New(exact_stop)->GetFunction());
+	prototype->Set("path_blend"_sym, FunctionTemplate::New(path_blend)->GetFunction());
+	prototype->Set("motion"_sym, FunctionTemplate::New(motion)->GetFunction());
+	prototype->Set("arc_motion"_sym, FunctionTemplate::New(arc_motion)->GetFunction());
+	prototype->Set("units"_sym, FunctionTemplate::New(units)->GetFunction());
+	prototype->Set("plane"_sym, FunctionTemplate::New(plane)->GetFunction());
+	prototype->Set("feed_rate_mode"_sym, FunctionTemplate::New(feed_rate_mode)->GetFunction());
+	prototype->Set("feed_rate"_sym, FunctionTemplate::New(feed_rate)->GetFunction());
+	prototype->Set("spindle_on"_sym, FunctionTemplate::New(spindle_on)->GetFunction());
+	prototype->Set("spindle_off"_sym, FunctionTemplate::New(spindle_off)->GetFunction());
+	prototype->Set("load_tool"_sym, FunctionTemplate::New(load_tool)->GetFunction());
+	prototype->Set("tool_change"_sym, FunctionTemplate::New(tool_change)->GetFunction());
+	prototype->Set("begin_block"_sym, FunctionTemplate::New(begin_block)->GetFunction());
+	prototype->Set("end_block"_sym, FunctionTemplate::New(end_block)->GetFunction());
+	prototype->Set("optional_pause"_sym, FunctionTemplate::New(optional_pause)->GetFunction());
+	prototype->Set("rapid"_sym, FunctionTemplate::New(rapid)->GetFunction());
+	prototype->Set("linear"_sym, FunctionTemplate::New(linear)->GetFunction());
+	prototype->Set("arc"_sym, FunctionTemplate::New(arc)->GetFunction());
+	prototype->Set("plunge"_sym, FunctionTemplate::New(plunge)->GetFunction());
+	prototype->Set("generate"_sym, FunctionTemplate::New(generate)->GetFunction());
+	prototype->Set("generate_model"_sym, FunctionTemplate::New(generate_model)->GetFunction());
 	
 	auto constructor = Persistent<Function>::New(tpl->GetFunction());
 	global->Set(name, constructor);

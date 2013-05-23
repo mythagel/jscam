@@ -7,6 +7,8 @@
 
 using namespace v8;
 
+using js::operator"" _sym;
+
 /*
  * Create a new js context with basic functions.
  */
@@ -31,7 +33,7 @@ int main(int argc, char* argv[])
 		if(args.empty())
 		{
 			auto source = js::read_stream(std::cin);
-			result = js::exec(source, String::NewSymbol("stdin"));
+			result = js::exec(source, "stdin"_sym);
 		}
 		else
 		{

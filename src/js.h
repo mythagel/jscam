@@ -15,6 +15,12 @@
 namespace js
 {
 
+// TODO better name
+inline v8::Handle<v8::String> operator"" _sym(const char* s, size_t l)
+{
+	return v8::String::NewSymbol(s, l);
+}
+
 v8::Handle<v8::String> read_stream(std::istream& is);
 
 std::string to_string(v8::Local<v8::Value> s);
