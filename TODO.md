@@ -9,6 +9,7 @@
  * WebGL export of model
  * Unchecked pure js Machine interface (for browser things)
  * Toolpath export
+ * NodeJS module (refactor so same binding code can be used)
 
 ### Code ###
  * Catch cxxcam exceptions and propagate as js exceptions
