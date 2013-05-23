@@ -66,7 +66,7 @@ function generate(m)
 				for(var code in word)
 				{
 					if(code == "comment")
-						s += "(" + word[code] + ")";
+						s += " (" + word[code] + ")";
 					else
 						s += code + fixedPoint(word[code]);
 				}
@@ -87,5 +87,5 @@ function generate(m)
 print(generate(m));
 
 // Crashes - some memory issue
-//print(JSON.stringify(m.generate_model()));
+print(JSON.stringify(m.generate_model()));
 

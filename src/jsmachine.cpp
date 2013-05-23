@@ -42,14 +42,30 @@ namespace jscam
 
 Handle<Value> exact_path(const Arguments& args)
 {
+	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
-	machine->AccuracyExactPath();
+	try
+	{
+		machine->AccuracyExactPath();
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
 	return {};
 }
 Handle<Value> exact_stop(const Arguments& args)
 {
+	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
-	machine->AccuracyExactStop();
+	try
+	{
+		machine->AccuracyExactStop();
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
 	return {};
 }
 Handle<Value> path_blend(const Arguments& args)
@@ -81,15 +97,16 @@ Handle<Value> path_blend(const Arguments& args)
 
 Handle<Value> motion(const Arguments& args)
 {
+	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
 
-	auto motion = js::to_string(args[0]);
-	if(motion == "absolute")
+	auto motion = args[0];
+	if(motion == "absolute"_sym)
 	{
 		machine->SetMotion(Machine::Motion::Absolute);
 		return {};
 	}
-	else if(motion == "incremental")
+	else if(motion == "incremental"_sym)
 	{
 		machine->SetMotion(Machine::Motion::Incremental);
 		return {};
@@ -99,15 +116,16 @@ Handle<Value> motion(const Arguments& args)
 }
 Handle<Value> arc_motion(const Arguments& args)
 {
+	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
 
-	auto motion = js::to_string(args[0]);
-	if(motion == "absolute")
+	auto motion = args[0];
+	if(motion == "absolute"_sym)
 	{
 		machine->SetArcMotion(Machine::Motion::Absolute);
 		return {};
 	}
-	else if(motion == "incremental")
+	else if(motion == "incremental"_sym)
 	{
 		machine->SetArcMotion(Machine::Motion::Incremental);
 		return {};
@@ -117,15 +135,16 @@ Handle<Value> arc_motion(const Arguments& args)
 }
 Handle<Value> units(const Arguments& args)
 {
+	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
 
-	auto units = js::to_string(args[0]);
-	if(units == "metric")
+	auto units = args[0];
+	if(units == "metric"_sym)
 	{
 		machine->SetUnits(Machine::Units::Metric);
 		return {};
 	}
-	else if(units == "imperial")
+	else if(units == "imperial"_sym)
 	{
 		machine->SetUnits(Machine::Units::Imperial);
 		return {};
@@ -135,35 +154,36 @@ Handle<Value> units(const Arguments& args)
 }
 Handle<Value> plane(const Arguments& args)
 {
+	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
 
-	auto plane = js::to_string(args[0]);
-	if(plane == "XY")
+	auto plane = args[0];
+	if(plane == "XY"_sym)
 	{
 		machine->SetPlane(Machine::Plane::XY);
 		return {};
 	}
-	else if(plane == "ZX")
+	else if(plane == "ZX"_sym)
 	{
 		machine->SetPlane(Machine::Plane::ZX);
 		return {};
 	}
-	else if(plane == "YZ")
+	else if(plane == "YZ"_sym)
 	{
 		machine->SetPlane(Machine::Plane::YZ);
 		return {};
 	}
-	else if(plane == "UV")
+	else if(plane == "UV"_sym)
 	{
 		machine->SetPlane(Machine::Plane::UV);
 		return {};
 	}
-	else if(plane == "WU")
+	else if(plane == "WU"_sym)
 	{
 		machine->SetPlane(Machine::Plane::WU);
 		return {};
 	}
-	else if(plane == "VW")
+	else if(plane == "VW"_sym)
 	{
 		machine->SetPlane(Machine::Plane::VW);
 		return {};
@@ -173,20 +193,21 @@ Handle<Value> plane(const Arguments& args)
 }
 Handle<Value> feed_rate_mode(const Arguments& args)
 {
+	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
 
-	auto mode = js::to_string(args[0]);
-	if(mode == "inverse")
+	auto mode = args[0];
+	if(mode == "inverse"_sym)
 	{
 		machine->SetFeedRateMode(Machine::FeedRateMode::InverseTime);
 		return {};
 	}
-	else if(mode == "upm")
+	else if(mode == "upm"_sym)
 	{
 		machine->SetFeedRateMode(Machine::FeedRateMode::UnitsPerMinute);
 		return {};
 	}
-	else if(mode == "upr")
+	else if(mode == "upr"_sym)
 	{
 		machine->SetFeedRateMode(Machine::FeedRateMode::UnitsPerRevolution);
 		return {};
@@ -223,18 +244,18 @@ Handle<Value> spindle_on(const Arguments& args)
 	else if(args.Length() == 2)
 	{
 		auto s = js::to_uint32(args[0]);
-		auto r = js::to_string(args[1]);
-		if(r == "stop")
+		auto r = args[1];
+		if(r == "stop"_sym)
 		{
 			machine->StartSpindle(s, Machine::Rotation::Stop);
 			return {};
 		}
-		else if(r == "clockwise")
+		else if(r == "clockwise"_sym)
 		{
 			machine->StartSpindle(s, Machine::Rotation::Clockwise);
 			return {};
 		}
-		else if(r == "counterclockwise")
+		else if(r == "counterclockwise"_sym)
 		{
 			machine->StartSpindle(s, Machine::Rotation::CounterClockwise);
 			return {};
@@ -245,6 +266,7 @@ Handle<Value> spindle_on(const Arguments& args)
 }
 Handle<Value> spindle_off(const Arguments& args)
 {
+	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
 	machine->StopSpindle();
 	return {};
@@ -308,34 +330,34 @@ Handle<Value> end_block(const Arguments& args)
 		int restore(0);
 		for(auto arg : js::arguments(args))
 		{
-			auto res = js::to_string(arg);
-			if(res == "preserve")
+			auto res = arg;
+			if(res == "preserve"_sym)
 			{
 				machine->EndBlock(Machine::block_PreserveState);
 				return {};
 			}
-			else if(res == "restore")
+			else if(res == "restore"_sym)
 			{
 				machine->EndBlock(Machine::block_RestoreState);
 				return {};
 			}
-			else if(res == "units")
+			else if(res == "units"_sym)
 				restore |= Machine::block_RestoreUnits;
-			else if(res == "plane")
+			else if(res == "plane"_sym)
 				restore |= Machine::block_RestorePlane;
-			else if(res == "motion")
+			else if(res == "motion"_sym)
 				restore |= Machine::block_RestoreMotion;
-			else if(res == "arc_motion")
+			else if(res == "arc_motion"_sym)
 				restore |= Machine::block_RestoreArcMotion;
-			else if(res == "feedrate_mode")
+			else if(res == "feedrate_mode"_sym)
 				restore |= Machine::block_RestoreFeedRateMode;
-			else if(res == "feedrate")
+			else if(res == "feedrate"_sym)
 				restore |= Machine::block_RestoreFeedRate;
-			else if(res == "spindle")
+			else if(res == "spindle"_sym)
 				restore |= Machine::block_RestoreSpindle;
-			else if(res == "tool")
+			else if(res == "tool"_sym)
 				restore |= Machine::block_RestoreTool;
-			else if(res == "position")
+			else if(res == "position"_sym)
 				restore |= Machine::block_RestorePosition;
 		}
 		machine->EndBlock(restore);
@@ -375,31 +397,30 @@ Handle<Value> rapid(const Arguments& args)
 	{
 		auto axis_value = arg->ToObject();
 		auto keys = axis_value->GetPropertyNames();
-		for(auto key : js::array(keys))
+		for(auto axis : js::array(keys))
 		{
-			auto axis = js::to_string(key);
-			auto value = axis_value->Get(key);
+			auto value = axis_value->Get(axis);
 
-			if(axis == "x")
+			if(axis == "x"_sym)
 				axes.push_back(X(js::to_double(value)));
-			else if(axis == "y")
+			else if(axis == "y"_sym)
 				axes.push_back(Y(js::to_double(value)));
-			else if(axis == "z")
+			else if(axis == "z"_sym)
 				axes.push_back(Z(js::to_double(value)));
 
-			else if(axis == "a")
+			else if(axis == "a"_sym)
 				axes.push_back(A(js::to_double(value)));
-			else if(axis == "b")
+			else if(axis == "b"_sym)
 				axes.push_back(B(js::to_double(value)));
-			else if(axis == "c")
+			else if(axis == "c"_sym)
 				axes.push_back(C(js::to_double(value)));
 
 			// UVW unimplemented in cxxcam
-//			else if(axis == "u")
+//			else if(axis == "u"_sym)
 //				axes.push_back(U(js::to_double(value)));
-//			else if(axis == "v")
+//			else if(axis == "v"_sym)
 //				axes.push_back(V(js::to_double(value)));
-//			else if(axis == "w")
+//			else if(axis == "w"_sym)
 //				axes.push_back(W(js::to_double(value)));
 
 			else
@@ -421,30 +442,29 @@ Handle<Value> linear(const Arguments& args)
 		auto axis_value = arg->ToObject();
 		auto keys = axis_value->GetPropertyNames();
 
-		for(auto key : js::array(keys))
+		for(auto axis : js::array(keys))
 		{
-			auto axis = js::to_string(key);
-			auto value = axis_value->Get(key);
-			if(axis == "x")
+			auto value = axis_value->Get(axis);
+			if(axis == "x"_sym)
 				axes.push_back(X(js::to_double(value)));
-			else if(axis == "y")
+			else if(axis == "y"_sym)
 				axes.push_back(Y(js::to_double(value)));
-			else if(axis == "z")
+			else if(axis == "z"_sym)
 				axes.push_back(Z(js::to_double(value)));
 
-			else if(axis == "a")
+			else if(axis == "a"_sym)
 				axes.push_back(A(js::to_double(value)));
-			else if(axis == "b")
+			else if(axis == "b"_sym)
 				axes.push_back(B(js::to_double(value)));
-			else if(axis == "c")
+			else if(axis == "c"_sym)
 				axes.push_back(C(js::to_double(value)));
 
 			// UVW unimplemented in cxxcam
-//			else if(axis == "u")
+//			else if(axis == "u"_sym)
 //				axes.push_back(U(js::to_double(value)));
-//			else if(axis == "v")
+//			else if(axis == "v"_sym)
 //				axes.push_back(V(js::to_double(value)));
-//			else if(axis == "w")
+//			else if(axis == "w"_sym)
 //				axes.push_back(W(js::to_double(value)));
 
 			else
@@ -548,6 +568,7 @@ Handle<Value> arc(const Arguments& args)
 }
 Handle<Value> plunge(const Arguments&)
 {
+	HandleScope handle_scope;
 	//auto machine = js::unwrap<Machine>(args);
 
 	// TODO missing in cxxcam
@@ -604,6 +625,7 @@ Handle<Value> generate_model(const Arguments& args)
 {
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
+	
 	auto stock = machine->GetStock();
 	auto stock_object = to_object(stock.Model);
 	
@@ -694,10 +716,10 @@ void bind(Handle<Object> global)
 			auto tool_obj = t->ToObject();
 
 			auto name = js::to_string(tool_obj->Get("name"_sym));
-			auto type = js::to_string(tool_obj->Get("type"_sym));
+			auto type = tool_obj->Get("type"_sym);
 			auto id = js::to_int32(tool_obj->Get("id"_sym));
 		
-			if(type == "mill")
+			if(type == "mill"_sym)
 			{
 				auto spec = Tool::Mill();
 
@@ -713,7 +735,7 @@ void bind(Handle<Object> global)
 			
 				tool = Tool(name, spec);
 			}
-			else if(type == "lathe")
+			else if(type == "lathe"_sym)
 			{
 				// TODO fill spec from js
 				auto spec = Tool::Lathe();
