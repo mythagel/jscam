@@ -52,6 +52,11 @@ function generate(m)
 	var lines = m.generate();
 	var s = "";
 
+	function fixedPoint(v)
+	{
+		return parseFloat(v.toFixed(6));
+	};
+
 	lines.forEach(function(line)
 	{
 		line.forEach(function(word)
@@ -61,13 +66,9 @@ function generate(m)
 				for(var code in word)
 				{
 					if(code == "comment")
-					{
 						s += "(" + word[code] + ")";
-					}
 					else
-					{
-						s += code + parseFloat(word[code].toFixed(6));
-					}
+						s += code + fixedPoint(word[code]);
 				}
 				s += " ";
 			}
