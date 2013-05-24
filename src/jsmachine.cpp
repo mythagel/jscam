@@ -618,56 +618,42 @@ Handle<Value> generate(const Arguments& args)
 	return handle_scope.Close(js_lines);
 }
 
-/*
- * Format: https://github.com/mrdoob/three.js/wiki/JSON-Model-format-3.1
- */
 Handle<Value> generate_model(const Arguments& args)
 {
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
 	
-	auto stock = machine->GetStock();
-	auto stock_object = to_object(stock.Model);
+	const auto stock = machine->GetStock();
+	const auto stock_object = to_object(stock.Model);
 	
 	auto obj = Object::New();
 	
+	auto vertices = Array::New(stock_object.vertices.size());
+	for(std::size_t v = 0; v != stock_object.vertices.size(); ++v)
 	{
-		auto vertices = Array::New(stock_object.vertices.size()*3);
-		std::size_t idx{0};
-		for(auto& vertex : stock_object.vertices)
-		{
-			vertices->Set(idx++, Number::New(vertex.x));
-			vertices->Set(idx++, Number::New(vertex.y));
-			vertices->Set(idx++, Number::New(vertex.z));
-		}
-		obj->Set("vertices"_sym, vertices);
+		auto& vtx = stock_object.vertices[v];
+		auto vertex = Array::New(3);
+		
+		vertex->Set(0, Number::New(vtx.x));
+		vertex->Set(1, Number::New(vtx.y));
+		vertex->Set(2, Number::New(vtx.z));
+		
+		vertices->Set(v, vertex);
 	}
+	obj->Set("vertices"_sym, vertices);
 	
-	std::vector<std::size_t> all_faces;
-	for(auto& face : stock_object.faces)
+	auto faces = Array::New(stock_object.faces.size());
+	for(std::size_t f = 0; f != stock_object.faces.size(); ++f)
 	{
-		if(face.size() == 3)
-		{
-			all_faces.push_back(0);
-			all_faces.insert(all_faces.end(), begin(face), end(face));
-		}
-		else if(face.size() == 4)
-		{
-			all_faces.push_back(0);
-			all_faces.insert(all_faces.end(), begin(face), end(face));
-		}
-		else
-		{
-			throw std::runtime_error("Unhandled face geometry.");
-		}
+		auto& fce = stock_object.faces[f];
+		auto face = Array::New(fce.size());
+		
+		for(std::size_t f = 0; f != stock_object.faces.size(); ++f)
+			face->Set(f, Number::New(fce[f]));
+		
+		faces->Set(f, face);
 	}
-	
-	{
-		auto faces = Array::New(all_faces.size());
-		for(std::size_t f = 0; f != all_faces.size(); ++f)
-			faces->Set(f, Number::New(all_faces[f]));
-		obj->Set("faces"_sym, faces);
-	}
+	obj->Set("faces"_sym, faces);
 	
 	return handle_scope.Close(obj);
 }

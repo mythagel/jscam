@@ -86,6 +86,8 @@ function generate(m)
 
 print(generate(m));
 
-// Crashes - some memory issue
+/*
+ * Format: https://github.com/mrdoob/three.js/wiki/JSON-Model-format-3.1
+ */
 print(JSON.stringify(m.generate_model()));
 
