@@ -1,8 +1,9 @@
 var mill = {
 	type: "mill",
 	tools: [],
-	spindle: ["100-1000", "2000-6000"]
+	spindle: [300]
 };
 
 var m = new Machine(mill, "LinuxCNC");
-
+var model = m.generate_model();
+//print(JSON.stringify(model));
