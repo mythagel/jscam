@@ -2,11 +2,11 @@
 
 ### High Level ###
  * Refine js api (some functions can be consolidated)
- * Test harnesses and drivers to validate cxxcam functions
- * Bind Tool loading from json (pending work in cxxcam)
+ * ~~Test harnesses and drivers to validate cxxcam functions~~
+ * ~~Bind Tool loading from json (pending work in cxxcam)~~
  * JS function library
- * Bind functions to retrieve generated GCode
- * WebGL export of model
+ * ~~Bind functions to retrieve generated GCode~~
+ * ~~WebGL export of model~~ (Interface exists)
  * Unchecked pure js Machine interface (for browser things)
  * Toolpath export
  * NodeJS module (refactor so same binding code can be used)
