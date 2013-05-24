@@ -1,32 +1,32 @@
-var config = {
+var mill = {
 	type: "mill",
 	tools:
 	[
 		{
-			name: "0.8mm End Mill",
+			name: "3mm End Mill",
 			id: 1,
 			type: "mill",
-
 			center_cutting: true,
 			flutes: 4,
-			flute_length: 10,
-			cutting_length: 10,
-			mill_diameter: 0.8,
-			shank_diameter: 1,
-			core_diameter: 0.6,
-			length: 40
+			flute_length: 25,
+			cutting_length: 20,
+			mill_diameter: 3,
+			shank_diameter: 6,
+			core_diameter: 3,
+			length: 60
 		}
 	],
-	spindle: [ "0-100", 300, "500-1000", 3000]
-}
-init(config, "LinuxCNC");
+	spindle: ["100-1000", "2000-6000"]
+};
 
-begin_block("Setup");
-	feed_rate(100);
-	spindle_on(250);
-	load_tool(1);
-	tool_change(1);
-	optional_pause("Post Setup");
-end_block("tool", "feedrate");
+var m = new Machine(mill, "LinuxCNC");
+
+m.begin_block("Setup");
+	m.feed_rate(100);
+	m.spindle_on(250);
+	m.load_tool(1);
+	m.tool_change(1);
+	m.optional_pause("Post Setup");
+m.end_block("tool", "feedrate");
 
 
