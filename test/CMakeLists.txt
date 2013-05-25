@@ -4,7 +4,7 @@ MACRO(JSCAM_TEST testname)
 	ADD_DEPENDENCIES(check ${testname})
 ENDMACRO()
 
-FOREACH(test basic simple model)
+FOREACH(test basic simple model interface)
 	JSCAM_TEST(${test})
 ENDFOREACH()
 

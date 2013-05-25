@@ -58,17 +58,23 @@ API Sketch
 
 var m = new Machine(mill, "LinuxCNC");
 
-m.trajectory = exact_path / exact_stop / {blend: []} / {blend: [p]} / {blend: [p, q]};
+m.exact_path();
+m.exact_stop();
+m.path_blend(p, q);
+
 m.motion = absoloute/incremental;
 m.arc_motion = absoloute/incremental;
 m.units = metric/imperial;
 m.plane = XY/XZ...;
 m.feed_rate_mode = ...;
 m.feed_rate = 30.5;
-m.spindle = { dir: stop/clockwise/counterclockwise, speed: x };
+m.spindle_on(speed, direction);
+m.spindle_off();
+var x = m.spindle;
 
 m.load_tool(id)
-m.tool = id;
+m.tool_change(id);
+var x = m.tool;
 
 m.begin_block(name);
 m.end_block(restore);

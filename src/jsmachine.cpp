@@ -95,141 +95,250 @@ Handle<Value> path_blend(const Arguments& args)
 	return ThrowException(String::New("expected path_blend(void / double p / double p, double q)"));
 }
 
-Handle<Value> motion(const Arguments& args)
+Handle<Value> motion(Local<String>, const AccessorInfo& info)
 {
 	HandleScope handle_scope;
-	auto machine = js::unwrap<Machine>(args);
+	auto machine = js::unwrap<Machine>(info);
+	
+	switch(machine->GetMotion())
+	{
+		case Machine::Motion::Absolute:
+			return "absolute"_sym;
+		case Machine::Motion::Incremental:
+			return "incremental"_sym;
+	}
+	
+	throw std::logic_error("Unknown motion type.");
+}
+void motion(Local<String>, Local<Value> value, const AccessorInfo& info)
+{
+	HandleScope handle_scope;
+	auto machine = js::unwrap<Machine>(info);
 
-	auto motion = args[0];
-	if(motion == "absolute"_sym)
+	if(value == "absolute"_sym)
 	{
 		machine->SetMotion(Machine::Motion::Absolute);
-		return {};
+		return;
 	}
-	else if(motion == "incremental"_sym)
+	else if(value == "incremental"_sym)
 	{
 		machine->SetMotion(Machine::Motion::Incremental);
-		return {};
+		return;
 	}
 
-	return ThrowException(String::New("expected motion(absolute / incremental)"));
+	ThrowException(String::New("expected motion = absolute / incremental"));
 }
-Handle<Value> arc_motion(const Arguments& args)
+
+Handle<Value> arc_motion(Local<String>, const AccessorInfo& info)
 {
 	HandleScope handle_scope;
-	auto machine = js::unwrap<Machine>(args);
+	auto machine = js::unwrap<Machine>(info);
+	
+	switch(machine->GetArcMotion())
+	{
+		case Machine::Motion::Absolute:
+			return "absolute"_sym;
+		case Machine::Motion::Incremental:
+			return "incremental"_sym;
+	}
+	
+	throw std::logic_error("Unknown arc motion type.");
+}
+void arc_motion(Local<String>, Local<Value> value, const AccessorInfo& info)
+{
+	HandleScope handle_scope;
+	auto machine = js::unwrap<Machine>(info);
 
-	auto motion = args[0];
-	if(motion == "absolute"_sym)
+	if(value == "absolute"_sym)
 	{
 		machine->SetArcMotion(Machine::Motion::Absolute);
-		return {};
+		return;
 	}
-	else if(motion == "incremental"_sym)
+	else if(value == "incremental"_sym)
 	{
 		machine->SetArcMotion(Machine::Motion::Incremental);
-		return {};
+		return;
 	}
 
-	return ThrowException(String::New("expected arc_motion(absolute / incremental)"));
+	ThrowException(String::New("expected arc_motion = absolute / incremental"));
 }
-Handle<Value> units(const Arguments& args)
+
+Handle<Value> units(Local<String>, const AccessorInfo& info)
 {
 	HandleScope handle_scope;
-	auto machine = js::unwrap<Machine>(args);
+	auto machine = js::unwrap<Machine>(info);
+	
+	switch(machine->GetUnits())
+	{
+		case Machine::Units::Metric:
+			return "metric"_sym;
+		case Machine::Units::Imperial:
+			return "imperial"_sym;
+	}
+	
+	throw std::logic_error("Unknown units.");
+}
+void units(Local<String>, Local<Value> value, const AccessorInfo& info)
+{
+	HandleScope handle_scope;
+	auto machine = js::unwrap<Machine>(info);
 
-	auto units = args[0];
-	if(units == "metric"_sym)
+	if(value == "metric"_sym)
 	{
 		machine->SetUnits(Machine::Units::Metric);
-		return {};
+		return;
 	}
-	else if(units == "imperial"_sym)
+	else if(value == "imperial"_sym)
 	{
 		machine->SetUnits(Machine::Units::Imperial);
-		return {};
+		return;
 	}
 
-	return ThrowException(String::New("expected units(metric / imperial)"));
+	ThrowException(String::New("expected units = metric / imperial"));
 }
-Handle<Value> plane(const Arguments& args)
+
+Handle<Value> plane(Local<String>, const AccessorInfo& info)
 {
 	HandleScope handle_scope;
-	auto machine = js::unwrap<Machine>(args);
+	auto machine = js::unwrap<Machine>(info);
+	
+	switch(machine->GetPlane())
+	{
+		case Machine::Plane::XY:
+			return "XY"_sym;
+		case Machine::Plane::ZX:
+			return "ZX"_sym;
+		case Machine::Plane::YZ:
+			return "YZ"_sym;
+		case Machine::Plane::UV:
+			return "UV"_sym;
+		case Machine::Plane::WU:
+			return "WU"_sym;
+		case Machine::Plane::VW:
+			return "VW"_sym;
+	}
+	
+	throw std::logic_error("Unknown plane.");
+}
+void plane(Local<String>, Local<Value> value, const AccessorInfo& info)
+{
+	HandleScope handle_scope;
+	auto machine = js::unwrap<Machine>(info);
 
-	auto plane = args[0];
-	if(plane == "XY"_sym)
+	if(value == "XY"_sym)
 	{
 		machine->SetPlane(Machine::Plane::XY);
-		return {};
+		return;
 	}
-	else if(plane == "ZX"_sym)
+	else if(value == "ZX"_sym)
 	{
 		machine->SetPlane(Machine::Plane::ZX);
-		return {};
+		return;
 	}
-	else if(plane == "YZ"_sym)
+	else if(value == "YZ"_sym)
 	{
 		machine->SetPlane(Machine::Plane::YZ);
-		return {};
+		return;
 	}
-	else if(plane == "UV"_sym)
+	else if(value == "UV"_sym)
 	{
 		machine->SetPlane(Machine::Plane::UV);
-		return {};
+		return;
 	}
-	else if(plane == "WU"_sym)
+	else if(value == "WU"_sym)
 	{
 		machine->SetPlane(Machine::Plane::WU);
-		return {};
+		return;
 	}
-	else if(plane == "VW"_sym)
+	else if(value == "VW"_sym)
 	{
 		machine->SetPlane(Machine::Plane::VW);
-		return {};
+		return;
 	}
 
-	return ThrowException(String::New("expected plane(XY / ZX / YZ / UV / WU / VW)"));
+	ThrowException(String::New("expected plane = XY / ZX / YZ / UV / WU / VW"));
 }
-Handle<Value> feed_rate_mode(const Arguments& args)
+
+Handle<Value> feed_rate_mode(Local<String>, const AccessorInfo& info)
 {
 	HandleScope handle_scope;
-	auto machine = js::unwrap<Machine>(args);
+	auto machine = js::unwrap<Machine>(info);
+	
+	switch(machine->GetFeedRate().second)
+	{
+		case Machine::FeedRateMode::InverseTime:
+			return "inverse"_sym;
+		case Machine::FeedRateMode::UnitsPerMinute:
+			return "upm"_sym;
+		case Machine::FeedRateMode::UnitsPerRevolution:
+			return "upr"_sym;
+	}
+	
+	throw std::logic_error("Unknown feed rate mode.");
+}
+void feed_rate_mode(Local<String>, Local<Value> value, const AccessorInfo& info)
+{
+	HandleScope handle_scope;
+	auto machine = js::unwrap<Machine>(info);
 
-	auto mode = args[0];
-	if(mode == "inverse"_sym)
+	if(value == "inverse"_sym)
 	{
 		machine->SetFeedRateMode(Machine::FeedRateMode::InverseTime);
-		return {};
+		return;
 	}
-	else if(mode == "upm"_sym)
+	else if(value == "upm"_sym)
 	{
 		machine->SetFeedRateMode(Machine::FeedRateMode::UnitsPerMinute);
-		return {};
+		return;
 	}
-	else if(mode == "upr"_sym)
+	else if(value == "upr"_sym)
 	{
 		machine->SetFeedRateMode(Machine::FeedRateMode::UnitsPerRevolution);
-		return {};
+		return;
 	}
 
-	return ThrowException(String::New("expected feed_rate_mode(inverse / upm / upr)"));
+	ThrowException(String::New("expected feed_rate_mode = inverse / upm / upr"));
 }
-Handle<Value> feed_rate(const Arguments& args)
+
+Handle<Value> feed_rate(Local<String>, const AccessorInfo& info)
 {
 	HandleScope handle_scope;
-	auto machine = js::unwrap<Machine>(args);
+	auto machine = js::unwrap<Machine>(info);
+	
+	return Number::New(machine->GetFeedRate().first);
+}
+void feed_rate(Local<String>, Local<Value> value, const AccessorInfo& info)
+{
+	HandleScope handle_scope;
+	auto machine = js::unwrap<Machine>(info);
 
-	if(args.Length() == 1)
-	{
-		auto f = js::to_double(args[0]);
-		machine->SetFeedRate(f);
-		return {};
-	}
-
-	return ThrowException(String::New("expected feed_rate(double feedrate)"));
+	auto f = js::to_double(value);
+	machine->SetFeedRate(f);
 }
 
+Handle<Value> spindle(Local<String>, const AccessorInfo& info)
+{
+	HandleScope handle_scope;
+	auto machine = js::unwrap<Machine>(info);
+	
+	auto s = machine->GetSpindleState();
+	auto state = Object::New();
+	state->Set("speed"_sym, Number::New(s.first));
+	switch(s.second)
+	{
+		case Machine::Rotation::Stop:
+			state->Set("direction"_sym, "stop"_sym);
+			break;
+		case Machine::Rotation::Clockwise:
+			state->Set("direction"_sym, "clockwise"_sym);
+			break;
+		case Machine::Rotation::CounterClockwise:
+			state->Set("direction"_sym, "counterclockwise"_sym);
+			break;
+	}
+	
+	return state;
+}
 Handle<Value> spindle_on(const Arguments& args)
 {
 	HandleScope handle_scope;
@@ -658,15 +767,6 @@ Handle<Value> generate_model(const Arguments& args)
 	return handle_scope.Close(obj);
 }
 
-//Handle<Value> GetPointX(Local<String> property, const AccessorInfo &info)
-//{
-//	Local<Object> self = info.Holder();
-//	Local<External> wrap = Local<External>::Cast(self->GetInternalField(0));
-//	void* ptr = wrap->Value();
-//	int value = static_cast<Point*>(ptr)->x_;
-//	return Integer::New(value);
-//}
-
 void bind(Handle<Object> global)
 {
 	// Name the class in js
@@ -760,22 +860,27 @@ void bind(Handle<Object> global)
 	});
 	
 	tpl->SetClassName(name);
-	tpl->InstanceTemplate()->SetInternalFieldCount(1);
-	
+	auto instance_template = tpl->InstanceTemplate();
 	auto prototype = tpl->PrototypeTemplate();
+	
+	instance_template->SetInternalFieldCount(1);
 	
 	prototype->Set("exact_path"_sym, FunctionTemplate::New(exact_path)->GetFunction());
 	prototype->Set("exact_stop"_sym, FunctionTemplate::New(exact_stop)->GetFunction());
 	prototype->Set("path_blend"_sym, FunctionTemplate::New(path_blend)->GetFunction());
-	prototype->Set("motion"_sym, FunctionTemplate::New(motion)->GetFunction());
-	prototype->Set("arc_motion"_sym, FunctionTemplate::New(arc_motion)->GetFunction());
-	prototype->Set("units"_sym, FunctionTemplate::New(units)->GetFunction());
-	prototype->Set("plane"_sym, FunctionTemplate::New(plane)->GetFunction());
-	prototype->Set("feed_rate_mode"_sym, FunctionTemplate::New(feed_rate_mode)->GetFunction());
-	prototype->Set("feed_rate"_sym, FunctionTemplate::New(feed_rate)->GetFunction());
+	
+	instance_template->SetAccessor("motion"_sym, motion, motion);
+	instance_template->SetAccessor("arc_motion"_sym, arc_motion, arc_motion);
+	instance_template->SetAccessor("units"_sym, units, units);
+	instance_template->SetAccessor("plane"_sym, plane, plane);
+	instance_template->SetAccessor("feed_rate_mode"_sym, feed_rate_mode, feed_rate_mode);
+	instance_template->SetAccessor("feed_rate"_sym, feed_rate, feed_rate);
+	instance_template->SetAccessor("spindle"_sym, spindle);
+	
 	prototype->Set("spindle_on"_sym, FunctionTemplate::New(spindle_on)->GetFunction());
 	prototype->Set("spindle_off"_sym, FunctionTemplate::New(spindle_off)->GetFunction());
 	prototype->Set("load_tool"_sym, FunctionTemplate::New(load_tool)->GetFunction());
+	// TODO tool property is missing.
 	prototype->Set("tool_change"_sym, FunctionTemplate::New(tool_change)->GetFunction());
 	prototype->Set("begin_block"_sym, FunctionTemplate::New(begin_block)->GetFunction());
 	prototype->Set("end_block"_sym, FunctionTemplate::New(end_block)->GetFunction());
