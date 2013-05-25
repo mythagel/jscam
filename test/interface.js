@@ -16,8 +16,8 @@ m.motion = "incremental";
 m.arc_motion = "incremental";
 m.units = "imperial";
 m.plane = "UV";
-m.feed_rate_mode = "blah";
-m.feed_rate = "dd";
+m.feed_rate_mode = "inverse";
+m.feed_rate = 100;
 //m.spindle_on
 //m.spindle_off
 //m.load_tool

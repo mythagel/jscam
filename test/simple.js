@@ -22,7 +22,7 @@ var mill = {
 var m = new Machine(mill, "LinuxCNC");
 
 m.begin_block("Setup");
-	m.feed_rate(100);
+	m.feed_rate = 100;
 	m.spindle_on(250);
 	m.load_tool(1);
 	m.tool_change(1);
