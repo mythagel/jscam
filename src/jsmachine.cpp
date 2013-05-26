@@ -534,6 +534,21 @@ Handle<Value> optional_pause(const Arguments& args)
 	return ThrowException(String::New("expected optional_pause(string comment)"));
 }
 
+Handle<Value> comment(const Arguments& args)
+{
+	HandleScope handle_scope;
+	auto machine = js::unwrap<Machine>(args);
+
+	if(args.Length() == 1)
+	{
+		auto comment = js::to_string(args[0]);
+		machine->Comment(comment);
+		return {};
+	}
+
+	return ThrowException(String::New("expected comment(string comment)"));
+}
+
 Handle<Value> rapid(const Arguments& args)
 {
 	HandleScope handle_scope;
@@ -923,6 +938,7 @@ void bind(Handle<Object> global)
 	prototype->Set("begin_block"_sym, FunctionTemplate::New(begin_block)->GetFunction());
 	prototype->Set("end_block"_sym, FunctionTemplate::New(end_block)->GetFunction());
 	prototype->Set("optional_pause"_sym, FunctionTemplate::New(optional_pause)->GetFunction());
+	prototype->Set("comment"_sym, FunctionTemplate::New(comment)->GetFunction());
 	prototype->Set("rapid"_sym, FunctionTemplate::New(rapid)->GetFunction());
 	prototype->Set("linear"_sym, FunctionTemplate::New(linear)->GetFunction());
 	prototype->Set("arc"_sym, FunctionTemplate::New(arc)->GetFunction());

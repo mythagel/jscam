@@ -47,6 +47,8 @@ m.tool_change(1);
 var t = m.tool;
 
 m.optional_pause();
+m.optional_pause("hello");
+m.comment("hello");
 m.rapid({x: 100});
 m.linear({x: 0});
 m.arc();
