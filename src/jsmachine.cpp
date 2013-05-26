@@ -339,6 +339,44 @@ Handle<Value> spindle(Local<String>, const AccessorInfo& info)
 	
 	return state;
 }
+
+Handle<Value> tool(Local<String>, const AccessorInfo& info)
+{
+	HandleScope handle_scope;
+	auto machine = js::unwrap<Machine>(info);
+	
+	auto tl = machine->GetTool();
+	auto tool = Object::New();
+	tool->Set("name"_sym, String::New(tl.Name().c_str(), tl.Name().size()));
+	switch(tl.ToolType())
+	{
+		case Tool::Type::Mill:
+		{
+			auto spec = tl.GetMill();
+			tool->Set("type"_sym, "mill"_sym);
+			
+			tool->Set("center_cutting"_sym, Number::New(spec.center_cutting));
+			tool->Set("flutes"_sym, Number::New(spec.flutes));
+			tool->Set("flute_length"_sym, Number::New(spec.flute_length));
+			tool->Set("cutting_length"_sym, Number::New(spec.cutting_length));
+			tool->Set("mill_diameter"_sym, Number::New(spec.mill_diameter));
+			tool->Set("shank_diameter"_sym, Number::New(spec.shank_diameter));
+			tool->Set("core_diameter"_sym, Number::New(spec.core_diameter));
+			tool->Set("length"_sym, Number::New(spec.length));
+			break;
+		}
+		case Tool::Type::Lathe:
+		{
+			auto spec = tl.GetLathe();
+			tool->Set("type"_sym, "lathe"_sym);
+			// TODO fill to js
+			break;
+		}
+	}
+	
+	return tool;
+}
+
 Handle<Value> spindle_on(const Arguments& args)
 {
 	HandleScope handle_scope;
@@ -876,11 +914,11 @@ void bind(Handle<Object> global)
 	instance_template->SetAccessor("feed_rate_mode"_sym, feed_rate_mode, feed_rate_mode);
 	instance_template->SetAccessor("feed_rate"_sym, feed_rate, feed_rate);
 	instance_template->SetAccessor("spindle"_sym, spindle);
+	instance_template->SetAccessor("tool"_sym, tool);
 	
 	prototype->Set("spindle_on"_sym, FunctionTemplate::New(spindle_on)->GetFunction());
 	prototype->Set("spindle_off"_sym, FunctionTemplate::New(spindle_off)->GetFunction());
 	prototype->Set("load_tool"_sym, FunctionTemplate::New(load_tool)->GetFunction());
-	// TODO tool property is missing.
 	prototype->Set("tool_change"_sym, FunctionTemplate::New(tool_change)->GetFunction());
 	prototype->Set("begin_block"_sym, FunctionTemplate::New(begin_block)->GetFunction());
 	prototype->Set("end_block"_sym, FunctionTemplate::New(end_block)->GetFunction());
