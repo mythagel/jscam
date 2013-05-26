@@ -30,12 +30,12 @@ function polygon(sides, size, center, depth)
 		var y = center.y + size * Math.sin(side * 2 * Math.PI / sides);
 		m.linear({x: x, y: y});
 	}
-	m.end_block(machine.BlockRestore.RestoreAll);
+	m.end_block(Machine.BlockRestore.RestoreAll);
 }
 
 m.begin_block("polygon test");
 
-m.feed_rate(100);
+m.feed_rate = 100;
 m.spindle_on(100);
 
 m.begin_block("polygon grid");
@@ -45,7 +45,7 @@ for(var i = 0; i < 10; ++i)
 }
 m.end_block();
 
-m.end_block(machine.BlockRestore.RestoreAll);
+m.end_block(Machine.BlockRestore.RestoreAll);
 
 function generate(m)
 {

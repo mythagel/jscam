@@ -1,11 +1,14 @@
 load("lathe.js")
-init(lathe, "LinuxCNC");
 
-units("imperial");
-feed_rate(100);
-exact_stop();
-units("metric");
-feed_rate(100);
-exact_path();
+var m = new Machine(lathe, "LinuxCNC");
 
-motion("incremental");
+m.units = "imperial";
+m.feed_rate = 100;
+m.exact_stop();
+m.units = "metric";
+m.feed_rate = 100;
+m.exact_path();
+
+m.motion = "incremental";
+
+print(JSON.stringify(m.generate()));
