@@ -10,6 +10,10 @@
  * Unchecked pure js Machine interface (for browser things)
  * Toolpath export
  * NodeJS module (refactor so same binding code can be used)
+ * Include paths
+    - For library files
+    - For user included files
+    - At present only `cwd` is searched.
 
 ### Code ###
  * Catch cxxcam exceptions and propagate as js exceptions
