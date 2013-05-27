@@ -73,23 +73,30 @@ Handle<Value> path_blend(const Arguments& args)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
 
-	if(args.Length() == 0)
+	try
 	{
-		machine->AccuracyPathBlending();
-		return {};
+		if(args.Length() == 0)
+		{
+			machine->AccuracyPathBlending();
+			return {};
+		}
+		else if(args.Length() == 1)
+		{
+			auto p = js::to_double(args[0]);
+			machine->AccuracyPathBlending(p);
+			return {};
+		}
+		else if(args.Length() == 2)
+		{
+			auto p = js::to_double(args[0]);
+			auto q = js::to_double(args[1]);
+			machine->AccuracyPathBlending(p, q);
+			return {};
+		}
 	}
-	else if(args.Length() == 1)
+	catch(const std::exception& ex)
 	{
-		auto p = js::to_double(args[0]);
-		machine->AccuracyPathBlending(p);
-		return {};
-	}
-	else if(args.Length() == 2)
-	{
-		auto p = js::to_double(args[0]);
-		auto q = js::to_double(args[1]);
-		machine->AccuracyPathBlending(p, q);
-		return {};
+		return ThrowException(String::New(ex.what()));
 	}
 
 	return ThrowException(String::New("expected path_blend(void / double p / double p, double q)"));
@@ -100,12 +107,19 @@ Handle<Value> motion(Local<String>, const AccessorInfo& info)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(info);
 	
-	switch(machine->GetMotion())
+	try
 	{
-		case Machine::Motion::Absolute:
-			return "absolute"_sym;
-		case Machine::Motion::Incremental:
-			return "incremental"_sym;
+		switch(machine->GetMotion())
+		{
+			case Machine::Motion::Absolute:
+				return "absolute"_sym;
+			case Machine::Motion::Incremental:
+				return "incremental"_sym;
+		}
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
 	}
 	
 	throw std::logic_error("Unknown motion type.");
@@ -115,14 +129,22 @@ void motion(Local<String>, Local<Value> value, const AccessorInfo& info)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(info);
 
-	if(value == "absolute"_sym)
+	try
 	{
-		machine->SetMotion(Machine::Motion::Absolute);
-		return;
+		if(value == "absolute"_sym)
+		{
+			machine->SetMotion(Machine::Motion::Absolute);
+			return;
+		}
+		else if(value == "incremental"_sym)
+		{
+			machine->SetMotion(Machine::Motion::Incremental);
+			return;
+		}
 	}
-	else if(value == "incremental"_sym)
+	catch(const std::exception& ex)
 	{
-		machine->SetMotion(Machine::Motion::Incremental);
+		ThrowException(String::New(ex.what()));
 		return;
 	}
 
@@ -134,12 +156,19 @@ Handle<Value> arc_motion(Local<String>, const AccessorInfo& info)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(info);
 	
-	switch(machine->GetArcMotion())
+	try
 	{
-		case Machine::Motion::Absolute:
-			return "absolute"_sym;
-		case Machine::Motion::Incremental:
-			return "incremental"_sym;
+		switch(machine->GetArcMotion())
+		{
+			case Machine::Motion::Absolute:
+				return "absolute"_sym;
+			case Machine::Motion::Incremental:
+				return "incremental"_sym;
+		}
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
 	}
 	
 	throw std::logic_error("Unknown arc motion type.");
@@ -149,14 +178,22 @@ void arc_motion(Local<String>, Local<Value> value, const AccessorInfo& info)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(info);
 
-	if(value == "absolute"_sym)
+	try
 	{
-		machine->SetArcMotion(Machine::Motion::Absolute);
-		return;
+		if(value == "absolute"_sym)
+		{
+			machine->SetArcMotion(Machine::Motion::Absolute);
+			return;
+		}
+		else if(value == "incremental"_sym)
+		{
+			machine->SetArcMotion(Machine::Motion::Incremental);
+			return;
+		}
 	}
-	else if(value == "incremental"_sym)
+	catch(const std::exception& ex)
 	{
-		machine->SetArcMotion(Machine::Motion::Incremental);
+		ThrowException(String::New(ex.what()));
 		return;
 	}
 
@@ -168,12 +205,19 @@ Handle<Value> units(Local<String>, const AccessorInfo& info)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(info);
 	
-	switch(machine->GetUnits())
+	try
 	{
-		case Machine::Units::Metric:
-			return "metric"_sym;
-		case Machine::Units::Imperial:
-			return "imperial"_sym;
+		switch(machine->GetUnits())
+		{
+			case Machine::Units::Metric:
+				return "metric"_sym;
+			case Machine::Units::Imperial:
+				return "imperial"_sym;
+		}
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
 	}
 	
 	throw std::logic_error("Unknown units.");
@@ -183,14 +227,22 @@ void units(Local<String>, Local<Value> value, const AccessorInfo& info)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(info);
 
-	if(value == "metric"_sym)
+	try
 	{
-		machine->SetUnits(Machine::Units::Metric);
-		return;
+		if(value == "metric"_sym)
+		{
+			machine->SetUnits(Machine::Units::Metric);
+			return;
+		}
+		else if(value == "imperial"_sym)
+		{
+			machine->SetUnits(Machine::Units::Imperial);
+			return;
+		}
 	}
-	else if(value == "imperial"_sym)
+	catch(const std::exception& ex)
 	{
-		machine->SetUnits(Machine::Units::Imperial);
+		ThrowException(String::New(ex.what()));
 		return;
 	}
 
@@ -202,20 +254,27 @@ Handle<Value> plane(Local<String>, const AccessorInfo& info)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(info);
 	
-	switch(machine->GetPlane())
+	try
 	{
-		case Machine::Plane::XY:
-			return "XY"_sym;
-		case Machine::Plane::ZX:
-			return "ZX"_sym;
-		case Machine::Plane::YZ:
-			return "YZ"_sym;
-		case Machine::Plane::UV:
-			return "UV"_sym;
-		case Machine::Plane::WU:
-			return "WU"_sym;
-		case Machine::Plane::VW:
-			return "VW"_sym;
+		switch(machine->GetPlane())
+		{
+			case Machine::Plane::XY:
+				return "XY"_sym;
+			case Machine::Plane::ZX:
+				return "ZX"_sym;
+			case Machine::Plane::YZ:
+				return "YZ"_sym;
+			case Machine::Plane::UV:
+				return "UV"_sym;
+			case Machine::Plane::WU:
+				return "WU"_sym;
+			case Machine::Plane::VW:
+				return "VW"_sym;
+		}
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
 	}
 	
 	throw std::logic_error("Unknown plane.");
@@ -225,34 +284,42 @@ void plane(Local<String>, Local<Value> value, const AccessorInfo& info)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(info);
 
-	if(value == "XY"_sym)
+	try
 	{
-		machine->SetPlane(Machine::Plane::XY);
-		return;
+		if(value == "XY"_sym)
+		{
+			machine->SetPlane(Machine::Plane::XY);
+			return;
+		}
+		else if(value == "ZX"_sym)
+		{
+			machine->SetPlane(Machine::Plane::ZX);
+			return;
+		}
+		else if(value == "YZ"_sym)
+		{
+			machine->SetPlane(Machine::Plane::YZ);
+			return;
+		}
+		else if(value == "UV"_sym)
+		{
+			machine->SetPlane(Machine::Plane::UV);
+			return;
+		}
+		else if(value == "WU"_sym)
+		{
+			machine->SetPlane(Machine::Plane::WU);
+			return;
+		}
+		else if(value == "VW"_sym)
+		{
+			machine->SetPlane(Machine::Plane::VW);
+			return;
+		}
 	}
-	else if(value == "ZX"_sym)
+	catch(const std::exception& ex)
 	{
-		machine->SetPlane(Machine::Plane::ZX);
-		return;
-	}
-	else if(value == "YZ"_sym)
-	{
-		machine->SetPlane(Machine::Plane::YZ);
-		return;
-	}
-	else if(value == "UV"_sym)
-	{
-		machine->SetPlane(Machine::Plane::UV);
-		return;
-	}
-	else if(value == "WU"_sym)
-	{
-		machine->SetPlane(Machine::Plane::WU);
-		return;
-	}
-	else if(value == "VW"_sym)
-	{
-		machine->SetPlane(Machine::Plane::VW);
+		ThrowException(String::New(ex.what()));
 		return;
 	}
 
@@ -264,14 +331,21 @@ Handle<Value> feed_rate_mode(Local<String>, const AccessorInfo& info)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(info);
 	
-	switch(machine->GetFeedRate().second)
+	try
 	{
-		case Machine::FeedRateMode::InverseTime:
-			return "inverse"_sym;
-		case Machine::FeedRateMode::UnitsPerMinute:
-			return "upm"_sym;
-		case Machine::FeedRateMode::UnitsPerRevolution:
-			return "upr"_sym;
+		switch(machine->GetFeedRate().second)
+		{
+			case Machine::FeedRateMode::InverseTime:
+				return "inverse"_sym;
+			case Machine::FeedRateMode::UnitsPerMinute:
+				return "upm"_sym;
+			case Machine::FeedRateMode::UnitsPerRevolution:
+				return "upr"_sym;
+		}
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
 	}
 	
 	throw std::logic_error("Unknown feed rate mode.");
@@ -281,19 +355,27 @@ void feed_rate_mode(Local<String>, Local<Value> value, const AccessorInfo& info)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(info);
 
-	if(value == "inverse"_sym)
+	try
 	{
-		machine->SetFeedRateMode(Machine::FeedRateMode::InverseTime);
-		return;
+		if(value == "inverse"_sym)
+		{
+			machine->SetFeedRateMode(Machine::FeedRateMode::InverseTime);
+			return;
+		}
+		else if(value == "upm"_sym)
+		{
+			machine->SetFeedRateMode(Machine::FeedRateMode::UnitsPerMinute);
+			return;
+		}
+		else if(value == "upr"_sym)
+		{
+			machine->SetFeedRateMode(Machine::FeedRateMode::UnitsPerRevolution);
+			return;
+		}
 	}
-	else if(value == "upm"_sym)
+	catch(const std::exception& ex)
 	{
-		machine->SetFeedRateMode(Machine::FeedRateMode::UnitsPerMinute);
-		return;
-	}
-	else if(value == "upr"_sym)
-	{
-		machine->SetFeedRateMode(Machine::FeedRateMode::UnitsPerRevolution);
+		ThrowException(String::New(ex.what()));
 		return;
 	}
 
@@ -305,7 +387,14 @@ Handle<Value> feed_rate(Local<String>, const AccessorInfo& info)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(info);
 	
-	return Number::New(machine->GetFeedRate().first);
+	try
+	{
+		return Number::New(machine->GetFeedRate().first);
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
 }
 void feed_rate(Local<String>, Local<Value> value, const AccessorInfo& info)
 {
@@ -313,7 +402,15 @@ void feed_rate(Local<String>, Local<Value> value, const AccessorInfo& info)
 	auto machine = js::unwrap<Machine>(info);
 
 	auto f = js::to_double(value);
-	machine->SetFeedRate(f);
+	
+	try
+	{
+		machine->SetFeedRate(f);
+	}
+	catch(const std::exception& ex)
+	{
+		ThrowException(String::New(ex.what()));
+	}
 }
 
 Handle<Value> spindle(Local<String>, const AccessorInfo& info)
@@ -321,20 +418,27 @@ Handle<Value> spindle(Local<String>, const AccessorInfo& info)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(info);
 	
-	auto s = machine->GetSpindleState();
 	auto state = Object::New();
-	state->Set("speed"_sym, Number::New(s.first));
-	switch(s.second)
+	try
 	{
-		case Machine::Rotation::Stop:
-			state->Set("direction"_sym, "stop"_sym);
-			break;
-		case Machine::Rotation::Clockwise:
-			state->Set("direction"_sym, "clockwise"_sym);
-			break;
-		case Machine::Rotation::CounterClockwise:
-			state->Set("direction"_sym, "counterclockwise"_sym);
-			break;
+		auto s = machine->GetSpindleState();
+		state->Set("speed"_sym, Number::New(s.first));
+		switch(s.second)
+		{
+			case Machine::Rotation::Stop:
+				state->Set("direction"_sym, "stop"_sym);
+				break;
+			case Machine::Rotation::Clockwise:
+				state->Set("direction"_sym, "clockwise"_sym);
+				break;
+			case Machine::Rotation::CounterClockwise:
+				state->Set("direction"_sym, "counterclockwise"_sym);
+				break;
+		}
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
 	}
 	
 	return state;
@@ -344,34 +448,41 @@ Handle<Value> tool(Local<String>, const AccessorInfo& info)
 {
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(info);
-	
-	auto tl = machine->GetTool();
 	auto tool = Object::New();
-	tool->Set("name"_sym, String::New(tl.Name().c_str(), tl.Name().size()));
-	switch(tl.ToolType())
+	
+	try
 	{
-		case Tool::Type::Mill:
+		auto tl = machine->GetTool();
+		tool->Set("name"_sym, String::New(tl.Name().c_str(), tl.Name().size()));
+		switch(tl.ToolType())
 		{
-			auto spec = tl.GetMill();
-			tool->Set("type"_sym, "mill"_sym);
+			case Tool::Type::Mill:
+			{
+				auto spec = tl.GetMill();
+				tool->Set("type"_sym, "mill"_sym);
 			
-			tool->Set("center_cutting"_sym, Number::New(spec.center_cutting));
-			tool->Set("flutes"_sym, Number::New(spec.flutes));
-			tool->Set("flute_length"_sym, Number::New(spec.flute_length));
-			tool->Set("cutting_length"_sym, Number::New(spec.cutting_length));
-			tool->Set("mill_diameter"_sym, Number::New(spec.mill_diameter));
-			tool->Set("shank_diameter"_sym, Number::New(spec.shank_diameter));
-			tool->Set("core_diameter"_sym, Number::New(spec.core_diameter));
-			tool->Set("length"_sym, Number::New(spec.length));
-			break;
+				tool->Set("center_cutting"_sym, Number::New(spec.center_cutting));
+				tool->Set("flutes"_sym, Number::New(spec.flutes));
+				tool->Set("flute_length"_sym, Number::New(spec.flute_length));
+				tool->Set("cutting_length"_sym, Number::New(spec.cutting_length));
+				tool->Set("mill_diameter"_sym, Number::New(spec.mill_diameter));
+				tool->Set("shank_diameter"_sym, Number::New(spec.shank_diameter));
+				tool->Set("core_diameter"_sym, Number::New(spec.core_diameter));
+				tool->Set("length"_sym, Number::New(spec.length));
+				break;
+			}
+			case Tool::Type::Lathe:
+			{
+				auto spec = tl.GetLathe();
+				tool->Set("type"_sym, "lathe"_sym);
+				// TODO fill to js
+				break;
+			}
 		}
-		case Tool::Type::Lathe:
-		{
-			auto spec = tl.GetLathe();
-			tool->Set("type"_sym, "lathe"_sym);
-			// TODO fill to js
-			break;
-		}
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
 	}
 	
 	return tool;
@@ -382,31 +493,38 @@ Handle<Value> spindle_on(const Arguments& args)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
 
-	if(args.Length() == 1)
+	try
 	{
-		auto s = js::to_uint32(args[0]);
-		machine->StartSpindle(s);
-		return {};
+		if(args.Length() == 1)
+		{
+			auto s = js::to_uint32(args[0]);
+			machine->StartSpindle(s);
+			return {};
+		}
+		else if(args.Length() == 2)
+		{
+			auto s = js::to_uint32(args[0]);
+			auto r = args[1];
+			if(r == "stop"_sym)
+			{
+				machine->StartSpindle(s, Machine::Rotation::Stop);
+				return {};
+			}
+			else if(r == "clockwise"_sym)
+			{
+				machine->StartSpindle(s, Machine::Rotation::Clockwise);
+				return {};
+			}
+			else if(r == "counterclockwise"_sym)
+			{
+				machine->StartSpindle(s, Machine::Rotation::CounterClockwise);
+				return {};
+			}
+		}
 	}
-	else if(args.Length() == 2)
+	catch(const std::exception& ex)
 	{
-		auto s = js::to_uint32(args[0]);
-		auto r = args[1];
-		if(r == "stop"_sym)
-		{
-			machine->StartSpindle(s, Machine::Rotation::Stop);
-			return {};
-		}
-		else if(r == "clockwise"_sym)
-		{
-			machine->StartSpindle(s, Machine::Rotation::Clockwise);
-			return {};
-		}
-		else if(r == "counterclockwise"_sym)
-		{
-			machine->StartSpindle(s, Machine::Rotation::CounterClockwise);
-			return {};
-		}
+		return ThrowException(String::New(ex.what()));
 	}
 
 	return ThrowException(String::New("expected spindle_on(uint s, r = machine.Rotation.Clockwise)"));
@@ -415,7 +533,14 @@ Handle<Value> spindle_off(const Arguments& args)
 {
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
-	machine->StopSpindle();
+	try
+	{
+		machine->StopSpindle();
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
 	return {};
 }
 
@@ -424,11 +549,18 @@ Handle<Value> load_tool(const Arguments& args)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
 
-	if(args.Length() == 1)
+	try
 	{
-		auto id = js::to_uint32(args[0]);
-		machine->SetTool(id);
-		return {};
+		if(args.Length() == 1)
+		{
+			auto id = js::to_uint32(args[0]);
+			machine->SetTool(id);
+			return {};
+		}
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
 	}
 
 	return ThrowException(String::New("expected load_tool(int id)"));
@@ -438,11 +570,18 @@ Handle<Value> tool_change(const Arguments& args)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
 
-	if(args.Length() == 1)
+	try
 	{
-		auto id = js::to_uint32(args[0]);
-		machine->ToolChange(id);
-		return {};
+		if(args.Length() == 1)
+		{
+			auto id = js::to_uint32(args[0]);
+			machine->ToolChange(id);
+			return {};
+		}
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
 	}
 
 	return ThrowException(String::New("expected tool_change(int id)"));
@@ -453,11 +592,18 @@ Handle<Value> begin_block(const Arguments& args)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
 
-	if(args.Length() == 1)
+	try
 	{
-		auto name = js::to_string(args[0]);
-		machine->NewBlock(name);
-		return {};
+		if(args.Length() == 1)
+		{
+			auto name = js::to_string(args[0]);
+			machine->NewBlock(name);
+			return {};
+		}
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
 	}
 
 	return ThrowException(String::New("expected begin_block(string name)"));
@@ -467,48 +613,55 @@ Handle<Value> end_block(const Arguments& args)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
 
-	if(args.Length() == 0)
+	try
 	{
-		machine->EndBlock();
-		return {};
-	}
-	else
-	{
-		int restore(0);
-		for(auto arg : js::arguments(args))
+		if(args.Length() == 0)
 		{
-			auto res = arg;
-			if(res == "preserve"_sym)
-			{
-				machine->EndBlock(Machine::block_PreserveState);
-				return {};
-			}
-			else if(res == "restore"_sym)
-			{
-				machine->EndBlock(Machine::block_RestoreState);
-				return {};
-			}
-			else if(res == "units"_sym)
-				restore |= Machine::block_RestoreUnits;
-			else if(res == "plane"_sym)
-				restore |= Machine::block_RestorePlane;
-			else if(res == "motion"_sym)
-				restore |= Machine::block_RestoreMotion;
-			else if(res == "arc_motion"_sym)
-				restore |= Machine::block_RestoreArcMotion;
-			else if(res == "feedrate_mode"_sym)
-				restore |= Machine::block_RestoreFeedRateMode;
-			else if(res == "feedrate"_sym)
-				restore |= Machine::block_RestoreFeedRate;
-			else if(res == "spindle"_sym)
-				restore |= Machine::block_RestoreSpindle;
-			else if(res == "tool"_sym)
-				restore |= Machine::block_RestoreTool;
-			else if(res == "position"_sym)
-				restore |= Machine::block_RestorePosition;
+			machine->EndBlock();
+			return {};
 		}
-		machine->EndBlock(restore);
-		return {};
+		else
+		{
+			int restore(0);
+			for(auto arg : js::arguments(args))
+			{
+				auto res = arg;
+				if(res == "preserve"_sym)
+				{
+					machine->EndBlock(Machine::block_PreserveState);
+					return {};
+				}
+				else if(res == "restore"_sym)
+				{
+					machine->EndBlock(Machine::block_RestoreState);
+					return {};
+				}
+				else if(res == "units"_sym)
+					restore |= Machine::block_RestoreUnits;
+				else if(res == "plane"_sym)
+					restore |= Machine::block_RestorePlane;
+				else if(res == "motion"_sym)
+					restore |= Machine::block_RestoreMotion;
+				else if(res == "arc_motion"_sym)
+					restore |= Machine::block_RestoreArcMotion;
+				else if(res == "feedrate_mode"_sym)
+					restore |= Machine::block_RestoreFeedRateMode;
+				else if(res == "feedrate"_sym)
+					restore |= Machine::block_RestoreFeedRate;
+				else if(res == "spindle"_sym)
+					restore |= Machine::block_RestoreSpindle;
+				else if(res == "tool"_sym)
+					restore |= Machine::block_RestoreTool;
+				else if(res == "position"_sym)
+					restore |= Machine::block_RestorePosition;
+			}
+			machine->EndBlock(restore);
+			return {};
+		}
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
 	}
 
 	return ThrowException(String::New("expected end_block(void / restore)"));
@@ -519,16 +672,23 @@ Handle<Value> optional_pause(const Arguments& args)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
 
-	if(args.Length() == 0)
+	try
 	{
-		machine->OptionalPause();
-		return {};
+		if(args.Length() == 0)
+		{
+			machine->OptionalPause();
+			return {};
+		}
+		else if(args.Length() == 1)
+		{
+			auto comment = js::to_string(args[0]);
+			machine->OptionalPause(comment);
+			return {};
+		}
 	}
-	else if(args.Length() == 1)
+	catch(const std::exception& ex)
 	{
-		auto comment = js::to_string(args[0]);
-		machine->OptionalPause(comment);
-		return {};
+		return ThrowException(String::New(ex.what()));
 	}
 
 	return ThrowException(String::New("expected optional_pause(string comment)"));
@@ -538,12 +698,19 @@ Handle<Value> comment(const Arguments& args)
 {
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
-
-	if(args.Length() == 1)
+	
+	try
 	{
-		auto comment = js::to_string(args[0]);
-		machine->Comment(comment);
-		return {};
+		if(args.Length() == 1)
+		{
+			auto comment = js::to_string(args[0]);
+			machine->Comment(comment);
+			return {};
+		}
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
 	}
 
 	return ThrowException(String::New("expected comment(string comment)"));
@@ -554,42 +721,49 @@ Handle<Value> rapid(const Arguments& args)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
 
-	std::vector<Axis> axes;
-	for(auto arg : js::arguments(args))
+	try
 	{
-		auto axis_value = arg->ToObject();
-		auto keys = axis_value->GetPropertyNames();
-		for(auto axis : js::array(keys))
+		std::vector<Axis> axes;
+		for(auto arg : js::arguments(args))
 		{
-			auto value = axis_value->Get(axis);
+			auto axis_value = arg->ToObject();
+			auto keys = axis_value->GetPropertyNames();
+			for(auto axis : js::array(keys))
+			{
+				auto value = axis_value->Get(axis);
 
-			if(axis == "x"_sym)
-				axes.push_back(X(js::to_double(value)));
-			else if(axis == "y"_sym)
-				axes.push_back(Y(js::to_double(value)));
-			else if(axis == "z"_sym)
-				axes.push_back(Z(js::to_double(value)));
+				if(axis == "x"_sym)
+					axes.push_back(X(js::to_double(value)));
+				else if(axis == "y"_sym)
+					axes.push_back(Y(js::to_double(value)));
+				else if(axis == "z"_sym)
+					axes.push_back(Z(js::to_double(value)));
 
-			else if(axis == "a"_sym)
-				axes.push_back(A(js::to_double(value)));
-			else if(axis == "b"_sym)
-				axes.push_back(B(js::to_double(value)));
-			else if(axis == "c"_sym)
-				axes.push_back(C(js::to_double(value)));
+				else if(axis == "a"_sym)
+					axes.push_back(A(js::to_double(value)));
+				else if(axis == "b"_sym)
+					axes.push_back(B(js::to_double(value)));
+				else if(axis == "c"_sym)
+					axes.push_back(C(js::to_double(value)));
 
-			// UVW unimplemented in cxxcam
-//			else if(axis == "u"_sym)
-//				axes.push_back(U(js::to_double(value)));
-//			else if(axis == "v"_sym)
-//				axes.push_back(V(js::to_double(value)));
-//			else if(axis == "w"_sym)
-//				axes.push_back(W(js::to_double(value)));
+				// UVW unimplemented in cxxcam
+	//			else if(axis == "u"_sym)
+	//				axes.push_back(U(js::to_double(value)));
+	//			else if(axis == "v"_sym)
+	//				axes.push_back(V(js::to_double(value)));
+	//			else if(axis == "w"_sym)
+	//				axes.push_back(W(js::to_double(value)));
 
-			else
-				return ThrowException(String::New("Unrecognised axis."));
+				else
+					return ThrowException(String::New("Unrecognised axis."));
+			}
 		}
+		machine->Rapid(axes);
 	}
-	machine->Rapid(axes);
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
 
 	return {};
 }
@@ -598,42 +772,49 @@ Handle<Value> linear(const Arguments& args)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
 
-	std::vector<Axis> axes;
-	for(auto arg : js::arguments(args))
+	try
 	{
-		auto axis_value = arg->ToObject();
-		auto keys = axis_value->GetPropertyNames();
-
-		for(auto axis : js::array(keys))
+		std::vector<Axis> axes;
+		for(auto arg : js::arguments(args))
 		{
-			auto value = axis_value->Get(axis);
-			if(axis == "x"_sym)
-				axes.push_back(X(js::to_double(value)));
-			else if(axis == "y"_sym)
-				axes.push_back(Y(js::to_double(value)));
-			else if(axis == "z"_sym)
-				axes.push_back(Z(js::to_double(value)));
+			auto axis_value = arg->ToObject();
+			auto keys = axis_value->GetPropertyNames();
 
-			else if(axis == "a"_sym)
-				axes.push_back(A(js::to_double(value)));
-			else if(axis == "b"_sym)
-				axes.push_back(B(js::to_double(value)));
-			else if(axis == "c"_sym)
-				axes.push_back(C(js::to_double(value)));
+			for(auto axis : js::array(keys))
+			{
+				auto value = axis_value->Get(axis);
+				if(axis == "x"_sym)
+					axes.push_back(X(js::to_double(value)));
+				else if(axis == "y"_sym)
+					axes.push_back(Y(js::to_double(value)));
+				else if(axis == "z"_sym)
+					axes.push_back(Z(js::to_double(value)));
 
-			// UVW unimplemented in cxxcam
-//			else if(axis == "u"_sym)
-//				axes.push_back(U(js::to_double(value)));
-//			else if(axis == "v"_sym)
-//				axes.push_back(V(js::to_double(value)));
-//			else if(axis == "w"_sym)
-//				axes.push_back(W(js::to_double(value)));
+				else if(axis == "a"_sym)
+					axes.push_back(A(js::to_double(value)));
+				else if(axis == "b"_sym)
+					axes.push_back(B(js::to_double(value)));
+				else if(axis == "c"_sym)
+					axes.push_back(C(js::to_double(value)));
 
-			else
-				return ThrowException(String::New("Unrecognised axis."));
+				// UVW unimplemented in cxxcam
+	//			else if(axis == "u"_sym)
+	//				axes.push_back(U(js::to_double(value)));
+	//			else if(axis == "v"_sym)
+	//				axes.push_back(V(js::to_double(value)));
+	//			else if(axis == "w"_sym)
+	//				axes.push_back(W(js::to_double(value)));
+
+				else
+					return ThrowException(String::New("Unrecognised axis."));
+			}
 		}
+		machine->Linear(axes);
 	}
-	machine->Linear(axes);
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
 
 	return {};
 }
@@ -642,89 +823,96 @@ Handle<Value> arc(const Arguments& args)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
 
-	Machine::Direction dir = Machine::Direction::Clockwise;
-	std::vector<Axis> end_pos;
-	std::vector<Offset> center;
-	unsigned int turns = 1;
-
-	/*
-	 * TODO this is messy and horrible.
-	 * Define a common binding strategy and stick to it.
-	 */
-	unsigned int index(0);
-	for(auto arg : js::arguments(args))
+	try
 	{
-		++index;
+		Machine::Direction dir = Machine::Direction::Clockwise;
+		std::vector<Axis> end_pos;
+		std::vector<Offset> center;
+		unsigned int turns = 1;
 
-		if(index == 1)
+		/*
+		 * TODO this is messy and horrible.
+		 * Define a common binding strategy and stick to it.
+		 */
+		unsigned int index(0);
+		for(auto arg : js::arguments(args))
 		{
-			auto d = js::to_string(arg);
-			if(d == "clockwise")
+			++index;
+
+			if(index == 1)
 			{
-				dir = Machine::Direction::Clockwise;
+				auto d = js::to_string(arg);
+				if(d == "clockwise")
+				{
+					dir = Machine::Direction::Clockwise;
+				}
+				else if(d == "counterclockwise")
+				{
+					dir = Machine::Direction::CounterClockwise;
+				}
+				else
+				{
+					return ThrowException(String::New("Unrecognised direction"));
+				}
 			}
-			else if(d == "counterclockwise")
+			else if(arg->IsObject())
 			{
-				dir = Machine::Direction::CounterClockwise;
+				auto axis_value = arg->ToObject();
+				auto keys = axis_value->GetPropertyNames();
+
+				for(auto key : js::array(keys))
+				{
+					auto axis = js::to_string(key);
+					auto value = axis_value->Get(key);
+
+					if(axis == "x")
+						end_pos.push_back(X(js::to_double(value)));
+					else if(axis == "y")
+						end_pos.push_back(Y(js::to_double(value)));
+					else if(axis == "z")
+						end_pos.push_back(Z(js::to_double(value)));
+
+					else if(axis == "a")
+						end_pos.push_back(A(js::to_double(value)));
+					else if(axis == "b")
+						end_pos.push_back(B(js::to_double(value)));
+					else if(axis == "c")
+						end_pos.push_back(C(js::to_double(value)));
+
+					// UVW unimplemented in cxxcam
+		//			else if(axis == "u")
+		//				end_pos.push_back(U(js::to_double(value)));
+		//			else if(axis == "v")
+		//				end_pos.push_back(V(js::to_double(value)));
+		//			else if(axis == "w")
+		//				end_pos.push_back(W(js::to_double(value)));
+
+					// Offsets
+					else if(axis == "i")
+						center.push_back(I(js::to_double(value)));
+					else if(axis == "j")
+						center.push_back(J(js::to_double(value)));
+					else if(axis == "k")
+						center.push_back(K(js::to_double(value)));
+
+					else if(axis == "turns")
+						turns = js::to_uint32(value);
+
+					else
+						return ThrowException(String::New("Unrecognised axis / offset / turns."));
+				}
 			}
 			else
 			{
-				return ThrowException(String::New("Unrecognised direction"));
+
 			}
 		}
-		else if(arg->IsObject())
-		{
-			auto axis_value = arg->ToObject();
-			auto keys = axis_value->GetPropertyNames();
-
-			for(auto key : js::array(keys))
-			{
-				auto axis = js::to_string(key);
-				auto value = axis_value->Get(key);
-
-				if(axis == "x")
-					end_pos.push_back(X(js::to_double(value)));
-				else if(axis == "y")
-					end_pos.push_back(Y(js::to_double(value)));
-				else if(axis == "z")
-					end_pos.push_back(Z(js::to_double(value)));
-
-				else if(axis == "a")
-					end_pos.push_back(A(js::to_double(value)));
-				else if(axis == "b")
-					end_pos.push_back(B(js::to_double(value)));
-				else if(axis == "c")
-					end_pos.push_back(C(js::to_double(value)));
-
-				// UVW unimplemented in cxxcam
-	//			else if(axis == "u")
-	//				end_pos.push_back(U(js::to_double(value)));
-	//			else if(axis == "v")
-	//				end_pos.push_back(V(js::to_double(value)));
-	//			else if(axis == "w")
-	//				end_pos.push_back(W(js::to_double(value)));
-
-				// Offsets
-				else if(axis == "i")
-					center.push_back(I(js::to_double(value)));
-				else if(axis == "j")
-					center.push_back(J(js::to_double(value)));
-				else if(axis == "k")
-					center.push_back(K(js::to_double(value)));
-
-				else if(axis == "turns")
-					turns = js::to_uint32(value);
-
-				else
-					return ThrowException(String::New("Unrecognised axis / offset / turns."));
-			}
-		}
-		else
-		{
-
-		}
+		machine->Arc(dir, end_pos, center, turns);
 	}
-	machine->Arc(dir, end_pos, center, turns);
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
 
 	return {};
 }
@@ -732,8 +920,15 @@ Handle<Value> plunge(const Arguments&)
 {
 	HandleScope handle_scope;
 	//auto machine = js::unwrap<Machine>(args);
-
-	// TODO missing in cxxcam
+	
+	try
+	{
+		// TODO missing in cxxcam
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
 	return {};
 }
 Handle<Value> generate(const Arguments& args)
@@ -771,51 +966,65 @@ Handle<Value> generate(const Arguments& args)
 		return js_line;
 	};
 	
-	auto lines = machine->Generate();
+	try
+	{
+		auto lines = machine->Generate();
 	
-	auto js_lines = Array::New(lines.size());
-	for(std::size_t l = 0; l != lines.size(); ++l)
-		js_lines->Set(l, line2js(lines[l]));
-
-	return handle_scope.Close(js_lines);
+		auto js_lines = Array::New(lines.size());
+		for(std::size_t l = 0; l != lines.size(); ++l)
+			js_lines->Set(l, line2js(lines[l]));
+		
+		return handle_scope.Close(js_lines);
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
 }
 
 Handle<Value> generate_model(const Arguments& args)
 {
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
-	
-	const auto stock = machine->GetStock();
-	const auto stock_object = to_object(stock.Model);
-	
 	auto obj = Object::New();
 	
-	auto vertices = Array::New(stock_object.vertices.size());
-	for(std::size_t v = 0; v != stock_object.vertices.size(); ++v)
+	try
 	{
-		auto& vtx = stock_object.vertices[v];
-		auto vertex = Array::New(3);
-		
-		vertex->Set(0, Number::New(vtx.x));
-		vertex->Set(1, Number::New(vtx.y));
-		vertex->Set(2, Number::New(vtx.z));
-		
-		vertices->Set(v, vertex);
-	}
-	obj->Set("vertices"_sym, vertices);
+		const auto stock = machine->GetStock();
+		const auto stock_object = to_object(stock.Model);
 	
-	auto faces = Array::New(stock_object.faces.size());
-	for(std::size_t f = 0; f != stock_object.faces.size(); ++f)
-	{
-		auto& fce = stock_object.faces[f];
-		auto face = Array::New(fce.size());
+	
+		auto vertices = Array::New(stock_object.vertices.size());
+		for(std::size_t v = 0; v != stock_object.vertices.size(); ++v)
+		{
+			auto& vtx = stock_object.vertices[v];
+			auto vertex = Array::New(3);
 		
+			vertex->Set(0, Number::New(vtx.x));
+			vertex->Set(1, Number::New(vtx.y));
+			vertex->Set(2, Number::New(vtx.z));
+		
+			vertices->Set(v, vertex);
+		}
+		obj->Set("vertices"_sym, vertices);
+	
+		auto faces = Array::New(stock_object.faces.size());
 		for(std::size_t f = 0; f != stock_object.faces.size(); ++f)
-			face->Set(f, Number::New(fce[f]));
+		{
+			auto& fce = stock_object.faces[f];
+			auto face = Array::New(fce.size());
 		
-		faces->Set(f, face);
+			for(std::size_t f = 0; f != stock_object.faces.size(); ++f)
+				face->Set(f, Number::New(fce[f]));
+		
+			faces->Set(f, face);
+		}
+		obj->Set("faces"_sym, faces);
 	}
-	obj->Set("faces"_sym, faces);
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
 	
 	return handle_scope.Close(obj);
 }
