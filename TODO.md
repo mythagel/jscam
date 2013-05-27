@@ -1,13 +1,7 @@
 # TODO List #
 
 ### High Level ###
- * ~~Refine js api (some functions can be consolidated)~~
- * ~~Test harnesses and drivers to validate cxxcam functions~~
- * ~~Bind Tool loading from json (pending work in cxxcam)~~
  * JS function library
- * ~~Bind functions to retrieve generated GCode~~
- * ~~WebGL export of model~~ (Interface exists)
- * Unchecked pure js Machine interface (for browser things)
  * Toolpath export
  * NodeJS module (refactor so same binding code can be used)
     - http://syskall.com/how-to-write-your-own-native-nodejs-extension/index.html/
@@ -16,6 +10,13 @@
     - For library files
     - For user included files
     - At present only `cwd` is searched.
+ * Unchecked pure js Machine interface (for browser things)
+    - Lower priority
+ * ~~Refine js api (some functions can be consolidated)~~
+ * ~~Test harnesses and drivers to validate cxxcam functions~~
+ * ~~Bind Tool loading from json (pending work in cxxcam)~~
+ * ~~Bind functions to retrieve generated GCode~~
+ * ~~WebGL export of model~~ (Interface exists)
 
 ### Code ###
  * Catch cxxcam exceptions and propagate as js exceptions
