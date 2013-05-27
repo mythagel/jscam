@@ -1,3 +1,5 @@
+"use strict";
+
 load("lathe.js")
 
 var m = new Machine(lathe);

@@ -1,3 +1,5 @@
+"use strict";
+
 load("machine.js");
 
 var lathe = {

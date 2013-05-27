@@ -1,3 +1,5 @@
+"use strict";
+
 load("mill.js");
 
 var m = new Machine(mill);

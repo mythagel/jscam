@@ -1,3 +1,5 @@
+"use strict";
+
 var mill = {
 	type: "mill",
 	tools: [],
