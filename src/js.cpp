@@ -25,6 +25,7 @@
 #include "js.h"
 #include <iostream>
 #include <fstream>
+#include <ostream>
 #include <iterator>
 
 using namespace v8;
@@ -36,6 +37,41 @@ using namespace v8;
 namespace js
 {
 
+namespace
+{
+std::ostream& operator<<(std::ostream& os, const TryCatch& try_catch)
+{
+	HandleScope handle_scope;
+
+	auto message = try_catch.Message();
+	auto exception = to_string(try_catch.Exception());
+	
+	if (message.IsEmpty())
+	{
+		os << "exception: " << exception << '\n';
+		return os;
+	}
+	
+	auto filename = to_string(message->GetScriptResourceName());
+	int lineno = message->GetLineNumber();
+	os << filename << ':' << lineno << ": " << exception << '\n';
+	
+	auto sourceline = to_string(message->GetSourceLine());
+	os << sourceline << '\n';
+	
+	int start = message->GetStartColumn();
+	int end = message->GetEndColumn();
+	os << std::string(start, ' ') << std::string(std::abs(end - start), '^') << '\n';
+	
+	auto stack_trace = to_string(try_catch.StackTrace());
+	if(!stack_trace.empty())
+		os << stack_trace << '\n';
+	
+	return os;
+}
+
+}
+
 Handle<String> read_stream(std::istream& is)
 {
 	if(!is)
@@ -45,32 +81,40 @@ Handle<String> read_stream(std::istream& is)
 	return String::New(str.c_str(), str.size());
 }
 
-std::string to_string(Local<Value> s)
+std::string to_string(Handle<Value> s)
 {
-	if(!s->IsString())
+	if(s.IsEmpty() || !s->IsString())
 		return {};
 	auto str = s->ToString();
 	String::AsciiValue ascii(str);
 	return {*ascii, *ascii + ascii.length()};
 }
 
-double to_double(Local<Value> d)
+double to_double(Handle<Value> d)
 {
+	if(d.IsEmpty())
+		return {};
 	return d->NumberValue();
 }
 
-int32_t to_int32(Local<Value> i)
+int32_t to_int32(Handle<Value> i)
 {
+	if(i.IsEmpty())
+		return {};
 	return i->IntegerValue();
 }
 
-uint32_t to_uint32(v8::Local<v8::Value> i)
+uint32_t to_uint32(v8::Handle<v8::Value> i)
 {
+	if(i.IsEmpty())
+		return {};
 	return i->Uint32Value();
 }
 
-bool to_bool(v8::Local<v8::Value> b)
+bool to_bool(v8::Handle<v8::Value> b)
 {
+	if(b.IsEmpty())
+		return {};
 	return b->BooleanValue();
 }
 
@@ -224,7 +268,7 @@ Handle<Value> require(const Arguments& args)
 	{
 		auto exception = try_catch.Exception();
 		String::AsciiValue exception_str(exception);
-		std::cerr << *exception_str << std::endl;
+		std::cerr << "exception: " << *exception_str << std::endl;
 		
 		return ThrowException(exception);
 	}
@@ -249,9 +293,7 @@ bool exec(Handle<String> source, Handle<Value> name)
 	auto result = script->Run();
 	if (result.IsEmpty())
 	{
-		auto exception = try_catch.Exception();
-		String::AsciiValue exception_str(exception);
-		std::cerr << *exception_str << std::endl;
+		std::cerr << try_catch << '\n';
 		return false;
 	}
 

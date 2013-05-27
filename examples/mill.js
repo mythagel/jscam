@@ -6,7 +6,7 @@ var mill = {
 	[
 		{
 			name: "3mm End Mill",
-			id: 0,
+			id: 1,
 			type: Machine.Type.Mill,
 			center_cutting: true,
 			flutes: 4,

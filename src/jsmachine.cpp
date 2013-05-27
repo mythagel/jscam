@@ -1031,18 +1031,15 @@ Handle<Value> generate_model(const Arguments& args)
 	return handle_scope.Close(obj);
 }
 
-void bind(Handle<Object> global)
+Handle<Value> machine_ctor(const Arguments& args)
 {
-	// Name the class in js
-	auto name = "Machine"_sym;
-	
-	auto tpl = FunctionTemplate::New([](const Arguments& args) -> Handle<Value>
+	if (!args.IsConstructCall())
+		return ThrowException(String::New("Cannot call constructor as function"));
+
+	HandleScope scope;
+
+	try
 	{
-		if (!args.IsConstructCall())
-			return ThrowException(String::New("Cannot call constructor as function"));
-
-		HandleScope scope;
-
 		auto config = args[0]->ToObject();
 		if(config.IsEmpty())
 			return ThrowException(String::New("Expected config"));
@@ -1067,7 +1064,7 @@ void bind(Handle<Object> global)
 			auto name = js::to_string(tool_obj->Get("name"_sym));
 			auto type = tool_obj->Get("type"_sym);
 			auto id = js::to_int32(tool_obj->Get("id"_sym));
-		
+	
 			if(type == "mill"_sym)
 			{
 				auto spec = Tool::Mill();
@@ -1081,7 +1078,7 @@ void bind(Handle<Object> global)
 				spec.shank_diameter = js::to_double(tool_obj->Get("shank_diameter"_sym));
 				spec.core_diameter = js::to_double(tool_obj->Get("core_diameter"_sym));
 				spec.length = js::to_double(tool_obj->Get("length"_sym));
-			
+		
 				tool = Tool(name, spec);
 			}
 			else if(type == "lathe"_sym)
@@ -1118,9 +1115,21 @@ void bind(Handle<Object> global)
 				}
 			}
 		}
+	}
+	catch(const error& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
 
-		return args.This();
-	});
+	return args.This();
+}
+
+void bind(Handle<Object> global)
+{
+	// Name the class in js
+	auto name = "Machine"_sym;
+	
+	auto tpl = FunctionTemplate::New(machine_ctor);
 	
 	tpl->SetClassName(name);
 	auto instance_template = tpl->InstanceTemplate();

@@ -40,11 +40,11 @@ inline v8::Handle<v8::String> operator"" _sym(const char* s, size_t l)
 
 v8::Handle<v8::String> read_stream(std::istream& is);
 
-std::string to_string(v8::Local<v8::Value> s);
-double to_double(v8::Local<v8::Value> d);
-int32_t to_int32(v8::Local<v8::Value> i);
-uint32_t to_uint32(v8::Local<v8::Value> i);
-bool to_bool(v8::Local<v8::Value> b);
+std::string to_string(v8::Handle<v8::Value> s);
+double to_double(v8::Handle<v8::Value> d);
+int32_t to_int32(v8::Handle<v8::Value> i);
+uint32_t to_uint32(v8::Handle<v8::Value> i);
+bool to_bool(v8::Handle<v8::Value> b);
 
 namespace detail
 {
