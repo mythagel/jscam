@@ -4,6 +4,6 @@ var mill = {
 	spindle: [300]
 };
 
-var m = new Machine(mill, "LinuxCNC");
+var m = new Machine(mill);
 var model = m.generate_model();
 //print(JSON.stringify(model));

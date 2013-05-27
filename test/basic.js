@@ -4,5 +4,5 @@ var mill = {
 	spindle: ["100-1000", "2000-6000"]
 };
 
-var m = new Machine(mill, "LinuxCNC");
+var m = new Machine(mill);
 

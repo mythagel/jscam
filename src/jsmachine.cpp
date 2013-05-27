@@ -1045,15 +1045,14 @@ void bind(Handle<Object> global)
 
 		auto config = args[0]->ToObject();
 		if(config.IsEmpty())
-			return ThrowException(String::New("Expected config, variant."));
-		auto variant = js::to_string(args[1]);
+			return ThrowException(String::New("Expected config"));
 
 		auto type = js::to_string(config->Get("type"_sym));
 
 		if(type == "mill")
-			js::make_object<Machine>(args.This(), Machine::Type::Mill, variant);
+			js::make_object<Machine>(args.This(), Machine::Type::Mill);
 		else if(type == "lathe")
-			js::make_object<Machine>(args.This(), Machine::Type::Lathe, variant);
+			js::make_object<Machine>(args.This(), Machine::Type::Lathe);
 		else
 			return ThrowException(String::New("type - mill / lathe"));
 

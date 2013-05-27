@@ -1,6 +1,6 @@
 load("mill.js");
 
-var m = new Machine(mill, "LinuxCNC");
+var m = new Machine(mill);
 
 /*
 pocket.js

@@ -24,7 +24,7 @@ var mill = {
 	spindle: [300]
 };
 
-var m = new Machine(mill, "LinuxCNC");
+var m = new Machine(mill);
 
 m.begin_block("block");
 m.exact_path();

@@ -1,6 +1,6 @@
 load("lathe.js")
 
-var m = new Machine(lathe, "LinuxCNC");
+var m = new Machine(lathe);
 
 m.units = "imperial";
 m.feed_rate = 100;
