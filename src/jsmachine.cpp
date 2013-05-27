@@ -25,6 +25,7 @@
 #include "jsmachine.h"
 #include <memory>
 #include "Machine.h"
+#include "Error.h"
 #include "Axis.h"
 #include "Offset.h"
 #include "Tool.h"
@@ -48,7 +49,7 @@ Handle<Value> exact_path(const Arguments& args)
 	{
 		machine->AccuracyExactPath();
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -62,7 +63,7 @@ Handle<Value> exact_stop(const Arguments& args)
 	{
 		machine->AccuracyExactStop();
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -94,7 +95,7 @@ Handle<Value> path_blend(const Arguments& args)
 			return {};
 		}
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -117,7 +118,7 @@ Handle<Value> motion(Local<String>, const AccessorInfo& info)
 				return "incremental"_sym;
 		}
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -142,7 +143,7 @@ void motion(Local<String>, Local<Value> value, const AccessorInfo& info)
 			return;
 		}
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		ThrowException(String::New(ex.what()));
 		return;
@@ -166,7 +167,7 @@ Handle<Value> arc_motion(Local<String>, const AccessorInfo& info)
 				return "incremental"_sym;
 		}
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -191,7 +192,7 @@ void arc_motion(Local<String>, Local<Value> value, const AccessorInfo& info)
 			return;
 		}
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		ThrowException(String::New(ex.what()));
 		return;
@@ -215,7 +216,7 @@ Handle<Value> units(Local<String>, const AccessorInfo& info)
 				return "imperial"_sym;
 		}
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -240,7 +241,7 @@ void units(Local<String>, Local<Value> value, const AccessorInfo& info)
 			return;
 		}
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		ThrowException(String::New(ex.what()));
 		return;
@@ -272,7 +273,7 @@ Handle<Value> plane(Local<String>, const AccessorInfo& info)
 				return "VW"_sym;
 		}
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -317,7 +318,7 @@ void plane(Local<String>, Local<Value> value, const AccessorInfo& info)
 			return;
 		}
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		ThrowException(String::New(ex.what()));
 		return;
@@ -343,7 +344,7 @@ Handle<Value> feed_rate_mode(Local<String>, const AccessorInfo& info)
 				return "upr"_sym;
 		}
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -373,7 +374,7 @@ void feed_rate_mode(Local<String>, Local<Value> value, const AccessorInfo& info)
 			return;
 		}
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		ThrowException(String::New(ex.what()));
 		return;
@@ -391,7 +392,7 @@ Handle<Value> feed_rate(Local<String>, const AccessorInfo& info)
 	{
 		return Number::New(machine->GetFeedRate().first);
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -407,7 +408,7 @@ void feed_rate(Local<String>, Local<Value> value, const AccessorInfo& info)
 	{
 		machine->SetFeedRate(f);
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		ThrowException(String::New(ex.what()));
 	}
@@ -436,7 +437,7 @@ Handle<Value> spindle(Local<String>, const AccessorInfo& info)
 				break;
 		}
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -480,7 +481,7 @@ Handle<Value> tool(Local<String>, const AccessorInfo& info)
 			}
 		}
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -522,7 +523,7 @@ Handle<Value> spindle_on(const Arguments& args)
 			}
 		}
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -537,7 +538,7 @@ Handle<Value> spindle_off(const Arguments& args)
 	{
 		machine->StopSpindle();
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -558,7 +559,7 @@ Handle<Value> load_tool(const Arguments& args)
 			return {};
 		}
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -579,7 +580,7 @@ Handle<Value> tool_change(const Arguments& args)
 			return {};
 		}
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -601,7 +602,7 @@ Handle<Value> begin_block(const Arguments& args)
 			return {};
 		}
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -659,7 +660,7 @@ Handle<Value> end_block(const Arguments& args)
 			return {};
 		}
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -686,7 +687,7 @@ Handle<Value> optional_pause(const Arguments& args)
 			return {};
 		}
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -708,7 +709,7 @@ Handle<Value> comment(const Arguments& args)
 			return {};
 		}
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -760,7 +761,7 @@ Handle<Value> rapid(const Arguments& args)
 		}
 		machine->Rapid(axes);
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -811,7 +812,7 @@ Handle<Value> linear(const Arguments& args)
 		}
 		machine->Linear(axes);
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -909,7 +910,7 @@ Handle<Value> arc(const Arguments& args)
 		}
 		machine->Arc(dir, end_pos, center, turns);
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -925,7 +926,7 @@ Handle<Value> plunge(const Arguments&)
 	{
 		// TODO missing in cxxcam
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -976,7 +977,7 @@ Handle<Value> generate(const Arguments& args)
 		
 		return handle_scope.Close(js_lines);
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
@@ -1021,7 +1022,7 @@ Handle<Value> generate_model(const Arguments& args)
 		}
 		obj->Set("faces"_sym, faces);
 	}
-	catch(const std::exception& ex)
+	catch(const error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
