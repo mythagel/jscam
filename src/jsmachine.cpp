@@ -35,6 +35,7 @@
 #include <stdexcept>
 
 using namespace v8;
+using namespace cxxcam;
 
 using js::operator"" _sym;
 
@@ -474,7 +475,7 @@ Handle<Value> tool(Local<String>, const AccessorInfo& info)
 			}
 			case Tool::Type::Lathe:
 			{
-				auto spec = tl.GetLathe();
+				//auto spec = tl.GetLathe();
 				tool->Set("type"_sym, "lathe"_sym);
 				// TODO fill to js
 				break;
