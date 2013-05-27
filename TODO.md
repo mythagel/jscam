@@ -10,6 +10,8 @@
  * Unchecked pure js Machine interface (for browser things)
  * Toolpath export
  * NodeJS module (refactor so same binding code can be used)
+    - http://syskall.com/how-to-write-your-own-native-nodejs-extension/index.html/
+    - Portability of scripts has to be considered. It is desired that scripts be self-contained so they can easily be regenerated on different systems.
  * Include paths
     - For library files
     - For user included files
