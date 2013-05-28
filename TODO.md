@@ -3,8 +3,6 @@
 ### High Level ###
  * Include paths
     - For library files
-    - ~~For user included files~~
-    - ~~At present only `cwd` is searched.~~
  * JS function library
     - Convert model to Three.js format for display
     - Backplot generation (pure js)
