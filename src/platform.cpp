@@ -25,17 +25,27 @@
 #include "platform.h"
 #include <cstdio>
 #include <memory>
+#include <libgen.h>
+#include <vector>
 
+// TODO platform specific stuff here.
+// Investigate boost libs.
 namespace platform
 {
 
 std::string realpath(const std::string& rel_path)
 {
-	// TODO platform specific stuff here.
 	auto cfree = [](char* c) { free(c); };
 	std::unique_ptr<char, decltype(cfree)> path(::realpath(rel_path.c_str(), nullptr), cfree);
 	
 	return path.get();
 }
 
+std::string dirname(const std::string& file)
+{
+	std::vector<char> buf(std::begin(file), std::end(file));
+	return ::dirname(buf.data());
 }
+
+}
+

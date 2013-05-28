@@ -30,6 +30,7 @@ namespace platform
 {
 
 std::string realpath(const std::string& rel_path);
+std::string dirname(const std::string& file);
 
 }
 

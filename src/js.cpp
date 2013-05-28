@@ -31,10 +31,7 @@
 
 using namespace v8;
 using platform::realpath;
-
-/*
- * Much of this code is based on v8 examples.
- */
+using platform::dirname;
 
 namespace js
 {
@@ -209,6 +206,8 @@ Handle<Value> print(const Arguments& args)
 }
 Handle<Value> read(const Arguments& args)
 {
+	HandleScope handle_scope;
+	
 	if (args.Length() != 1)
 		return ThrowException(String::New("Expected: filename"));
 
@@ -221,10 +220,11 @@ Handle<Value> read(const Arguments& args)
 	if (source.IsEmpty())
 		return ThrowException(String::New("Unable to read file"));
 
-	return source;
+	return handle_scope.Close(source);
 }
 Handle<Value> write(const Arguments& args)
 {
+	HandleScope handle_scope;
 	if (args.Length() != 2)
 		return ThrowException(String::New("Expected: filename, data"));
 
@@ -237,7 +237,8 @@ Handle<Value> write(const Arguments& args)
 	
 		auto content = to_string(args[1]);
 		bool result = ofs.write(content.c_str(), content.size());
-		return Boolean::New(result);
+		
+		return handle_scope.Close(Boolean::New(result));
 	}
 	catch(const error& ex)
 	{
@@ -247,6 +248,10 @@ Handle<Value> write(const Arguments& args)
 Handle<Value> load(const Arguments& args)
 {
 	HandleScope handle_scope;
+	auto context = args.Holder()->CreationContext();
+	auto global = context->Global();
+	auto parent_script = global->Get("__filename"_sym);
+	auto parent_path = dirname(to_string(parent_script)) + '/';
 
 	for(auto arg : arguments(args))
 	{
@@ -254,15 +259,22 @@ Handle<Value> load(const Arguments& args)
 		try
 		{
 			auto file = to_string(arg);
-			auto filename = realpath(file);
+			if(file.empty())
+				continue;
+			
+			if(file[0] != '/')
+				file = parent_path + file;
 			
 			std::ifstream ifs(file);
 			auto source = read_stream(ifs);
 			if (source.IsEmpty())
 				return ThrowException(String::New("Unable to read file"));
 
-			if (!exec(source, String::New(filename.c_str(), filename.size()), args.Holder()->CreationContext()))
+			auto filename = realpath(file);
+			if (!exec(source, String::New(filename.c_str(), filename.size()), context))
 				return ThrowException(String::New("Unable to execute file"));
+			
+			global->Set("__filename"_sym, parent_script);
 		}
 		catch(const error& ex)
 		{
