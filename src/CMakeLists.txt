@@ -7,7 +7,7 @@ ENDIF()
 #INCLUDE_DIRECTORIES(${CXXCAM_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/deps/cxxcam/include)
 
-ADD_EXECUTABLE(${PROJECT_NAME} jscam.cpp jsmachine.cpp js.cpp)
+ADD_EXECUTABLE(${PROJECT_NAME} jscam.cpp jsmachine.cpp js.cpp platform.cpp)
 
 # Addition of boost_system is required for an unknown reason
 # on my ubuntu system.

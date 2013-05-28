@@ -21,10 +21,11 @@
 #include <fstream>
 #include <iostream>
 #include "jsmachine.h"
+#include "platform.h"
 
 using namespace v8;
-
 using js::operator"" _sym;
+using platform::realpath;
 
 /*
  * Create a new js context with basic functions.
@@ -54,8 +55,10 @@ int main(int argc, char* argv[])
 		}
 		else
 		{
-			for(auto& arg : args)
+			for(const auto& arg : args)
 			{
+				auto filename = realpath(arg);
+				
 				std::ifstream ifs(arg);
 				auto source = js::read_stream(ifs);
 				if(source.IsEmpty())
@@ -65,7 +68,7 @@ int main(int argc, char* argv[])
 					break;
 				}
 
-				result = js::exec(source, String::New(arg.c_str(), arg.size()), context);
+				result = js::exec(source, String::New(filename.c_str(), filename.size()), context);
 				if(!result)
 				{
 					std::cerr << "Unable to execute source file " << arg << '\n';
