@@ -629,7 +629,7 @@ Handle<Value> spindle_off(const Arguments& args)
 	return {};
 }
 
-Handle<Value> load_tool(const Arguments& args)
+Handle<Value> preload_tool(const Arguments& args)
 {
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
@@ -652,7 +652,7 @@ Handle<Value> load_tool(const Arguments& args)
 		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 
-	return ThrowException(String::New("expected load_tool(int id)"));
+	return ThrowException(String::New("expected preload_tool(int id)"));
 }
 Handle<Value> tool_change(const Arguments& args)
 {
@@ -1286,7 +1286,7 @@ void bind(Handle<Object> global)
 	
 	prototype->Set("spindle_on"_sym, FunctionTemplate::New(spindle_on)->GetFunction());
 	prototype->Set("spindle_off"_sym, FunctionTemplate::New(spindle_off)->GetFunction());
-	prototype->Set("load_tool"_sym, FunctionTemplate::New(load_tool)->GetFunction());
+	prototype->Set("preload_tool"_sym, FunctionTemplate::New(preload_tool)->GetFunction());
 	prototype->Set("tool_change"_sym, FunctionTemplate::New(tool_change)->GetFunction());
 	prototype->Set("begin_block"_sym, FunctionTemplate::New(begin_block)->GetFunction());
 	prototype->Set("end_block"_sym, FunctionTemplate::New(end_block)->GetFunction());
