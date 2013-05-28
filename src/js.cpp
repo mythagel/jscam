@@ -61,7 +61,9 @@ std::ostream& operator<<(std::ostream& os, const TryCatch& try_catch)
 	
 	int start = message->GetStartColumn();
 	int end = message->GetEndColumn();
-	os << std::string(start, ' ') << std::string(std::abs(end - start), '^') << '\n';
+	for(int i = 0; i < start; ++i)
+		os << (sourceline[i] == '\t' ? '\t' : ' ');
+	os << std::string(std::abs(end - start), '^') << '\n';
 	
 	auto stack_trace = try_catch.StackTrace();
 	if(!stack_trace.IsEmpty())
