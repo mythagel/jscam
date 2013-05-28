@@ -92,8 +92,9 @@ std::string to_string(Handle<Value> s)
 	auto str = s->ToString();
 	if(str.IsEmpty())
 		throw error("String conversion failed");
-	String::AsciiValue ascii(str);
-	return {*ascii, *ascii + ascii.length()};
+	
+	String::Utf8Value value(str);
+	return {*value, *value + value.length()};
 }
 
 double to_double(Handle<Value> d)
@@ -222,6 +223,27 @@ Handle<Value> read(const Arguments& args)
 
 	return source;
 }
+Handle<Value> write(const Arguments& args)
+{
+	if (args.Length() != 2)
+		return ThrowException(String::New("Expected: filename, data"));
+
+	try
+	{
+		auto file = to_string(args[0]);
+		std::ofstream ofs(file);
+		if(!ofs)
+			return ThrowException(String::New("Unable to open file for writing."));
+	
+		auto content = to_string(args[1]);
+		bool result = ofs.write(content.c_str(), content.size());
+		return Boolean::New(result);
+	}
+	catch(const error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
+	}
+}
 Handle<Value> load(const Arguments& args)
 {
 	HandleScope handle_scope;
@@ -284,6 +306,7 @@ void bind(Handle<ObjectTemplate> global)
 {
 	global->Set(String::New("print"), FunctionTemplate::New(print));
 	global->Set(String::New("read"), FunctionTemplate::New(read));
+	global->Set(String::New("write"), FunctionTemplate::New(write));
 	global->Set(String::New("load"), FunctionTemplate::New(load));
 }
 

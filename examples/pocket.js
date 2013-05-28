@@ -93,6 +93,7 @@ function generate(m)
 }
 
 print(generate(m));
+//write("test.ngc", generate(m));
 
 /*
  * Format: https://github.com/mrdoob/three.js/wiki/JSON-Model-format-3.1
