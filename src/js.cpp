@@ -83,9 +83,11 @@ Handle<String> read_stream(std::istream& is)
 
 std::string to_string(Handle<Value> s)
 {
-	if(s.IsEmpty() || !s->IsString())
-		return {};
+	if(s.IsEmpty())
+		throw error("Empty Handle");
 	auto str = s->ToString();
+	if(str.IsEmpty())
+		throw error("String conversion failed");
 	String::AsciiValue ascii(str);
 	return {*ascii, *ascii + ascii.length()};
 }
@@ -93,28 +95,28 @@ std::string to_string(Handle<Value> s)
 double to_double(Handle<Value> d)
 {
 	if(d.IsEmpty())
-		return {};
+		throw error("Empty Handle");
 	return d->NumberValue();
 }
 
 int32_t to_int32(Handle<Value> i)
 {
 	if(i.IsEmpty())
-		return {};
+		throw error("Empty Handle");
 	return i->IntegerValue();
 }
 
 uint32_t to_uint32(v8::Handle<v8::Value> i)
 {
 	if(i.IsEmpty())
-		return {};
+		throw error("Empty Handle");
 	return i->Uint32Value();
 }
 
 bool to_bool(v8::Handle<v8::Value> b)
 {
 	if(b.IsEmpty())
-		return {};
+		throw error("Empty Handle");
 	return b->BooleanValue();
 }
 

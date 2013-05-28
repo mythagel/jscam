@@ -46,13 +46,18 @@ Handle<Value> exact_path(const Arguments& args)
 {
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
+	
 	try
 	{
 		machine->AccuracyExactPath();
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 	return {};
 }
@@ -60,13 +65,18 @@ Handle<Value> exact_stop(const Arguments& args)
 {
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
+	
 	try
 	{
 		machine->AccuracyExactStop();
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 	return {};
 }
@@ -96,9 +106,13 @@ Handle<Value> path_blend(const Arguments& args)
 			return {};
 		}
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 
 	return ThrowException(String::New("expected path_blend(void / double p / double p, double q)"));
@@ -119,9 +133,13 @@ Handle<Value> motion(Local<String>, const AccessorInfo& info)
 				return "incremental"_sym;
 		}
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 	
 	throw std::logic_error("Unknown motion type.");
@@ -144,9 +162,14 @@ void motion(Local<String>, Local<Value> value, const AccessorInfo& info)
 			return;
 		}
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		ThrowException(String::New(ex.what()));
+		return;
+	}
+	catch(const js::error& ex)
+	{
+		ThrowException(Exception::Error(String::New(ex.what())));
 		return;
 	}
 
@@ -168,9 +191,13 @@ Handle<Value> arc_motion(Local<String>, const AccessorInfo& info)
 				return "incremental"_sym;
 		}
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 	
 	throw std::logic_error("Unknown arc motion type.");
@@ -193,9 +220,14 @@ void arc_motion(Local<String>, Local<Value> value, const AccessorInfo& info)
 			return;
 		}
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		ThrowException(String::New(ex.what()));
+		return;
+	}
+	catch(const js::error& ex)
+	{
+		ThrowException(Exception::Error(String::New(ex.what())));
 		return;
 	}
 
@@ -217,9 +249,13 @@ Handle<Value> units(Local<String>, const AccessorInfo& info)
 				return "imperial"_sym;
 		}
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 	
 	throw std::logic_error("Unknown units.");
@@ -242,9 +278,14 @@ void units(Local<String>, Local<Value> value, const AccessorInfo& info)
 			return;
 		}
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		ThrowException(String::New(ex.what()));
+		return;
+	}
+	catch(const js::error& ex)
+	{
+		ThrowException(Exception::Error(String::New(ex.what())));
 		return;
 	}
 
@@ -274,9 +315,13 @@ Handle<Value> plane(Local<String>, const AccessorInfo& info)
 				return "VW"_sym;
 		}
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 	
 	throw std::logic_error("Unknown plane.");
@@ -319,9 +364,14 @@ void plane(Local<String>, Local<Value> value, const AccessorInfo& info)
 			return;
 		}
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		ThrowException(String::New(ex.what()));
+		return;
+	}
+	catch(const js::error& ex)
+	{
+		ThrowException(Exception::Error(String::New(ex.what())));
 		return;
 	}
 
@@ -345,9 +395,13 @@ Handle<Value> feed_rate_mode(Local<String>, const AccessorInfo& info)
 				return "upr"_sym;
 		}
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 	
 	throw std::logic_error("Unknown feed rate mode.");
@@ -375,9 +429,14 @@ void feed_rate_mode(Local<String>, Local<Value> value, const AccessorInfo& info)
 			return;
 		}
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		ThrowException(String::New(ex.what()));
+		return;
+	}
+	catch(const js::error& ex)
+	{
+		ThrowException(Exception::Error(String::New(ex.what())));
 		return;
 	}
 
@@ -393,9 +452,13 @@ Handle<Value> feed_rate(Local<String>, const AccessorInfo& info)
 	{
 		return Number::New(machine->GetFeedRate().first);
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 }
 void feed_rate(Local<String>, Local<Value> value, const AccessorInfo& info)
@@ -403,15 +466,18 @@ void feed_rate(Local<String>, Local<Value> value, const AccessorInfo& info)
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(info);
 
-	auto f = js::to_double(value);
-	
 	try
 	{
+		auto f = js::to_double(value);
 		machine->SetFeedRate(f);
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		ThrowException(Exception::Error(String::New(ex.what())));
 	}
 }
 
@@ -438,9 +504,13 @@ Handle<Value> spindle(Local<String>, const AccessorInfo& info)
 				break;
 		}
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 	
 	return state;
@@ -450,8 +520,8 @@ Handle<Value> tool(Local<String>, const AccessorInfo& info)
 {
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(info);
-	auto tool = Object::New();
 	
+	auto tool = Object::New();
 	try
 	{
 		auto tl = machine->GetTool();
@@ -482,9 +552,13 @@ Handle<Value> tool(Local<String>, const AccessorInfo& info)
 			}
 		}
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 	
 	return tool;
@@ -524,9 +598,13 @@ Handle<Value> spindle_on(const Arguments& args)
 			}
 		}
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 
 	return ThrowException(String::New("expected spindle_on(uint s, r = machine.Rotation.Clockwise)"));
@@ -535,13 +613,18 @@ Handle<Value> spindle_off(const Arguments& args)
 {
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
+	
 	try
 	{
 		machine->StopSpindle();
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 	return {};
 }
@@ -560,9 +643,13 @@ Handle<Value> load_tool(const Arguments& args)
 			return {};
 		}
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 
 	return ThrowException(String::New("expected load_tool(int id)"));
@@ -581,9 +668,13 @@ Handle<Value> tool_change(const Arguments& args)
 			return {};
 		}
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 
 	return ThrowException(String::New("expected tool_change(int id)"));
@@ -603,9 +694,13 @@ Handle<Value> begin_block(const Arguments& args)
 			return {};
 		}
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 
 	return ThrowException(String::New("expected begin_block(string name)"));
@@ -661,9 +756,13 @@ Handle<Value> end_block(const Arguments& args)
 			return {};
 		}
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 
 	return ThrowException(String::New("expected end_block(void / restore)"));
@@ -688,9 +787,13 @@ Handle<Value> optional_pause(const Arguments& args)
 			return {};
 		}
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 
 	return ThrowException(String::New("expected optional_pause(string comment)"));
@@ -710,9 +813,13 @@ Handle<Value> comment(const Arguments& args)
 			return {};
 		}
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 
 	return ThrowException(String::New("expected comment(string comment)"));
@@ -762,9 +869,13 @@ Handle<Value> rapid(const Arguments& args)
 		}
 		machine->Rapid(axes);
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 
 	return {};
@@ -813,9 +924,13 @@ Handle<Value> linear(const Arguments& args)
 		}
 		machine->Linear(axes);
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 
 	return {};
@@ -911,9 +1026,13 @@ Handle<Value> arc(const Arguments& args)
 		}
 		machine->Arc(dir, end_pos, center, turns);
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 
 	return {};
@@ -927,9 +1046,13 @@ Handle<Value> plunge(const Arguments&)
 	{
 		// TODO missing in cxxcam
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 	return {};
 }
@@ -978,9 +1101,13 @@ Handle<Value> generate(const Arguments& args)
 		
 		return handle_scope.Close(js_lines);
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 }
 
@@ -988,8 +1115,8 @@ Handle<Value> generate_model(const Arguments& args)
 {
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
-	auto obj = Object::New();
 	
+	auto obj = Object::New();
 	try
 	{
 		const auto stock = machine->GetStock();
@@ -1023,9 +1150,13 @@ Handle<Value> generate_model(const Arguments& args)
 		}
 		obj->Set("faces"_sym, faces);
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 	
 	return handle_scope.Close(obj);
@@ -1116,9 +1247,13 @@ Handle<Value> machine_ctor(const Arguments& args)
 			}
 		}
 	}
-	catch(const error& ex)
+	catch(const cxxcam::error& ex)
 	{
 		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
 	}
 
 	return args.This();
@@ -1126,7 +1261,6 @@ Handle<Value> machine_ctor(const Arguments& args)
 
 void bind(Handle<Object> global)
 {
-	// Name the class in js
 	auto name = "Machine"_sym;
 	
 	auto tpl = FunctionTemplate::New(machine_ctor);

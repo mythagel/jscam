@@ -28,9 +28,19 @@
 #include <string>
 #include <cstdint>
 #include <iosfwd>
+#include <stdexcept>
 
 namespace js
 {
+
+class error : public std::runtime_error
+{
+public:
+	error(const std::string& what)
+	 : std::runtime_error(what)
+	{
+	}
+};
 
 // TODO better name
 inline v8::Handle<v8::String> operator"" _sym(const char* s, size_t l)
