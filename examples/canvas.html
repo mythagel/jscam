@@ -1,0 +1,38 @@
+<html>
+	<head>
+	<title>canvas</title>
+
+	<style type='text/css'>
+	#c {
+		border: 1px solid #000;
+	}
+	</style>
+  
+	<script type='text/javascript'>//<![CDATA[ 
+function draw()
+{
+	var c = document.getElementById('c');
+	var context = c.getContext("2d");
+	
+	context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+
+	context.beginPath();
+	
+	context.moveTo(10, 10);
+	context.lineTo(10, 20);
+	context.lineTo(20, 20);
+	context.lineTo(20, 10);
+	context.lineTo(10, 10);
+
+	context.strokeStyle = "#000";
+	context.stroke();
+}
+//]]></script>
+	</head>
+	
+	<body onload="draw();">
+		<canvas id="c" width="800" height="600"/>
+	</body>
+</html>
+
+
