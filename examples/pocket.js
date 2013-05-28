@@ -2,23 +2,16 @@
 
 load("mill.js");
 
+load("../lib/spiral.js");
+load("../lib/gcode.js");
+
 var m = new Machine(mill);
 
 /*
 pocket.js
 =========
 
-Lessons learnt in planning already:
-Need to be able to access properties from cxxcam, i.e. active tool diameter.
 */
-
-function isObject(obj)
-{
-	if( Object.prototype.toString.call( obj ) === '[object Object]' )
-		return true;
-		
-	return false;
-}
 
 function polygon(sides, size, center, depth)
 {
@@ -55,44 +48,15 @@ m.end_block();
 
 m.end_block(Machine.BlockRestore.RestoreAll);
 
-function generate(m)
-{
-	var lines = m.generate();
-	var s = "";
 
-	function fixedPoint(v)
-	{
-		return parseFloat(v.toFixed(6));
-	};
+m.begin_block("spiral test");
+m.tool_change(1);
+m.feed_rate = 100;
+m.spindle_on(100);
+spiral(m, {x: 0, y: 0}, 72, 10, 0, 3, 0);
+m.end_block(Machine.BlockRestore.RestoreAll);
 
-	lines.forEach(function(line)
-	{
-		line.forEach(function(word)
-		{
-			if(isObject(word))
-			{
-				for(var code in word)
-				{
-					if(code == "comment")
-						s += " (" + word[code] + ")";
-					else
-						s += code + fixedPoint(word[code]);
-				}
-				s += " ";
-			}
-			else
-			{
-				// Comment is only allowed at end of line.
-				s += "; " + word;
-			}
-		});
-		s += "\n";
-	});
-
-	return s;
-}
-
-print(generate(m));
+print(generate_gcode(m.generate()));
 //write("test.ngc", generate(m));
 
 /*
