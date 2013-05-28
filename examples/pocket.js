@@ -23,6 +23,11 @@ function isObject(obj)
 function polygon(sides, size, center, depth)
 {
 	m.begin_block("polygon od " + size + " @ (" + center.x + "," + center.y + ")");
+	
+	var tool = m.tool;
+	//tool.mill_diameter
+	// TODO spiral in pocket by mill width steps
+	
 	m.rapid ({x: center.x + size * Math.cos(0), y: center.y + size * Math.sin(0)});         
 	m.linear({z: depth});
 
@@ -37,6 +42,7 @@ function polygon(sides, size, center, depth)
 
 m.begin_block("polygon test");
 
+m.tool_change(1);
 m.feed_rate = 100;
 m.spindle_on(100);
 
