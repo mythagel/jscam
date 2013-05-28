@@ -26,7 +26,7 @@ var m = new Machine(mill);
 m.begin_block("Setup");
 	m.feed_rate = 100;
 	m.spindle_on(250);
-	m.load_tool(1);
+	m.preload_tool(1);
 	m.tool_change(1);
 	m.optional_pause("Post Setup");
 m.end_block("tool", "feedrate");

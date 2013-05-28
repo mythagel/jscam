@@ -42,7 +42,7 @@ m.feed_rate = 100;
 
 var s = m.spindle;
 
-m.load_tool(1);
+m.preload_tool(1);
 m.tool_change(1);
 
 var t = m.tool;
