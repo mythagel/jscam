@@ -8,3 +8,4 @@ var mill = {
 
 var m = new Machine(mill);
 
+print(__filename);

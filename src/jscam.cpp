@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
 		if(args.empty())
 		{
 			auto source = js::read_stream(std::cin);
-			result = js::exec(source, "stdin"_sym);
+			result = js::exec(source, "stdin"_sym, context);
 		}
 		else
 		{
@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
 					break;
 				}
 
-				result = js::exec(source, String::New(arg.c_str(), arg.size()));
+				result = js::exec(source, String::New(arg.c_str(), arg.size()), context);
 				if(!result)
 				{
 					std::cerr << "Unable to execute source file " << arg << '\n';

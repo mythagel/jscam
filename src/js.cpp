@@ -232,7 +232,7 @@ Handle<Value> load(const Arguments& args)
 		if (source.IsEmpty())
 			return ThrowException(String::New("Unable to read file"));
 
-		if (!exec(source, String::New(*file)))
+		if (!exec(source, String::New(*file), args.Holder()->CreationContext()))
 			return ThrowException(String::New("Unable to execute file"));
 	}
 	return handle_scope.Close(Undefined());
@@ -276,7 +276,7 @@ Handle<Value> require(const Arguments& args)
 	return handle_scope.Close(result);
 }
 
-bool exec(Handle<String> source, Handle<Value> name)
+bool exec(Handle<String> source, Handle<Value> name, Handle<Context> context)
 {
 	HandleScope handle_scope;
 	TryCatch try_catch;
@@ -288,6 +288,12 @@ bool exec(Handle<String> source, Handle<Value> name)
 		String::AsciiValue exception_str(exception);
 		std::cerr << *exception_str << std::endl;
 		return false;
+	}
+
+	if(!context.IsEmpty())
+	{
+		auto global = context->Global();
+		global->Set("__filename"_sym, name);
 	}
 
 	auto result = script->Run();
