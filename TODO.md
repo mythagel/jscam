@@ -7,10 +7,12 @@
     - Convert model to Three.js format for display
     - Backplot (Preferably 3d projection using 2d html5 canvas)
  * Machining operations
+    - Profile
     - Pocket
     - Drill
     - Facing
     - Slots
+    - Lathe (Given a curve)
     - ???
  * Unchecked pure js Machine interface (for browser things)
     - Lower priority
