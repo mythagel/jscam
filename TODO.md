@@ -11,7 +11,6 @@
     - Drill
     - Facing
     - ???
-
  * Unchecked pure js Machine interface (for browser things)
     - Lower priority
  * NodeJS module (refactor so same binding code can be used)
