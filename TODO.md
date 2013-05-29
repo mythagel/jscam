@@ -5,7 +5,13 @@
     - For library files
  * JS function library
     - Convert model to Three.js format for display
-    - Backplot generation (pure js)
+    - Backplot (Preferably 3d projection using 2d html5 canvas)
+ * Machining operations
+    - Pocket
+    - Drill
+    - Facing
+    - ???
+
  * Unchecked pure js Machine interface (for browser things)
     - Lower priority
  * NodeJS module (refactor so same binding code can be used)
