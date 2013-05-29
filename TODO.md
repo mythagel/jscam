@@ -10,6 +10,7 @@
     - Pocket
     - Drill
     - Facing
+    - Slots
     - ???
  * Unchecked pure js Machine interface (for browser things)
     - Lower priority
