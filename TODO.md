@@ -14,6 +14,9 @@
     - Slots
     - Lathe (Given a curve)
     - ???
+ * GCode Generation
+    - Aligned comments within a gcode block
+    - Document in comments relevant parameters (Stock dimensions, position, tools used, etc.)
  * Unchecked pure js Machine interface (for browser things)
     - Lower priority
  * NodeJS module (refactor so same binding code can be used)
