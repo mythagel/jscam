@@ -17,6 +17,12 @@
  * GCode Generation
     - Aligned comments within a gcode block
     - Document in comments relevant parameters (Stock dimensions, position, tools used, etc.)
+ * One file is the complete part
+    - With multiple operations underneath
+    - Should be able to generate gcode for ops individually.
+    - one file is NOT the complete object - only a single part.
+ * LOGO / Turtle style interface for experimentation (implemented 100% in js)
+ * Output image of toolpath (js or cxxcam)
  * Unchecked pure js Machine interface (for browser things)
     - Lower priority
  * NodeJS module (refactor so same binding code can be used)
