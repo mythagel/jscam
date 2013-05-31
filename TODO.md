@@ -3,7 +3,10 @@
 ### High Level ###
  * Include paths
     - For library files
- * Bind Corordinate systems
+ * cxxcam bindings:
+    - Corordinate systems
+    - State push/pop
+    - nef::polyhedron_t
  * JS function library
     - Convert model to Three.js format for display
     - Backplot (Preferably 3d projection using 2d html5 canvas)
