@@ -121,13 +121,9 @@ static T* unwrap(const v8::AccessorInfo& info)
 	return static_cast<T*>(wrap->Value());
 }
 
-/*
- * Construct a new c++ object and wrap it in a js object
- */
-template <typename T, typename... Args>
-static v8::Persistent<v8::Object> make_object(v8::Handle<v8::Object> object, Args&&... args)
+template <typename T>
+static v8::Persistent<v8::Object> wrap_object(v8::Handle<v8::Object> object, T* x)
 {
-	auto x = new T(std::forward<Args>(args)...);
 	auto obj = v8::Persistent<v8::Object>::New(object);
 	obj->SetInternalField(0, v8::External::New(x));
 
@@ -141,6 +137,16 @@ static v8::Persistent<v8::Object> make_object(v8::Handle<v8::Object> object, Arg
 	});
 
 	return obj;
+}
+
+/*
+ * Construct a new c++ object and wrap it in a js object
+ */
+template <typename T, typename... Args>
+static v8::Persistent<v8::Object> make_object(v8::Handle<v8::Object> object, Args&&... args)
+{
+	auto x = new T(std::forward<Args>(args)...);
+	return wrap_object(object, x);
 }
 
 }
