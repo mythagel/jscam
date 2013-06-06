@@ -7,6 +7,8 @@ function jprint(x)
 
 var mill = {
 	type: "mill",
+	units: "metric",
+	axes: "XYZ",
 	tools: [
 			{
 			name: "3mm End Mill",

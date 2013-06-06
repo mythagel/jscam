@@ -25,6 +25,7 @@
 #include "jsmachine.h"
 #include <memory>
 #include "Machine.h"
+#include "Configuration.h"
 #include "Error.h"
 #include "Axis.h"
 #include "Offset.h"
@@ -1175,16 +1176,43 @@ Handle<Value> machine_ctor(const Arguments& args)
 		if(config.IsEmpty())
 			return ThrowException(String::New("Expected config"));
 
-		auto type = js::to_string(config->Get("type"_sym));
+		Configuration machine_config;
 
-		if(type == "mill")
-			js::make_object<Machine>(args.This(), Machine::Type::Mill);
-		else if(type == "lathe")
-			js::make_object<Machine>(args.This(), Machine::Type::Lathe);
-		else
-			return ThrowException(String::New("type - mill / lathe"));
+		{
+			auto type = js::to_string(config->Get("type"_sym));
+			if(type == "mill")
+				machine_config.type = Machine::Type::Mill;
+			else if(type == "lathe")
+				machine_config.type = Machine::Type::Lathe;
+			else
+				return ThrowException(String::New("type - mill / lathe"));
+		}
+		{
+			auto units = js::to_string(config->Get("units"_sym));
+			if(!units.empty())
+			{
+				if(units == "metric")
+					machine_config.units = Machine::Units::Metric;
+				else if(units == "imperial")
+					machine_config.units = Machine::Units::Imperial;
+				else
+					return ThrowException(String::New("units - metric / imperial"));
+			}
+		}
+		{
+			auto axes = js::to_string(config->Get("axes"_sym));
+			if(!axes.empty())
+				machine_config.axes = axes;
+		}
 
-		auto machine = js::unwrap<Machine>(args);
+// TODO torque, feedrates and rapid rates.
+//	std::vector<spindle_speed> spindle_speeds;
+//	
+//	double max_feed_rate = 0.0;
+//	std::map<Axis::Type, double> axis_max_feed_rates;
+//	
+//	double rapid_rate = 0.0;
+//	std::map<Axis::Type, double> axis_rapid_rates;
 
 		auto tools = config->Get("tools"_sym);
 		for(auto t : js::array(tools))
@@ -1219,16 +1247,17 @@ Handle<Value> machine_ctor(const Arguments& args)
 				tool = Tool(name, spec);
 			}
 
-			machine->AddTool(id, tool);
+			machine_config.tools[id] = tool;
 		}
 
+		// TODO torque in js
 		auto spindle_speeds = config->Get("spindle"_sym);
 		for(auto s : js::array(spindle_speeds))
 		{
 			if(s->IsNumber())
 			{
 				auto speed = js::to_uint32(s);
-				machine->AddSpindleDiscrete(speed);
+				machine_config.spindle_speeds.emplace_back(speed, 0.0);
 			}
 			else
 			{
@@ -1238,7 +1267,7 @@ Handle<Value> machine_ctor(const Arguments& args)
 				{
 					auto start = speed.substr(0, dash_pos);
 					auto end = speed.substr(dash_pos+1);
-					machine->AddSpindleRange(std::stoul(start), std::stoul(end));
+					machine_config.spindle_speeds.emplace_back(std::stoul(start), std::stoul(end), 0.0, 0.0);
 				}
 				else
 				{
@@ -1246,6 +1275,9 @@ Handle<Value> machine_ctor(const Arguments& args)
 				}
 			}
 		}
+		
+		auto machine = machine_config.Construct();
+		js::wrap_object<Machine>(args.This(), machine.release());
 	}
 	catch(const cxxcam::error& ex)
 	{
