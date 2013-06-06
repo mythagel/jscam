@@ -20,7 +20,7 @@ var mill = {
 			length: 60
 		}
 	],
-	spindle: ["100-1000", "2000-6000"]
+	spindle: [ {rpm: [100, 1000] }, {rpm: [2000, 6000]}]
 };
 
 var m = new Machine(mill);

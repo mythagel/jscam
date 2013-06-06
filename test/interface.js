@@ -24,7 +24,7 @@ var mill = {
 			length: 60
 		}
 	],
-	spindle: [300]
+	spindle: [ {rpm: 300} ]
 };
 
 var m = new Machine(mill);

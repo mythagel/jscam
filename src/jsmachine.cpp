@@ -1205,7 +1205,7 @@ Handle<Value> machine_ctor(const Arguments& args)
 				machine_config.axes = axes;
 		}
 
-// TODO torque, feedrates and rapid rates.
+// TODO feedrates and rapid rates.
 //	std::vector<spindle_speed> spindle_speeds;
 //	
 //	double max_feed_rate = 0.0;
@@ -1250,29 +1250,33 @@ Handle<Value> machine_ctor(const Arguments& args)
 			machine_config.tools[id] = tool;
 		}
 
-		// TODO torque in js
 		auto spindle_speeds = config->Get("spindle"_sym);
 		for(auto s : js::array(spindle_speeds))
 		{
-			if(s->IsNumber())
+			auto entry = s->ToObject();
+			if(entry.IsEmpty())
+				return ThrowException(String::New("Expected object"));
+			
+			auto rpm = entry->Get("rpm"_sym);
+			auto nm = entry->Get("nm"_sym);
+			
+			if(rpm->IsNumber())
 			{
-				auto speed = js::to_uint32(s);
-				machine_config.spindle_speeds.emplace_back(speed, 0.0);
+				auto speed = js::to_uint32(rpm);
+				auto torque = js::to_double(nm);
+				machine_config.spindle_speeds.emplace_back(speed, torque);
 			}
 			else
 			{
-				auto speed = js::to_string(s);
-				auto dash_pos = speed.find('-');
-				if(dash_pos != std::string::npos)
-				{
-					auto start = speed.substr(0, dash_pos);
-					auto end = speed.substr(dash_pos+1);
-					machine_config.spindle_speeds.emplace_back(std::stoul(start), std::stoul(end), 0.0, 0.0);
-				}
-				else
-				{
-					return ThrowException(String::New("range: 'start-end'"));
-				}
+				auto speed = Array::Cast(*rpm);
+				auto torque = Array::Cast(*nm);
+				
+				auto speed_low = js::to_uint32(speed->Get(0));
+				auto speed_high = js::to_uint32(speed->Get(1));
+				auto torque_low = js::to_double(torque->Get(0));
+				auto torque_high = js::to_double(torque->Get(1));
+				
+				machine_config.spindle_speeds.emplace_back(speed_low, speed_high, torque_low, torque_high);
 			}
 		}
 		

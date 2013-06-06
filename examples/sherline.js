@@ -20,6 +20,6 @@ var mill = {
 			length: 60
 		}*/
 	],
-	spindle: ["70-2800"]
+	spindle: [ {rpm: [70, 2800], nm: [3.1776, 0.0706]} ]
 };
 
