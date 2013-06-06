@@ -1075,31 +1075,31 @@ Handle<Value> generate(const Arguments& args)
 		
 		return js_word;
 	};
-	auto line2js = [word2js](const Machine::line_t& line) -> Handle<Array>
+	auto block2js = [word2js](const Machine::block_t& block) -> Handle<Array>
 	{
-		if(line.empty())
+		if(block.empty())
 			return Array::New();
 		
-		auto js_line = Array::New(line.words.size() + (line.comment.empty() ? 0 : 1));
+		auto js_block = Array::New(block.words.size() + (block.comment.empty() ? 0 : 1));
 
-		for(std::size_t w = 0; w != line.words.size(); ++w)
-			js_line->Set(w, word2js(line.words[w]));
+		for(std::size_t w = 0; w != block.words.size(); ++w)
+			js_block->Set(w, word2js(block.words[w]));
 		
-		if(!line.comment.empty())
-			js_line->Set(line.words.size(), String::New(line.comment.c_str(), line.comment.size()));
+		if(!block.comment.empty())
+			js_block->Set(block.words.size(), String::New(block.comment.c_str(), block.comment.size()));
 		
-		return js_line;
+		return js_block;
 	};
 	
 	try
 	{
-		auto lines = machine->Generate();
+		auto blocks = machine->Generate();
 	
-		auto js_lines = Array::New(lines.size());
-		for(std::size_t l = 0; l != lines.size(); ++l)
-			js_lines->Set(l, line2js(lines[l]));
+		auto js_blocks = Array::New(blocks.size());
+		for(std::size_t l = 0; l != blocks.size(); ++l)
+			js_blocks->Set(l, block2js(blocks[l]));
 		
-		return handle_scope.Close(js_lines);
+		return handle_scope.Close(js_blocks);
 	}
 	catch(const cxxcam::error& ex)
 	{
