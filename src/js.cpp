@@ -86,6 +86,8 @@ std::string to_string(Handle<Value> s)
 {
 	if(s.IsEmpty())
 		throw error("Empty Handle");
+	if(s->IsUndefined())
+		return {};
 	auto str = s->ToString();
 	if(str.IsEmpty())
 		throw error("String conversion failed");
