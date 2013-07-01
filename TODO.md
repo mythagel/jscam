@@ -9,7 +9,7 @@
     - nef::polyhedron_t
  * JS function library
     - Convert model to Three.js format for display
-    - Backplot (Preferably 3d projection using 2d html5 canvas)
+    - Backplot Viewer (Preferably 3d projection using 2d html5 canvas)
  * Machining operations
     - Profile
     - Pocket
@@ -18,6 +18,15 @@
     - Slots
     - Lathe (Given a curve)
     - ???
+ * GCode Postprocessing
+    - GCode Parser needed
+       - Parses a gcode file into json object
+    - Postprocessors
+       - Rename axis
+       - Translate rotational axes (i.e. rotational axis offsets)
+       - Arcs to lines
+       - Backplot
+    - Modal code tracking
  * GCode Generation
     - Aligned comments within a gcode block
     - Document in comments relevant parameters (Stock dimensions, position, tools used, etc.)
