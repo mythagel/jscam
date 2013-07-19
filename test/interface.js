@@ -51,11 +51,15 @@ var t = m.tool;
 
 m.optional_pause();
 m.optional_pause("hello");
+m.dwell(5);
+m.dwell(5, "hello");
 m.comment("hello");
 m.rapid({x: 100});
 m.linear({x: 0});
 m.arc();
 //m.plunge
+m.push_state();
+m.push_state();
 
 jprint(m.spindle);
 jprint(m.motion);
@@ -65,6 +69,9 @@ jprint(m.plane);
 jprint(m.feed_rate_mode);
 jprint(m.feed_rate);
 jprint(m.tool);
+
+m.discard_state();
+m.pop_state();
 
 m.spindle_off();
 m.end_block();
