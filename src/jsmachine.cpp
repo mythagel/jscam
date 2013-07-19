@@ -884,6 +884,39 @@ Handle<Value> comment(const Arguments& args)
 	return ThrowException(String::New("expected comment(string comment)"));
 }
 
+Handle<Value> dwell(const Arguments& args)
+{
+	HandleScope handle_scope;
+	auto machine = js::unwrap<Machine>(args);
+	
+	try
+	{
+		if(args.Length() == 1)
+		{
+			auto seconds = js::to_double(args[0]);
+			machine->Dwell(seconds);
+			return {};
+		}
+		else if(args.Length() == 2)
+		{
+			auto seconds = js::to_double(args[0]);
+			auto comment = js::to_string(args[1]);
+			machine->Dwell(seconds, comment);
+			return {};
+		}
+	}
+	catch(const cxxcam::error& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
+	}
+
+	return ThrowException(String::New("expected comment(string comment)"));
+}
+
 Handle<Value> rapid(const Arguments& args)
 {
 	HandleScope handle_scope;
@@ -1390,6 +1423,7 @@ void bind(Handle<Object> global)
 	prototype->Set("end_block"_sym, FunctionTemplate::New(end_block)->GetFunction());
 	prototype->Set("optional_pause"_sym, FunctionTemplate::New(optional_pause)->GetFunction());
 	prototype->Set("comment"_sym, FunctionTemplate::New(comment)->GetFunction());
+	prototype->Set("dwell"_sym, FunctionTemplate::New(dwell)->GetFunction());
 	prototype->Set("rapid"_sym, FunctionTemplate::New(rapid)->GetFunction());
 	prototype->Set("linear"_sym, FunctionTemplate::New(linear)->GetFunction());
 	prototype->Set("arc"_sym, FunctionTemplate::New(arc)->GetFunction());
