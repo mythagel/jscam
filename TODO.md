@@ -5,8 +5,8 @@
     - For library files
  * cxxcam bindings:
     - Corordinate systems
-    - State push/pop
     - nef::polyhedron_t
+    - ~~State push/pop~~
  * JS function library
     - Convert model to Three.js format for display
     - Backplot Viewer (Preferably 3d projection using 2d html5 canvas)
