@@ -4,8 +4,8 @@
  * Include paths
     - For library files
  * cxxcam bindings:
-    - Corordinate systems
     - nef::polyhedron_t
+    - ~~Corordinate systems~~
     - ~~State push/pop~~
  * JS function library
     - Convert model to Three.js format for display
