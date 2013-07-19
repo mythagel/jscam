@@ -5,6 +5,9 @@
     - For library files
  * cxxcam bindings:
     - nef::polyhedron_t
+    - Configuration
+       - Feed rates
+       - Rapid rates
  * JS function library
     - Convert model to Three.js format for display
     - Backplot Viewer (Preferably 3d projection using 2d html5 canvas)
