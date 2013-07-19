@@ -8,6 +8,7 @@
     - Configuration
        - Feed rates
        - Rapid rates
+    - Lathe tool
  * JS function library
     - Convert model to Three.js format for display
     - Backplot Viewer (Preferably 3d projection using 2d html5 canvas)
@@ -44,3 +45,5 @@
     - Portability of scripts has to be considered. It is desired that scripts be self-contained so they can easily be regenerated on different systems.
 
 ### Code ###
+ * Bindings
+    - Cleanup (e.g. Arc).
