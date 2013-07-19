@@ -35,6 +35,7 @@ m.exact_stop();
 m.path_blend();
 
 m.spindle_on(300);
+m.coordinate_system = "p4";
 m.motion = "incremental";
 m.arc_motion = "incremental";
 m.units = "imperial";
@@ -62,6 +63,7 @@ m.push_state();
 m.push_state();
 
 jprint(m.spindle);
+jprint(m.coordinate_system);
 jprint(m.motion);
 jprint(m.arc_motion);
 jprint(m.units);
