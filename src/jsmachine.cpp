@@ -43,6 +43,64 @@ using js::operator"" _sym;
 namespace jscam
 {
 
+Handle<Value> push_state(const Arguments& args)
+{
+	HandleScope handle_scope;
+	auto machine = js::unwrap<Machine>(args);
+	
+	try
+	{
+		machine->PushState();
+	}
+	catch(const cxxcam::error& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
+	}
+	return {};
+}
+Handle<Value> pop_state(const Arguments& args)
+{
+	HandleScope handle_scope;
+	auto machine = js::unwrap<Machine>(args);
+	
+	try
+	{
+		machine->PopState();
+	}
+	catch(const cxxcam::error& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
+	}
+	return {};
+}
+Handle<Value> discard_state(const Arguments& args)
+{
+	HandleScope handle_scope;
+	auto machine = js::unwrap<Machine>(args);
+	
+	try
+	{
+		machine->DiscardState();
+	}
+	catch(const cxxcam::error& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
+	}
+	return {};
+}
+
 Handle<Value> exact_path(const Arguments& args)
 {
 	HandleScope handle_scope;
@@ -1306,6 +1364,10 @@ void bind(Handle<Object> global)
 	auto prototype = tpl->PrototypeTemplate();
 	
 	instance_template->SetInternalFieldCount(1);
+
+	prototype->Set("push_state"_sym, FunctionTemplate::New(push_state)->GetFunction());
+	prototype->Set("pop_state"_sym, FunctionTemplate::New(pop_state)->GetFunction());
+	prototype->Set("discard_state"_sym, FunctionTemplate::New(discard_state)->GetFunction());
 	
 	prototype->Set("exact_path"_sym, FunctionTemplate::New(exact_path)->GetFunction());
 	prototype->Set("exact_stop"_sym, FunctionTemplate::New(exact_stop)->GetFunction());
