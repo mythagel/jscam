@@ -177,6 +177,120 @@ Handle<Value> path_blend(const Arguments& args)
 	return ThrowException(String::New("expected path_blend(void / double p / double p, double q)"));
 }
 
+Handle<Value> coordinate_system(Local<String>, const AccessorInfo& info)
+{
+	HandleScope handle_scope;
+	auto machine = js::unwrap<Machine>(info);
+	
+	try
+	{
+		switch(machine->GetCoordinateSystem())
+		{
+			case Machine::CoordinateSystem::Active:
+				return "active"_sym;
+			case Machine::CoordinateSystem::P1:
+				return "p1"_sym;
+			case Machine::CoordinateSystem::P2:
+				return "p2"_sym;
+			case Machine::CoordinateSystem::P3:
+				return "p3"_sym;
+			case Machine::CoordinateSystem::P4:
+				return "p4"_sym;
+			case Machine::CoordinateSystem::P5:
+				return "p5"_sym;
+			case Machine::CoordinateSystem::P6:
+				return "p6"_sym;
+			case Machine::CoordinateSystem::P7:
+				return "p7"_sym;
+			case Machine::CoordinateSystem::P8:
+				return "p8"_sym;
+			case Machine::CoordinateSystem::P9:
+				return "p9"_sym;
+		}
+	}
+	catch(const cxxcam::error& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
+	}
+	
+	throw std::logic_error("Unknown coordinate system.");
+}
+void coordinate_system(Local<String>, Local<Value> value, const AccessorInfo& info)
+{
+	HandleScope handle_scope;
+	auto machine = js::unwrap<Machine>(info);
+
+	try
+	{
+		if(value == "active"_sym)
+		{
+			machine->SetCoordinateSystem(Machine::CoordinateSystem::Active);
+			return;
+		}
+		else if(value == "p1"_sym)
+		{
+			machine->SetCoordinateSystem(Machine::CoordinateSystem::P1);
+			return;
+		}
+		else if(value == "p2"_sym)
+		{
+			machine->SetCoordinateSystem(Machine::CoordinateSystem::P2);
+			return;
+		}
+		else if(value == "p3"_sym)
+		{
+			machine->SetCoordinateSystem(Machine::CoordinateSystem::P3);
+			return;
+		}
+		else if(value == "p4"_sym)
+		{
+			machine->SetCoordinateSystem(Machine::CoordinateSystem::P4);
+			return;
+		}
+		else if(value == "p5"_sym)
+		{
+			machine->SetCoordinateSystem(Machine::CoordinateSystem::P5);
+			return;
+		}
+		else if(value == "p6"_sym)
+		{
+			machine->SetCoordinateSystem(Machine::CoordinateSystem::P6);
+			return;
+		}
+		else if(value == "p7"_sym)
+		{
+			machine->SetCoordinateSystem(Machine::CoordinateSystem::P7);
+			return;
+		}
+		else if(value == "p8"_sym)
+		{
+			machine->SetCoordinateSystem(Machine::CoordinateSystem::P8);
+			return;
+		}
+		else if(value == "p9"_sym)
+		{
+			machine->SetCoordinateSystem(Machine::CoordinateSystem::P9);
+			return;
+		}
+	}
+	catch(const cxxcam::error& ex)
+	{
+		ThrowException(String::New(ex.what()));
+		return;
+	}
+	catch(const js::error& ex)
+	{
+		ThrowException(Exception::Error(String::New(ex.what())));
+		return;
+	}
+
+	ThrowException(String::New("expected coordinate_system = active / p1-9"));
+}
+
 Handle<Value> motion(Local<String>, const AccessorInfo& info)
 {
 	HandleScope handle_scope;
@@ -1406,6 +1520,7 @@ void bind(Handle<Object> global)
 	prototype->Set("exact_stop"_sym, FunctionTemplate::New(exact_stop)->GetFunction());
 	prototype->Set("path_blend"_sym, FunctionTemplate::New(path_blend)->GetFunction());
 	
+	instance_template->SetAccessor("coordinate_system"_sym, coordinate_system, coordinate_system);
 	instance_template->SetAccessor("motion"_sym, motion, motion);
 	instance_template->SetAccessor("arc_motion"_sym, arc_motion, arc_motion);
 	instance_template->SetAccessor("units"_sym, units, units);
