@@ -1061,13 +1061,12 @@ Handle<Value> rapid(const Arguments& args)
 				else if(axis == "c"_sym)
 					axes.push_back(C(js::to_double(value)));
 
-				// UVW unimplemented in cxxcam
-	//			else if(axis == "u"_sym)
-	//				axes.push_back(U(js::to_double(value)));
-	//			else if(axis == "v"_sym)
-	//				axes.push_back(V(js::to_double(value)));
-	//			else if(axis == "w"_sym)
-	//				axes.push_back(W(js::to_double(value)));
+				else if(axis == "u"_sym)
+					axes.push_back(U(js::to_double(value)));
+				else if(axis == "v"_sym)
+					axes.push_back(V(js::to_double(value)));
+				else if(axis == "w"_sym)
+					axes.push_back(W(js::to_double(value)));
 
 				else
 					return ThrowException(String::New("Unrecognised axis."));
@@ -1116,13 +1115,12 @@ Handle<Value> linear(const Arguments& args)
 				else if(axis == "c"_sym)
 					axes.push_back(C(js::to_double(value)));
 
-				// UVW unimplemented in cxxcam
-	//			else if(axis == "u"_sym)
-	//				axes.push_back(U(js::to_double(value)));
-	//			else if(axis == "v"_sym)
-	//				axes.push_back(V(js::to_double(value)));
-	//			else if(axis == "w"_sym)
-	//				axes.push_back(W(js::to_double(value)));
+				else if(axis == "u"_sym)
+					axes.push_back(U(js::to_double(value)));
+				else if(axis == "v"_sym)
+					axes.push_back(V(js::to_double(value)));
+				else if(axis == "w"_sym)
+					axes.push_back(W(js::to_double(value)));
 
 				else
 					return ThrowException(String::New("Unrecognised axis."));
@@ -1202,13 +1200,12 @@ Handle<Value> arc(const Arguments& args)
 					else if(axis == "c")
 						end_pos.push_back(C(js::to_double(value)));
 
-					// UVW unimplemented in cxxcam
-		//			else if(axis == "u")
-		//				end_pos.push_back(U(js::to_double(value)));
-		//			else if(axis == "v")
-		//				end_pos.push_back(V(js::to_double(value)));
-		//			else if(axis == "w")
-		//				end_pos.push_back(W(js::to_double(value)));
+					else if(axis == "u")
+						end_pos.push_back(U(js::to_double(value)));
+					else if(axis == "v")
+						end_pos.push_back(V(js::to_double(value)));
+					else if(axis == "w")
+						end_pos.push_back(W(js::to_double(value)));
 
 					// Offsets
 					else if(axis == "i")
