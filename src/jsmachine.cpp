@@ -1426,9 +1426,9 @@ Handle<Value> machine_ctor(const Arguments& args)
 
 			auto id = js::to_int32(tid);
 			auto name = js::to_string(tool_obj->Get("name"_sym));
-			auto type = tool_obj->Get("type"_sym);
+			auto type = js::to_string(tool_obj->Get("type"_sym));
 	
-			if(type == "mill"_sym)
+			if(type == "mill")
 			{
 				auto spec = Tool::Mill();
 
@@ -1444,11 +1444,15 @@ Handle<Value> machine_ctor(const Arguments& args)
 		
 				tool = Tool(name, spec);
 			}
-			else if(type == "lathe"_sym)
+			else if(type == "lathe")
 			{
 				// TODO fill spec from js
 				auto spec = Tool::Lathe();
 				tool = Tool(name, spec);
+			}
+			else
+			{
+				return ThrowException(String::New("tool type - mill / lathe"));
 			}
 
 			machine_config.tools[id] = tool;
