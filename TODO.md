@@ -1,8 +1,6 @@
 # TODO List #
 
 ### High Level ###
- * Split tool id from tool definition
-    - Allows tools to be stored in a library and included at different positions for different jobs.
  * Include paths
     - For library files
  * cxxcam bindings:
