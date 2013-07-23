@@ -44,6 +44,7 @@ std::string realpath(const std::string& rel_path)
 std::string dirname(const std::string& file)
 {
 	std::vector<char> buf(std::begin(file), std::end(file));
+	buf.push_back('\0');
 	return ::dirname(buf.data());
 }
 
