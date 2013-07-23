@@ -47,3 +47,4 @@
 ### Code ###
  * Bindings
     - Cleanup (e.g. Arc).
+ * Tests for V8 comparisions String::New vs String::NewSymbol and comparisions wrt, JSON::parse
