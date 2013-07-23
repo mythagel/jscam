@@ -5,6 +5,10 @@ load("mill.js");
 load("../lib/spiral.js");
 load("../lib/gcode.js");
 
+load("load_json.js");
+
+mill.tools[2] = load_json("tools/HSS 3mm 4 flute End Mill.json");
+
 var m = new Machine(mill);
 
 /*
@@ -35,7 +39,7 @@ function polygon(sides, size, center, depth)
 
 m.begin_block("polygon test");
 
-m.tool_change(1);
+m.tool_change(2);
 m.feed_rate = 100;
 m.spindle_on(100);
 

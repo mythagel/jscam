@@ -1,0 +1,13 @@
+{
+	"name": "HSS 3mm 4 flute End Mill",
+	"type": "mill",
+	"center_cutting": true,
+	"flutes": 4,
+	"flute_length": 25,
+	"cutting_length": 20,
+	"mill_diameter": 3,
+	"shank_diameter": 6,
+	"core_diameter": 3,
+	"length": 60
+}
+
