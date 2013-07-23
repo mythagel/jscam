@@ -26,7 +26,7 @@
 #define JSMACHINE_H_
 #include <v8.h>
 
-namespace jscam
+namespace jsmachine
 {
 
 /*

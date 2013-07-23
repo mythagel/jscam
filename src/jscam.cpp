@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 		Context::Scope context_scope(context);
 		
 		auto global = context->Global();
-		jscam::bind(global);
+		jsmachine::bind(global);
 	
 		if(args.empty())
 		{

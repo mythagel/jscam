@@ -40,7 +40,7 @@ using namespace cxxcam;
 
 using js::operator"" _sym;
 
-namespace jscam
+namespace jsmachine
 {
 
 Handle<Value> push_state(const Arguments& args)
