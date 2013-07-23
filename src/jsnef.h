@@ -29,6 +29,37 @@
 namespace jsnef
 {
 
+/*
+API Sketch
+
+Polyhedron
+{
+	Polyhedron intersection(const Polyhedron& poly) const;
+	Polyhedron union(const Polyhedron& poly) const;
+	Polyhedron difference(const Polyhedron& poly) const;
+	Polyhedron symmetric_difference(const Polyhedron& poly) const;
+	Polyhedron complement() const;
+
+	bool empty() const;
+	
+	array<Polyhedron> explode();
+	
+	object_t to_object();
+	void write_off(filename);
+	
+	Polyhedron glide([{x:1, y:1, z:1}, {x:10, y:10, z:10}]);
+	
+	double volume();
+	
+	Polyhedron rotate({w: 0, x:1, y:1, z:1});
+	Polyhedron translate({x:1, y:1, z:1});
+}
+
+Polyhedron make_sphere({x:10, y:10, z:10}, double r, std::size_t slices);
+Polyhedron make_box(const primitives::point_3& p1, const primitives::point_3& p2);
+Polyhedron make_cone(const primitives::point_3& top_center, const primitives::point_3& bottom_center, double top_radius, double bottom_radius, std::size_t slices);
+
+*/
 void bind(v8::Handle<v8::Object> global);
 
 }
