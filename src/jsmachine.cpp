@@ -1419,15 +1419,17 @@ Handle<Value> machine_ctor(const Arguments& args)
 //	double rapid_rate = 0.0;
 //	std::map<Axis::Type, double> axis_rapid_rates;
 
-		auto tools = config->Get("tools"_sym);
-		for(auto t : js::array(tools))
+		auto tools = config->Get("tools"_sym)->ToObject();
+		auto tids = tools->GetPropertyNames();
+
+		for(auto tid : js::array(tids))
 		{
 			Tool tool;
-			auto tool_obj = t->ToObject();
+			auto tool_obj = tools->Get(tid)->ToObject();
 
+			auto id = js::to_int32(tid);
 			auto name = js::to_string(tool_obj->Get("name"_sym));
 			auto type = tool_obj->Get("type"_sym);
-			auto id = js::to_int32(tool_obj->Get("id"_sym));
 	
 			if(type == "mill"_sym)
 			{

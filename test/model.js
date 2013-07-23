@@ -4,7 +4,7 @@ var mill = {
 	type: "mill",
 	units: "metric",
 	axes: "XYZ",
-	tools: [],
+	tools: {},
 	spindle: [300]
 };
 

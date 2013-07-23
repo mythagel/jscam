@@ -5,10 +5,9 @@ var mill = {
 	units: "metric",
 	axes: "XYZ",
 	tools:
-	[
-		{
+	{
+		1: {
 			name: "3mm End Mill",
-			id: 1,
 			type: "mill",
 			center_cutting: true,
 			flutes: 4,
@@ -19,7 +18,7 @@ var mill = {
 			core_diameter: 3,
 			length: 60
 		}
-	],
+	},
 	spindle: [ {rpm: [100, 1000] }, {rpm: [2000, 6000]}]
 };
 

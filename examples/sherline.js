@@ -5,10 +5,9 @@ load("machine.js");
 var mill = {
 	type: Machine.Type.Mill,
 	tools:
-	[
-/*		{
+	{
+/*		1: {
 			name: "3mm End Mill",
-			id: 1,
 			type: Machine.Type.Mill,
 			center_cutting: true,
 			flutes: 4,
@@ -19,7 +18,7 @@ var mill = {
 			core_diameter: 3,
 			length: 60
 		}*/
-	],
+	},
 	spindle: [ {rpm: [70, 2800], nm: [3.1776, 0.0706]} ]
 };
 
