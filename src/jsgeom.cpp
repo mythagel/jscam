@@ -309,7 +309,22 @@ Handle<Value> glide(const Arguments& args)
 	try
 	{
 		auto self = js::unwrap<polyhedron_t>(args);
-		// TODO action
+		polyline_t path;
+		
+		for(auto p : js::array(args[0]))
+		{
+			auto po = p->ToObject();
+			auto x = po->Get("x"_sym);
+			auto y = po->Get("y"_sym);
+			auto z = po->Get("z"_sym);
+			path.line.push_back({js::to_double(x), js::to_double(y), js::to_double(z)});
+		}
+		
+		auto result = new_instance("Polyhedron"_sym);
+		auto Px = js::unwrap<polyhedron_t>(result);
+		*Px = glide(*self, path);
+		
+		return handle_scope.Close(result);
 	}
 	catch(const js::error& ex)
 	{
@@ -319,7 +334,6 @@ Handle<Value> glide(const Arguments& args)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
-	return {};
 }
 Handle<Value> volume(const Arguments& args)
 {
@@ -338,7 +352,6 @@ Handle<Value> volume(const Arguments& args)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
-	return {};
 }
 Handle<Value> rotate(const Arguments& args)
 {
@@ -347,7 +360,19 @@ Handle<Value> rotate(const Arguments& args)
 	try
 	{
 		auto self = js::unwrap<polyhedron_t>(args);
-		// TODO action
+		
+		auto qo = args[0]->ToObject();
+		
+		auto w = qo->Get("w"_sym);
+		auto x = qo->Get("x"_sym);
+		auto y = qo->Get("y"_sym);
+		auto z = qo->Get("z"_sym);
+		
+		auto result = new_instance("Polyhedron"_sym);
+		auto Px = js::unwrap<polyhedron_t>(result);
+		*Px = rotate(*self, js::to_double(w), js::to_double(x), js::to_double(y), js::to_double(z));
+		
+		return handle_scope.Close(result);
 	}
 	catch(const js::error& ex)
 	{
@@ -357,7 +382,6 @@ Handle<Value> rotate(const Arguments& args)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
-	return {};
 }
 Handle<Value> translate(const Arguments& args)
 {
@@ -366,7 +390,18 @@ Handle<Value> translate(const Arguments& args)
 	try
 	{
 		auto self = js::unwrap<polyhedron_t>(args);
-		// TODO action
+		
+		auto vo = args[0]->ToObject();
+		
+		auto x = vo->Get("x"_sym);
+		auto y = vo->Get("y"_sym);
+		auto z = vo->Get("z"_sym);
+		
+		auto result = new_instance("Polyhedron"_sym);
+		auto Px = js::unwrap<polyhedron_t>(result);
+		*Px = translate(*self, js::to_double(x), js::to_double(y), js::to_double(z));
+		
+		return handle_scope.Close(result);
 	}
 	catch(const js::error& ex)
 	{
