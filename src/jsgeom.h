@@ -42,17 +42,17 @@ Polyhedron
 
 	bool empty() const;
 	
-	array<Polyhedron> explode();
+	array<Polyhedron> explode() const;
 	
-	object_t to_object();
-	void write_off(filename);
+	object_t to_object()  const;
+	void write_off(filename)  const;
 	
-	Polyhedron glide([{x:1, y:1, z:1}, {x:10, y:10, z:10}]);
+	Polyhedron glide([{x:1, y:1, z:1}, {x:10, y:10, z:10}])  const;
 	
-	double volume();
+	double volume()  const;
 	
-	Polyhedron rotate({w: 0, x:1, y:1, z:1});
-	Polyhedron translate({x:1, y:1, z:1});
+	Polyhedron rotate({w: 0, x:1, y:1, z:1})  const;
+	Polyhedron translate({x:1, y:1, z:1})  const;
 }
 
 Polyhedron make_sphere({x:10, y:10, z:10}, double r, std::size_t slices);
