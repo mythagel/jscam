@@ -100,6 +100,9 @@ v8_object_iterator_adapter::iterator end(const v8_object_iterator_adapter& a);
 detail::v8_argument_iterator_adapter arguments(const v8::Arguments& args);
 detail::v8_object_iterator_adapter array(v8::Local<v8::Value> obj);
 
+v8::Local<v8::Object> jsnew(v8::Handle<v8::Value> name);
+v8::Local<v8::Object> jsnew(v8::Handle<v8::Value> name, int argc, v8::Handle<v8::Value> argv[]);
+
 bool exec(v8::Handle<v8::String> source, v8::Handle<v8::Value> name, v8::Handle<v8::Context> context = {});
 void bind(v8::Handle<v8::ObjectTemplate> global);
 

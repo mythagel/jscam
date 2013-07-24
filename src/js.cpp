@@ -186,6 +186,43 @@ detail::v8_object_iterator_adapter array(Local<Value> obj)
 	return { Array::Cast(*obj) };
 }
 
+v8::Local<v8::Object> jsnew(v8::Handle<v8::Value> name)
+{
+	HandleScope handle_scope;
+	
+	auto context = Context::GetCurrent();
+	auto global = context->Global();
+	
+	auto fn = global->Get(name);
+	if(fn.IsEmpty())
+		throw std::logic_error("Requested to create instance from unknown ctor.");
+	if(!fn->IsFunction())
+		throw std::logic_error("Symbol is not a function.");
+	
+	auto constructor = Function::Cast(*fn);
+	auto object = constructor->NewInstance();
+	
+	return handle_scope.Close(object);
+}
+v8::Local<v8::Object> jsnew(v8::Handle<v8::Value> name, int argc, v8::Handle<v8::Value> argv[])
+{
+	HandleScope handle_scope;
+	
+	auto context = Context::GetCurrent();
+	auto global = context->Global();
+	
+	auto fn = global->Get(name);
+	if(fn.IsEmpty())
+		throw std::logic_error("Requested to create instance from unknown ctor.");
+	if(!fn->IsFunction())
+		throw std::logic_error("Symbol is not a function.");
+	
+	auto constructor = Function::Cast(*fn);
+	auto object = constructor->NewInstance(argc, argv);
+	
+	return handle_scope.Close(object);
+}
+
 Handle<Value> print(const Arguments& args)
 {
 	HandleScope handle_scope;
