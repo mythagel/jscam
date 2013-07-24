@@ -120,6 +120,12 @@ static T* unwrap(const v8::AccessorInfo& info)
 	auto wrap = v8::Local<v8::External>::Cast(self->GetInternalField(0));
 	return static_cast<T*>(wrap->Value());
 }
+template <typename T>
+static T* unwrap(const v8::Local<v8::Object>& obj)
+{
+	auto wrap = v8::Local<v8::External>::Cast(obj->GetInternalField(0));
+	return static_cast<T*>(wrap->Value());
+}
 
 template <typename T>
 static v8::Persistent<v8::Object> wrap_object(v8::Handle<v8::Object> object, T* x)
