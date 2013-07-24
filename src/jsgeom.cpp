@@ -444,7 +444,19 @@ Handle<Value> make_sphere(const Arguments& args)
 	
 	try
 	{
-		// TODO
+		auto center = args[0]->ToObject();
+		auto cx = center->Get("x"_sym);
+		auto cy = center->Get("y"_sym);
+		auto cz = center->Get("z"_sym);
+		
+		auto r = js::to_double(args[1]);
+		auto slices = js::to_uint32(args[2]);
+		
+		auto result = new_instance("Polyhedron"_sym);
+		auto Px = js::unwrap<polyhedron_t>(result);
+		*Px = geom::make_sphere({js::to_double(cx), js::to_double(cy), js::to_double(cz)}, r, slices);
+		
+		return handle_scope.Close(result);
 	}
 	catch(const js::error& ex)
 	{
@@ -454,8 +466,6 @@ Handle<Value> make_sphere(const Arguments& args)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
-	
-	return {};
 }
 Handle<Value> make_box(const Arguments& args)
 {
@@ -463,7 +473,21 @@ Handle<Value> make_box(const Arguments& args)
 	
 	try
 	{
-		// TODO
+		auto p1 = args[0]->ToObject();
+		auto p1x = p1->Get("x"_sym);
+		auto p1y = p1->Get("y"_sym);
+		auto p1z = p1->Get("z"_sym);
+		
+		auto p2 = args[1]->ToObject();
+		auto p2x = p2->Get("x"_sym);
+		auto p2y = p2->Get("y"_sym);
+		auto p2z = p2->Get("z"_sym);
+		
+		auto result = new_instance("Polyhedron"_sym);
+		auto Px = js::unwrap<polyhedron_t>(result);
+		*Px = geom::make_box({js::to_double(p1x), js::to_double(p1y), js::to_double(p1z)}, {js::to_double(p2x), js::to_double(p2y), js::to_double(p2z)});
+		
+		return handle_scope.Close(result);
 	}
 	catch(const js::error& ex)
 	{
@@ -473,16 +497,32 @@ Handle<Value> make_box(const Arguments& args)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
-	
-	return {};
 }
 Handle<Value> make_cone(const Arguments& args)
 {
-	HandleScope scope;
+	HandleScope handle_scope;
 
 	try
 	{
-		// TODO
+		auto p1 = args[0]->ToObject();
+		auto p1x = p1->Get("x"_sym);
+		auto p1y = p1->Get("y"_sym);
+		auto p1z = p1->Get("z"_sym);
+		
+		auto p2 = args[1]->ToObject();
+		auto p2x = p2->Get("x"_sym);
+		auto p2y = p2->Get("y"_sym);
+		auto p2z = p2->Get("z"_sym);
+		
+		auto r1 = js::to_double(args[2]);
+		auto r2 = js::to_double(args[3]);
+		auto slices = js::to_uint32(args[4]);
+		
+		auto result = new_instance("Polyhedron"_sym);
+		auto Px = js::unwrap<polyhedron_t>(result);
+		*Px = geom::make_cone({js::to_double(p1x), js::to_double(p1y), js::to_double(p1z)}, {js::to_double(p2x), js::to_double(p2y), js::to_double(p2z)}, r1, r2, slices);
+		
+		return handle_scope.Close(result);
 	}
 	catch(const js::error& ex)
 	{
@@ -492,8 +532,6 @@ Handle<Value> make_cone(const Arguments& args)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
-
-	return {};
 }
 
 void bind(v8::Handle<v8::Object> global)
