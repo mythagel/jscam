@@ -8,7 +8,6 @@
        - Feed rates
        - Rapid rates
     - Lathe tool
-    - ~~geom::polyhedron_t~~
  * JS function library
     - Convert model to Three.js format for display
     - Backplot Viewer (Preferably 3d projection using 2d html5 canvas)
