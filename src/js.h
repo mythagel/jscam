@@ -123,6 +123,8 @@ static T* unwrap(const v8::AccessorInfo& info)
 template <typename T>
 static T* unwrap(const v8::Local<v8::Object>& obj)
 {
+	if(obj.IsEmpty())
+		throw error("Empty Handle");
 	auto wrap = v8::Local<v8::External>::Cast(obj->GetInternalField(0));
 	return static_cast<T*>(wrap->Value());
 }
