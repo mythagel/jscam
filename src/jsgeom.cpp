@@ -24,8 +24,14 @@
 
 #include "jsgeom.h"
 #include "js.h"
-#include "geom/polyhedron.h"
 #include <memory>
+#include "geom/polyhedron.h"
+#include "geom/explode.h"
+#include "geom/io.h"
+#include "geom/ops.h"
+#include "geom/primitives.h"
+#include "geom/translate.h"
+#include <fstream>
 
 using namespace v8;
 using namespace geom;
@@ -42,12 +48,10 @@ Handle<Value> intersection(const Arguments& args)
 	
 	try
 	{
-		// TODO need to validate correct way of unwraping
-		// object from an argument (not `this`)
-		// and determine correct way to return new Polyhedron object.
-//		auto Pa = js::unwrap<polyhedron_t>(args[0]->ToObject());
-//		std::unique_ptr<polyhedron_t> Px{new polyhedron_t};
-//		*Px = (*P) * (*Pa);
+		// TODO determine correct way to return new Polyhedron object.
+		auto poly = js::unwrap<polyhedron_t>(args[0]->ToObject());
+		std::unique_ptr<polyhedron_t> Px{new polyhedron_t};
+		*Px = (*self) * (*poly);
 		//js::wrap_object<polyhedron_t>(args.This(), Px.release());
 	}
 	catch(const js::error& ex)
@@ -67,7 +71,11 @@ Handle<Value> union_(const Arguments& args)
 	
 	try
 	{
-		// action
+		// TODO determine correct way to return new Polyhedron object.
+		auto poly = js::unwrap<polyhedron_t>(args[0]->ToObject());
+		std::unique_ptr<polyhedron_t> Px{new polyhedron_t};
+		*Px = (*self) + (*poly);
+		//js::wrap_object<polyhedron_t>(args.This(), Px.release());
 	}
 	catch(const js::error& ex)
 	{
@@ -86,7 +94,11 @@ Handle<Value> difference(const Arguments& args)
 	
 	try
 	{
-		// action
+		// TODO determine correct way to return new Polyhedron object.
+		auto poly = js::unwrap<polyhedron_t>(args[0]->ToObject());
+		std::unique_ptr<polyhedron_t> Px{new polyhedron_t};
+		*Px = (*self) - (*poly);
+		//js::wrap_object<polyhedron_t>(args.This(), Px.release());
 	}
 	catch(const js::error& ex)
 	{
@@ -105,7 +117,11 @@ Handle<Value> symmetric_difference(const Arguments& args)
 	
 	try
 	{
-		// action
+		// TODO determine correct way to return new Polyhedron object.
+		auto poly = js::unwrap<polyhedron_t>(args[0]->ToObject());
+		std::unique_ptr<polyhedron_t> Px{new polyhedron_t};
+		*Px = (*self) ^ (*poly);
+		//js::wrap_object<polyhedron_t>(args.This(), Px.release());
 	}
 	catch(const js::error& ex)
 	{
@@ -124,7 +140,10 @@ Handle<Value> complement(const Arguments& args)
 	
 	try
 	{
-		// action
+		// TODO determine correct way to return new Polyhedron object.
+		std::unique_ptr<polyhedron_t> Px{new polyhedron_t};
+		*Px = ! (*self);
+		//js::wrap_object<polyhedron_t>(args.This(), Px.release());
 	}
 	catch(const js::error& ex)
 	{
@@ -143,7 +162,7 @@ Handle<Value> empty(const Arguments& args)
 	
 	try
 	{
-		// action
+		return Boolean::New(self->empty());
 	}
 	catch(const js::error& ex)
 	{
@@ -162,7 +181,8 @@ Handle<Value> explode(const Arguments& args)
 	
 	try
 	{
-		// action
+		auto parts = explode(*self);
+		// TODO determine correct way to return new Polyhedron object.
 	}
 	catch(const js::error& ex)
 	{
@@ -179,9 +199,37 @@ Handle<Value> to_object(const Arguments& args)
 	HandleScope handle_scope;
 	auto self = js::unwrap<polyhedron_t>(args);
 	
+	auto obj = Object::New();
 	try
 	{
-		// action
+		const auto poly_object = to_object(*self);
+	
+		auto vertices = Array::New(poly_object.vertices.size());
+		for(std::size_t v = 0; v != poly_object.vertices.size(); ++v)
+		{
+			auto& vtx = poly_object.vertices[v];
+			auto vertex = Array::New(3);
+		
+			vertex->Set(0, Number::New(vtx.x));
+			vertex->Set(1, Number::New(vtx.y));
+			vertex->Set(2, Number::New(vtx.z));
+		
+			vertices->Set(v, vertex);
+		}
+		obj->Set("vertices"_sym, vertices);
+	
+		auto faces = Array::New(poly_object.faces.size());
+		for(std::size_t f = 0; f != poly_object.faces.size(); ++f)
+		{
+			auto& fce = poly_object.faces[f];
+			auto face = Array::New(fce.size());
+		
+			for(std::size_t f = 0; f != poly_object.faces.size(); ++f)
+				face->Set(f, Number::New(fce[f]));
+		
+			faces->Set(f, face);
+		}
+		obj->Set("faces"_sym, faces);
 	}
 	catch(const js::error& ex)
 	{
@@ -191,7 +239,8 @@ Handle<Value> to_object(const Arguments& args)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
-	return {};
+	
+	return handle_scope.Close(obj);
 }
 Handle<Value> write_off(const Arguments& args)
 {
@@ -200,7 +249,10 @@ Handle<Value> write_off(const Arguments& args)
 	
 	try
 	{
-		// action
+		auto filename = js::to_string(args[0]);
+		std::ofstream os(filename);
+		write_off(os, *self);
+		return {};
 	}
 	catch(const js::error& ex)
 	{
@@ -219,7 +271,7 @@ Handle<Value> glide(const Arguments& args)
 	
 	try
 	{
-		// action
+		// TODO action
 	}
 	catch(const js::error& ex)
 	{
@@ -238,7 +290,7 @@ Handle<Value> volume(const Arguments& args)
 	
 	try
 	{
-		// action
+		return Number::New(volume(*self));
 	}
 	catch(const js::error& ex)
 	{
@@ -257,7 +309,7 @@ Handle<Value> rotate(const Arguments& args)
 	
 	try
 	{
-		// action
+		// TODO action
 	}
 	catch(const js::error& ex)
 	{
@@ -276,7 +328,7 @@ Handle<Value> translate(const Arguments& args)
 	
 	try
 	{
-		// action
+		// TODO action
 	}
 	catch(const js::error& ex)
 	{
