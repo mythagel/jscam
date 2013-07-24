@@ -38,7 +38,7 @@ namespace jsgeom
 Handle<Value> intersection(const Arguments& args)
 {
 	HandleScope handle_scope;
-	auto P = js::unwrap<polyhedron_t>(args);
+	auto self = js::unwrap<polyhedron_t>(args);
 	
 	try
 	{
@@ -63,7 +63,7 @@ Handle<Value> intersection(const Arguments& args)
 Handle<Value> union_(const Arguments& args)
 {
 	HandleScope handle_scope;
-	auto P = js::unwrap<polyhedron_t>(args);
+	auto self = js::unwrap<polyhedron_t>(args);
 	
 	try
 	{
@@ -82,7 +82,7 @@ Handle<Value> union_(const Arguments& args)
 Handle<Value> difference(const Arguments& args)
 {
 	HandleScope handle_scope;
-	auto P = js::unwrap<polyhedron_t>(args);
+	auto self = js::unwrap<polyhedron_t>(args);
 	
 	try
 	{
@@ -101,7 +101,7 @@ Handle<Value> difference(const Arguments& args)
 Handle<Value> symmetric_difference(const Arguments& args)
 {
 	HandleScope handle_scope;
-	auto P = js::unwrap<polyhedron_t>(args);
+	auto self = js::unwrap<polyhedron_t>(args);
 	
 	try
 	{
@@ -120,7 +120,7 @@ Handle<Value> symmetric_difference(const Arguments& args)
 Handle<Value> complement(const Arguments& args)
 {
 	HandleScope handle_scope;
-	auto P = js::unwrap<polyhedron_t>(args);
+	auto self = js::unwrap<polyhedron_t>(args);
 	
 	try
 	{
@@ -139,7 +139,7 @@ Handle<Value> complement(const Arguments& args)
 Handle<Value> empty(const Arguments& args)
 {
 	HandleScope handle_scope;
-	auto P = js::unwrap<polyhedron_t>(args);
+	auto self = js::unwrap<polyhedron_t>(args);
 	
 	try
 	{
@@ -158,7 +158,7 @@ Handle<Value> empty(const Arguments& args)
 Handle<Value> explode(const Arguments& args)
 {
 	HandleScope handle_scope;
-	auto P = js::unwrap<polyhedron_t>(args);
+	auto self = js::unwrap<polyhedron_t>(args);
 	
 	try
 	{
@@ -177,7 +177,7 @@ Handle<Value> explode(const Arguments& args)
 Handle<Value> to_object(const Arguments& args)
 {
 	HandleScope handle_scope;
-	auto P = js::unwrap<polyhedron_t>(args);
+	auto self = js::unwrap<polyhedron_t>(args);
 	
 	try
 	{
@@ -196,7 +196,7 @@ Handle<Value> to_object(const Arguments& args)
 Handle<Value> write_off(const Arguments& args)
 {
 	HandleScope handle_scope;
-	auto P = js::unwrap<polyhedron_t>(args);
+	auto self = js::unwrap<polyhedron_t>(args);
 	
 	try
 	{
@@ -215,7 +215,7 @@ Handle<Value> write_off(const Arguments& args)
 Handle<Value> glide(const Arguments& args)
 {
 	HandleScope handle_scope;
-	auto P = js::unwrap<polyhedron_t>(args);
+	auto self = js::unwrap<polyhedron_t>(args);
 	
 	try
 	{
@@ -234,7 +234,7 @@ Handle<Value> glide(const Arguments& args)
 Handle<Value> volume(const Arguments& args)
 {
 	HandleScope handle_scope;
-	auto P = js::unwrap<polyhedron_t>(args);
+	auto self = js::unwrap<polyhedron_t>(args);
 	
 	try
 	{
@@ -253,7 +253,7 @@ Handle<Value> volume(const Arguments& args)
 Handle<Value> rotate(const Arguments& args)
 {
 	HandleScope handle_scope;
-	auto P = js::unwrap<polyhedron_t>(args);
+	auto self = js::unwrap<polyhedron_t>(args);
 	
 	try
 	{
@@ -272,7 +272,7 @@ Handle<Value> rotate(const Arguments& args)
 Handle<Value> translate(const Arguments& args)
 {
 	HandleScope handle_scope;
-	auto P = js::unwrap<polyhedron_t>(args);
+	auto self = js::unwrap<polyhedron_t>(args);
 	
 	try
 	{
