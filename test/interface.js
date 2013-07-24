@@ -79,6 +79,6 @@ m.end_block();
 var g = m.generate();
 jprint(g);
 
-var p = m.generate_model();
+var p = m.stock.to_object();
 jprint(p);
 

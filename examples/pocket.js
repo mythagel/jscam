@@ -66,5 +66,5 @@ print(generate_gcode(m.generate()));
 /*
  * Format: https://github.com/mrdoob/three.js/wiki/JSON-Model-format-3.1
  */
-print(JSON.stringify(m.generate_model()));
+print(JSON.stringify(m.stock.to_object()));
 

@@ -9,5 +9,5 @@ var mill = {
 };
 
 var m = new Machine(mill);
-var model = m.generate_model();
-//print(JSON.stringify(model));
+var model = m.stock.to_object();
+print(JSON.stringify(model));

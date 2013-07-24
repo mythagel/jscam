@@ -737,6 +737,29 @@ Handle<Value> tool(Local<String>, const AccessorInfo& info)
 	return tool;
 }
 
+Handle<Value> stock(Local<String>, const AccessorInfo& info)
+{
+	HandleScope handle_scope;
+	auto machine = js::unwrap<Machine>(info);
+	
+	try
+	{
+		auto result = js::jsnew("Polyhedron"_sym);
+		auto Px = js::unwrap<geom::polyhedron_t>(result);
+		*Px = machine->GetStock().Model;
+		
+		return handle_scope.Close(result);
+	}
+	catch(const cxxcam::error& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
+	}
+}
+
 Handle<Value> spindle_on(const Arguments& args)
 {
 	HandleScope handle_scope;
@@ -1314,57 +1337,6 @@ Handle<Value> generate(const Arguments& args)
 	}
 }
 
-Handle<Value> generate_model(const Arguments& args)
-{
-	HandleScope handle_scope;
-	auto machine = js::unwrap<Machine>(args);
-	
-	auto obj = Object::New();
-	try
-	{
-		const auto stock = machine->GetStock();
-		const auto stock_object = to_object(stock.Model);
-	
-	
-		auto vertices = Array::New(stock_object.vertices.size());
-		for(std::size_t v = 0; v != stock_object.vertices.size(); ++v)
-		{
-			auto& vtx = stock_object.vertices[v];
-			auto vertex = Array::New(3);
-		
-			vertex->Set(0, Number::New(vtx.x));
-			vertex->Set(1, Number::New(vtx.y));
-			vertex->Set(2, Number::New(vtx.z));
-		
-			vertices->Set(v, vertex);
-		}
-		obj->Set("vertices"_sym, vertices);
-	
-		auto faces = Array::New(stock_object.faces.size());
-		for(std::size_t f = 0; f != stock_object.faces.size(); ++f)
-		{
-			auto& fce = stock_object.faces[f];
-			auto face = Array::New(fce.size());
-		
-			for(std::size_t f = 0; f != stock_object.faces.size(); ++f)
-				face->Set(f, Number::New(fce[f]));
-		
-			faces->Set(f, face);
-		}
-		obj->Set("faces"_sym, faces);
-	}
-	catch(const cxxcam::error& ex)
-	{
-		return ThrowException(String::New(ex.what()));
-	}
-	catch(const js::error& ex)
-	{
-		return ThrowException(Exception::Error(String::New(ex.what())));
-	}
-	
-	return handle_scope.Close(obj);
-}
-
 Handle<Value> machine_ctor(const Arguments& args)
 {
 	if (!args.IsConstructCall())
@@ -1532,6 +1504,7 @@ void bind(Handle<Object> global)
 	instance_template->SetAccessor("feed_rate"_sym, feed_rate, feed_rate);
 	instance_template->SetAccessor("spindle"_sym, spindle);
 	instance_template->SetAccessor("tool"_sym, tool);
+	instance_template->SetAccessor("stock"_sym, stock);
 	
 	prototype->Set("spindle_on"_sym, FunctionTemplate::New(spindle_on)->GetFunction());
 	prototype->Set("spindle_off"_sym, FunctionTemplate::New(spindle_off)->GetFunction());
@@ -1547,7 +1520,6 @@ void bind(Handle<Object> global)
 	prototype->Set("arc"_sym, FunctionTemplate::New(arc)->GetFunction());
 	prototype->Set("plunge"_sym, FunctionTemplate::New(plunge)->GetFunction());
 	prototype->Set("generate"_sym, FunctionTemplate::New(generate)->GetFunction());
-	prototype->Set("generate_model"_sym, FunctionTemplate::New(generate_model)->GetFunction());
 	
 	auto constructor = Persistent<Function>::New(tpl->GetFunction());
 	global->Set(name, constructor);
