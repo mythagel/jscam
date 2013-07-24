@@ -4,7 +4,7 @@
  * Include paths
     - For library files
  * cxxcam bindings:
-    - nef::polyhedron_t
+    - geom::polyhedron_t
     - Configuration
        - Feed rates
        - Rapid rates
@@ -48,3 +48,4 @@
  * Bindings
     - Cleanup (e.g. Arc).
  * Tests for V8 comparisions String::New vs String::NewSymbol and comparisions wrt, JSON::parse
+ * Investigate issues with nested file inclusion
