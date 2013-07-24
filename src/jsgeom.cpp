@@ -445,7 +445,6 @@ void bind(v8::Handle<v8::Object> global)
 	prototype->Set("volume"_sym, FunctionTemplate::New(volume)->GetFunction());
 	prototype->Set("rotate"_sym, FunctionTemplate::New(rotate)->GetFunction());
 	prototype->Set("translate"_sym, FunctionTemplate::New(translate)->GetFunction());
-	prototype->Set(""_sym, FunctionTemplate::New()->GetFunction());
 
 	auto constructor = Persistent<Function>::New(tpl->GetFunction());
 	global->Set(name, constructor);
