@@ -41,28 +41,6 @@ using js::operator"" _sym;
 namespace jsgeom
 {
 
-namespace
-{
-Local<Object> new_instance(Handle<Value> name)
-{
-	HandleScope handle_scope;
-	
-	auto context = Context::GetCurrent();
-	auto global = context->Global();
-	
-	auto fn = global->Get(name);
-	if(fn.IsEmpty())
-		throw std::logic_error("Requested to create instance from unknown ctor.");
-	if(!fn->IsFunction())
-		throw std::logic_error("Symbol is not a function.");
-	
-	auto constructor = Function::Cast(*fn);
-	auto object = constructor->NewInstance();
-	
-	return handle_scope.Close(object);
-}
-}
-
 Handle<Value> intersection(const Arguments& args)
 {
 	HandleScope handle_scope;
@@ -72,7 +50,7 @@ Handle<Value> intersection(const Arguments& args)
 		auto self = js::unwrap<polyhedron_t>(args);
 		auto poly = js::unwrap<polyhedron_t>(args[0]->ToObject());
 		
-		auto result = new_instance("Polyhedron"_sym);
+		auto result = js::jsnew("Polyhedron"_sym);
 		auto Px = js::unwrap<polyhedron_t>(result);
 		*Px = (*self) * (*poly);
 		
@@ -96,7 +74,7 @@ Handle<Value> union_(const Arguments& args)
 		auto self = js::unwrap<polyhedron_t>(args);
 		auto poly = js::unwrap<polyhedron_t>(args[0]->ToObject());
 		
-		auto result = new_instance("Polyhedron"_sym);
+		auto result = js::jsnew("Polyhedron"_sym);
 		auto Px = js::unwrap<polyhedron_t>(result);
 		*Px = (*self) + (*poly);
 		
@@ -120,7 +98,7 @@ Handle<Value> difference(const Arguments& args)
 		auto self = js::unwrap<polyhedron_t>(args);
 		auto poly = js::unwrap<polyhedron_t>(args[0]->ToObject());
 		
-		auto result = new_instance("Polyhedron"_sym);
+		auto result = js::jsnew("Polyhedron"_sym);
 		auto Px = js::unwrap<polyhedron_t>(result);
 		*Px = (*self) - (*poly);
 		
@@ -144,7 +122,7 @@ Handle<Value> symmetric_difference(const Arguments& args)
 		auto self = js::unwrap<polyhedron_t>(args);
 		auto poly = js::unwrap<polyhedron_t>(args[0]->ToObject());
 		
-		auto result = new_instance("Polyhedron"_sym);
+		auto result = js::jsnew("Polyhedron"_sym);
 		auto Px = js::unwrap<polyhedron_t>(result);
 		*Px = (*self) ^ (*poly);
 		
@@ -167,7 +145,7 @@ Handle<Value> complement(const Arguments& args)
 	{
 		auto self = js::unwrap<polyhedron_t>(args);
 		
-		auto result = new_instance("Polyhedron"_sym);
+		auto result = js::jsnew("Polyhedron"_sym);
 		auto Px = js::unwrap<polyhedron_t>(result);
 		*Px = !(*self);
 		
@@ -214,7 +192,7 @@ Handle<Value> explode(const Arguments& args)
 		auto res = Array::New(parts.size());
 		for(std::size_t p = 0; p != parts.size(); ++p)
 		{
-			auto part = new_instance("Polyhedron"_sym);
+			auto part = js::jsnew("Polyhedron"_sym);
 			auto Px = js::unwrap<polyhedron_t>(part);
 			*Px = parts[p];
 			
@@ -320,7 +298,7 @@ Handle<Value> glide(const Arguments& args)
 			path.line.push_back({js::to_double(x), js::to_double(y), js::to_double(z)});
 		}
 		
-		auto result = new_instance("Polyhedron"_sym);
+		auto result = js::jsnew("Polyhedron"_sym);
 		auto Px = js::unwrap<polyhedron_t>(result);
 		*Px = glide(*self, path);
 		
@@ -368,7 +346,7 @@ Handle<Value> rotate(const Arguments& args)
 		auto y = qo->Get("y"_sym);
 		auto z = qo->Get("z"_sym);
 		
-		auto result = new_instance("Polyhedron"_sym);
+		auto result = js::jsnew("Polyhedron"_sym);
 		auto Px = js::unwrap<polyhedron_t>(result);
 		*Px = rotate(*self, js::to_double(w), js::to_double(x), js::to_double(y), js::to_double(z));
 		
@@ -397,7 +375,7 @@ Handle<Value> translate(const Arguments& args)
 		auto y = vo->Get("y"_sym);
 		auto z = vo->Get("z"_sym);
 		
-		auto result = new_instance("Polyhedron"_sym);
+		auto result = js::jsnew("Polyhedron"_sym);
 		auto Px = js::unwrap<polyhedron_t>(result);
 		*Px = translate(*self, js::to_double(x), js::to_double(y), js::to_double(z));
 		
@@ -452,7 +430,7 @@ Handle<Value> make_sphere(const Arguments& args)
 		auto r = js::to_double(args[1]);
 		auto slices = js::to_uint32(args[2]);
 		
-		auto result = new_instance("Polyhedron"_sym);
+		auto result = js::jsnew("Polyhedron"_sym);
 		auto Px = js::unwrap<polyhedron_t>(result);
 		*Px = geom::make_sphere({js::to_double(cx), js::to_double(cy), js::to_double(cz)}, r, slices);
 		
@@ -483,7 +461,7 @@ Handle<Value> make_box(const Arguments& args)
 		auto p2y = p2->Get("y"_sym);
 		auto p2z = p2->Get("z"_sym);
 		
-		auto result = new_instance("Polyhedron"_sym);
+		auto result = js::jsnew("Polyhedron"_sym);
 		auto Px = js::unwrap<polyhedron_t>(result);
 		*Px = geom::make_box({js::to_double(p1x), js::to_double(p1y), js::to_double(p1z)}, {js::to_double(p2x), js::to_double(p2y), js::to_double(p2z)});
 		
@@ -518,7 +496,7 @@ Handle<Value> make_cone(const Arguments& args)
 		auto r2 = js::to_double(args[3]);
 		auto slices = js::to_uint32(args[4]);
 		
-		auto result = new_instance("Polyhedron"_sym);
+		auto result = js::jsnew("Polyhedron"_sym);
 		auto Px = js::unwrap<polyhedron_t>(result);
 		*Px = geom::make_cone({js::to_double(p1x), js::to_double(p1y), js::to_double(p1z)}, {js::to_double(p2x), js::to_double(p2y), js::to_double(p2z)}, r1, r2, slices);
 		
