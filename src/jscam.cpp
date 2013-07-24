@@ -21,7 +21,7 @@
 #include <fstream>
 #include <iostream>
 #include "jsmachine.h"
-#include "jsnef.h"
+#include "jsgeom.h"
 #include "platform.h"
 
 using namespace v8;
@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
 		
 		auto global = context->Global();
 		jsmachine::bind(global);
-		jsnef::bind(global);
+		jsgeom::bind(global);
 	
 		if(args.empty())
 		{

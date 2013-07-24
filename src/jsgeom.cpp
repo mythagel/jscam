@@ -16,22 +16,22 @@
  */
 
 /*
- * jsnef.cpp
+ * jsgeom.cpp
  *
  *  Created on: 2013-07-24
  *      Author: nicholas
  */
 
-#include "jsnef.h"
+#include "jsgeom.h"
 #include "js.h"
-#include "nef/polyhedron.h"
+#include "geom/polyhedron.h"
 
 using namespace v8;
-using namespace nef;
+using namespace geom;
 
 using js::operator"" _sym;
 
-namespace jsnef
+namespace jsgeom
 {
 
 Handle<Value> polyhedron_ctor(const Arguments& args)

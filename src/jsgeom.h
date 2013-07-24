@@ -16,17 +16,17 @@
  */
 
 /*
- * jsnef.h
+ * jsgeom.h
  *
  *  Created on: 2013-07-24
  *      Author: nicholas
  */
 
-#ifndef JSNEF_H_
-#define JSNEF_H_
+#ifndef JSGEOM_H_
+#define JSGEOM_H_
 #include <v8.h>
 
-namespace jsnef
+namespace jsgeom
 {
 
 /*
@@ -64,4 +64,4 @@ void bind(v8::Handle<v8::Object> global);
 
 }
 
-#endif /* JSNEF_H_ */
+#endif /* JSGEOM_H_ */

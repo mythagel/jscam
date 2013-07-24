@@ -31,7 +31,7 @@
 #include "Offset.h"
 #include "Tool.h"
 #include "Stock.h"
-#include "nef/io.h"
+#include "geom/io.h"
 #include "js.h"
 #include <stdexcept>
 
