@@ -1350,6 +1350,8 @@ Handle<Value> machine_ctor(const Arguments& args)
 		if(config.IsEmpty())
 			return ThrowException(String::New("Expected config"));
 
+		auto stock = args[1];
+
 		Configuration machine_config;
 
 		{
@@ -1457,6 +1459,17 @@ Handle<Value> machine_ctor(const Arguments& args)
 				auto torque_high = js::to_double(torque->Get(1));
 				
 				machine_config.spindle_speeds.emplace_back(speed_low, speed_high, torque_low, torque_high);
+			}
+		}
+		
+		if(stock->IsObject())
+		{
+			auto so = stock->ToObject();
+			auto model = so->Get("model"_sym);
+			if(model->IsObject())
+			{
+				auto poly = js::unwrap<geom::polyhedron_t>(model->ToObject());
+				machine_config.stock.Model = *poly;
 			}
 		}
 		
