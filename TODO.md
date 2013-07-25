@@ -4,10 +4,6 @@
  * Include paths
     - For library files
  * cxxcam bindings:
-    - Improve bindings with new mapped Polyhedron type
-       - Ability to set stock object in machine creation.
-       - var m = new Machine(mill, {stock, material...});
-       - var m = new Machine(mill, stock) for the moment.
     - Configuration
        - Feed rates
        - Rapid rates
@@ -51,5 +47,7 @@
 ### Code ###
  * Bindings
     - Cleanup (e.g. Arc).
+    - Generalise
+       - Functions to convert js arrays and objects to axes etc.
  * Tests for V8 comparisions String::New vs String::NewSymbol and comparisions wrt, JSON::parse
  * Investigate issues with nested file inclusion
