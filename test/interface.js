@@ -23,7 +23,10 @@ var mill = {
 			length: 60
 		}
 	},
-	spindle: [ {rpm: 300} ]
+	spindle: [ {rpm: 300} ],
+	
+	feed_rate: {z: 50, max: 300},
+	rapid_rate: {z: 50, max: 300}
 };
 
 var m = new Machine(mill);
