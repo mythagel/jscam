@@ -1363,6 +1363,7 @@ Handle<Value> machine_ctor(const Arguments& args)
 			else
 				return ThrowException(String::New("type - mill / lathe"));
 		}
+		
 		{
 			auto units = js::to_string(config->Get("units"_sym));
 			if(!units.empty())
@@ -1375,90 +1376,157 @@ Handle<Value> machine_ctor(const Arguments& args)
 					return ThrowException(String::New("units - metric / imperial"));
 			}
 		}
+		
 		{
 			auto axes = js::to_string(config->Get("axes"_sym));
 			if(!axes.empty())
 				machine_config.axes = axes;
 		}
 
-// TODO feedrates and rapid rates.
-//	std::vector<spindle_speed> spindle_speeds;
-//	
-//	double max_feed_rate = 0.0;
-//	std::map<Axis::Type, double> axis_max_feed_rates;
-//	
-//	double rapid_rate = 0.0;
-//	std::map<Axis::Type, double> axis_rapid_rates;
-
-		auto tools = config->Get("tools"_sym)->ToObject();
-		auto tids = tools->GetPropertyNames();
-
-		for(auto tid : js::array(tids))
 		{
-			Tool tool;
-			auto tool_obj = tools->Get(tid)->ToObject();
+			auto tools = config->Get("tools"_sym)->ToObject();
+			auto tids = tools->GetPropertyNames();
+			for(auto tid : js::array(tids))
+			{
+				Tool tool;
+				auto tool_obj = tools->Get(tid)->ToObject();
 
-			auto id = js::to_int32(tid);
-			auto name = js::to_string(tool_obj->Get("name"_sym));
-			auto type = js::to_string(tool_obj->Get("type"_sym));
+				auto id = js::to_int32(tid);
+				auto name = js::to_string(tool_obj->Get("name"_sym));
+				auto type = js::to_string(tool_obj->Get("type"_sym));
 	
-			if(type == "mill")
-			{
-				auto spec = Tool::Mill();
+				if(type == "mill")
+				{
+					auto spec = Tool::Mill();
 
-				spec.type = Tool::Mill::Type::End;
-				spec.center_cutting = js::to_bool(tool_obj->Get("center_cutting"_sym));
-				spec.flutes = js::to_uint32(tool_obj->Get("flutes"_sym));
-				spec.flute_length = js::to_double(tool_obj->Get("flute_length"_sym));
-				spec.cutting_length = js::to_double(tool_obj->Get("cutting_length"_sym));
-				spec.mill_diameter = js::to_double(tool_obj->Get("mill_diameter"_sym));
-				spec.shank_diameter = js::to_double(tool_obj->Get("shank_diameter"_sym));
-				spec.core_diameter = js::to_double(tool_obj->Get("core_diameter"_sym));
-				spec.length = js::to_double(tool_obj->Get("length"_sym));
+					spec.type = Tool::Mill::Type::End;
+					spec.center_cutting = js::to_bool(tool_obj->Get("center_cutting"_sym));
+					spec.flutes = js::to_uint32(tool_obj->Get("flutes"_sym));
+					spec.flute_length = js::to_double(tool_obj->Get("flute_length"_sym));
+					spec.cutting_length = js::to_double(tool_obj->Get("cutting_length"_sym));
+					spec.mill_diameter = js::to_double(tool_obj->Get("mill_diameter"_sym));
+					spec.shank_diameter = js::to_double(tool_obj->Get("shank_diameter"_sym));
+					spec.core_diameter = js::to_double(tool_obj->Get("core_diameter"_sym));
+					spec.length = js::to_double(tool_obj->Get("length"_sym));
 		
-				tool = Tool(name, spec);
-			}
-			else if(type == "lathe")
-			{
-				// TODO fill spec from js
-				auto spec = Tool::Lathe();
-				tool = Tool(name, spec);
-			}
-			else
-			{
-				return ThrowException(String::New("tool type - mill / lathe"));
-			}
+					tool = Tool(name, spec);
+				}
+				else if(type == "lathe")
+				{
+					// TODO fill spec from js
+					auto spec = Tool::Lathe();
+					tool = Tool(name, spec);
+				}
+				else
+				{
+					return ThrowException(String::New("tool type - mill / lathe"));
+				}
 
-			machine_config.tools[id] = tool;
+				machine_config.tools[id] = tool;
+			}
 		}
 
-		auto spindle_speeds = config->Get("spindle"_sym);
-		for(auto s : js::array(spindle_speeds))
+		auto fr = config->Get("feed_rate"_sym);
+		if(fr->IsObject())
 		{
-			auto entry = s->ToObject();
-			if(entry.IsEmpty())
-				return ThrowException(String::New("Expected object"));
-			
-			auto rpm = entry->Get("rpm"_sym);
-			auto nm = entry->Get("nm"_sym);
-			
-			if(rpm->IsNumber())
+			auto feed_rate = fr->ToObject();
+			auto axes = feed_rate->GetPropertyNames();
+			for(auto axis : js::array(axes))
 			{
-				auto speed = js::to_uint32(rpm);
-				auto torque = js::to_double(nm);
-				machine_config.spindle_speeds.emplace_back(speed, torque);
+				if(axis == "x"_sym)
+					machine_config.axis_max_feed_rates[Axis::Type::X] = js::to_double(feed_rate->Get(axis));
+				else if(axis == "y"_sym)
+					machine_config.axis_max_feed_rates[Axis::Type::Y] = js::to_double(feed_rate->Get(axis));
+				else if(axis == "z"_sym)
+					machine_config.axis_max_feed_rates[Axis::Type::Z] = js::to_double(feed_rate->Get(axis));
+				
+				else if(axis == "a"_sym)
+					machine_config.axis_max_feed_rates[Axis::Type::A] = js::to_double(feed_rate->Get(axis));
+				else if(axis == "b"_sym)
+					machine_config.axis_max_feed_rates[Axis::Type::B] = js::to_double(feed_rate->Get(axis));
+				else if(axis == "c"_sym)
+					machine_config.axis_max_feed_rates[Axis::Type::C] = js::to_double(feed_rate->Get(axis));
+				
+				else if(axis == "u"_sym)
+					machine_config.axis_max_feed_rates[Axis::Type::U] = js::to_double(feed_rate->Get(axis));
+				else if(axis == "v"_sym)
+					machine_config.axis_max_feed_rates[Axis::Type::V] = js::to_double(feed_rate->Get(axis));
+				else if(axis == "w"_sym)
+					machine_config.axis_max_feed_rates[Axis::Type::W] = js::to_double(feed_rate->Get(axis));
+				
+				else if(axis == "max"_sym)
+					machine_config.max_feed_rate = js::to_double(feed_rate->Get(axis));
+				
+				else
+					return ThrowException(String::New("feed_rate - xyzabcuvw / max"));
 			}
-			else
+		}
+		
+		auto rr = config->Get("rapid_rate"_sym);
+		if(rr->IsObject())
+		{
+			auto rapid_rate = config->Get("rapid_rate"_sym)->ToObject();
+			auto axes = rapid_rate->GetPropertyNames();
+			for(auto axis : js::array(axes))
 			{
-				auto speed = Array::Cast(*rpm);
-				auto torque = Array::Cast(*nm);
+				if(axis == "x"_sym)
+					machine_config.axis_rapid_rates[Axis::Type::X] = js::to_double(rapid_rate->Get(axis));
+				else if(axis == "y"_sym)
+					machine_config.axis_rapid_rates[Axis::Type::Y] = js::to_double(rapid_rate->Get(axis));
+				else if(axis == "z"_sym)
+					machine_config.axis_rapid_rates[Axis::Type::Z] = js::to_double(rapid_rate->Get(axis));
 				
-				auto speed_low = js::to_uint32(speed->Get(0));
-				auto speed_high = js::to_uint32(speed->Get(1));
-				auto torque_low = js::to_double(torque->Get(0));
-				auto torque_high = js::to_double(torque->Get(1));
+				else if(axis == "a"_sym)
+					machine_config.axis_rapid_rates[Axis::Type::A] = js::to_double(rapid_rate->Get(axis));
+				else if(axis == "b"_sym)
+					machine_config.axis_rapid_rates[Axis::Type::B] = js::to_double(rapid_rate->Get(axis));
+				else if(axis == "c"_sym)
+					machine_config.axis_rapid_rates[Axis::Type::C] = js::to_double(rapid_rate->Get(axis));
 				
-				machine_config.spindle_speeds.emplace_back(speed_low, speed_high, torque_low, torque_high);
+				else if(axis == "u"_sym)
+					machine_config.axis_rapid_rates[Axis::Type::U] = js::to_double(rapid_rate->Get(axis));
+				else if(axis == "v"_sym)
+					machine_config.axis_rapid_rates[Axis::Type::V] = js::to_double(rapid_rate->Get(axis));
+				else if(axis == "w"_sym)
+					machine_config.axis_rapid_rates[Axis::Type::W] = js::to_double(rapid_rate->Get(axis));
+				
+				else if(axis == "max"_sym)
+					machine_config.rapid_rate = js::to_double(rapid_rate->Get(axis));
+				
+				else
+					return ThrowException(String::New("rapid_rate - xyzabcuvw / max"));
+			}
+		}
+
+		{
+			auto spindle_speeds = config->Get("spindle"_sym);
+			for(auto s : js::array(spindle_speeds))
+			{
+				auto entry = s->ToObject();
+				if(entry.IsEmpty())
+					return ThrowException(String::New("Expected object"));
+			
+				auto rpm = entry->Get("rpm"_sym);
+				auto nm = entry->Get("nm"_sym);
+			
+				if(rpm->IsNumber())
+				{
+					auto speed = js::to_uint32(rpm);
+					auto torque = js::to_double(nm);
+					machine_config.spindle_speeds.emplace_back(speed, torque);
+				}
+				else
+				{
+					auto speed = Array::Cast(*rpm);
+					auto torque = Array::Cast(*nm);
+				
+					auto speed_low = js::to_uint32(speed->Get(0));
+					auto speed_high = js::to_uint32(speed->Get(1));
+					auto torque_low = js::to_double(torque->Get(0));
+					auto torque_high = js::to_double(torque->Get(1));
+				
+					machine_config.spindle_speeds.emplace_back(speed_low, speed_high, torque_low, torque_high);
+				}
 			}
 		}
 		
