@@ -64,6 +64,8 @@ m.arc();
 m.push_state();
 m.push_state();
 
+m.dump_state();
+
 jprint(m.spindle);
 jprint(m.coordinate_system);
 jprint(m.motion);

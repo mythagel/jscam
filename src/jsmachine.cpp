@@ -101,6 +101,26 @@ Handle<Value> discard_state(const Arguments& args)
 	return {};
 }
 
+Handle<Value> dump_state(const Arguments& args)
+{
+	HandleScope handle_scope;
+	auto machine = js::unwrap<Machine>(args);
+	
+	try
+	{
+		machine->dump();
+	}
+	catch(const cxxcam::error& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
+	}
+	return {};
+}
+
 Handle<Value> exact_path(const Arguments& args)
 {
 	HandleScope handle_scope;
@@ -1571,6 +1591,7 @@ void bind(Handle<Object> global)
 	prototype->Set("push_state"_sym, FunctionTemplate::New(push_state)->GetFunction());
 	prototype->Set("pop_state"_sym, FunctionTemplate::New(pop_state)->GetFunction());
 	prototype->Set("discard_state"_sym, FunctionTemplate::New(discard_state)->GetFunction());
+	prototype->Set("dump_state"_sym, FunctionTemplate::New(dump_state)->GetFunction());
 	
 	prototype->Set("exact_path"_sym, FunctionTemplate::New(exact_path)->GetFunction());
 	prototype->Set("exact_stop"_sym, FunctionTemplate::New(exact_stop)->GetFunction());
