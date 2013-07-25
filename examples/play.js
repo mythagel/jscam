@@ -49,7 +49,7 @@ function polygon(sides, size, center, depth)
 	//tool.mill_diameter
 	// TODO spiral in pocket by mill width steps
 	
-	m.rapid ({x: center.x + size * Math.cos(0), y: center.y + size * Math.sin(0)});         
+	m.rapid ({x: center.x + size * Math.cos(0), y: center.y + size * Math.sin(0)});
 	m.linear({z: depth});
 
 	for (var side = 1; side <= sides; ++side)
