@@ -47,5 +47,7 @@
 ### Code ###
  * Bindings
     - Cleanup (e.g. Arc).
+    - Generalise
+       - Functions to convert js arrays and objects to axes etc.
  * Tests for V8 comparisions String::New vs String::NewSymbol and comparisions wrt, JSON::parse
  * Investigate issues with nested file inclusion
