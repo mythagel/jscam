@@ -4,9 +4,6 @@
  * Include paths
     - For library files
  * cxxcam bindings:
-    - ~~Improve bindings with new mapped Polyhedron type~~
-       - ~~Ability to set stock object in machine creation.~~
-       - ~~var m = new Machine(mill, {stock, material...});~~
     - Configuration
        - Feed rates
        - Rapid rates
