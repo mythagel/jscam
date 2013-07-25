@@ -39,7 +39,27 @@ for(var i = 0; i < 11; ++i)
 	print("{x:" + 5*i + ", y:" + 5*i + ", z:" + (10-i) + "}")
 	m.linear({z:10-i});
 	m.linear({x:5*i, y:5*i});
+
 	//m.linear({x:5*i, y:5*i, z:10-i});
 }
+
+function polygon(sides, size, center, depth)
+{
+	var tool = m.tool;
+	//tool.mill_diameter
+	// TODO spiral in pocket by mill width steps
+	
+	m.rapid ({x: center.x + size * Math.cos(0), y: center.y + size * Math.sin(0)});         
+	m.linear({z: depth});
+
+	for (var side = 1; side <= sides; ++side)
+	{
+		var x = center.x + size * Math.cos(side * 2 * Math.PI / sides);
+		var y = center.y + size * Math.sin(side * 2 * Math.PI / sides);
+		m.linear({x: x, y: y});
+	}
+}
+
+polygon(6, 10, {x:25, y:25}, 3);
 
 m.stock.write_off("play.off");
