@@ -7,15 +7,15 @@ var mill = {
 	tools:
 	{
 		1: {
-			name: "3mm End Mill",
+			name: "1mm End Mill",
 			type: "mill",
 			center_cutting: true,
 			flutes: 4,
 			flute_length: 25,
 			cutting_length: 20,
-			mill_diameter: 3,
-			shank_diameter: 6,
-			core_diameter: 3,
+			mill_diameter: 1,
+			shank_diameter: 2,
+			core_diameter: 0.5,
 			length: 60
 		}
 	},
@@ -32,16 +32,6 @@ m.tool_change(1);
 m.spindle_on(250);
 
 m.rapid({z:11});
-m.rapid({x:0, y:0});
-
-//for(var i = 0; i < 11; ++i)
-//{
-//	print("{x:" + 5*i + ", y:" + 5*i + ", z:" + (10-i) + "}")
-//	m.linear({z:10-i});
-//	m.linear({x:5*i, y:5*i});
-
-//	//m.linear({x:5*i, y:5*i, z:10-i});
-//}
 
 function polygon(sides, size, center, depth)
 {
@@ -60,6 +50,7 @@ function polygon(sides, size, center, depth)
 	}
 }
 
-polygon(6, 10, {x:25, y:25}, 3);
+for(var i = 0; i < 10; ++i)
+polygon(6, 1, {x:10, y:10 + (4 * i)}, 8);
 
-m.stock.write_off("play.off");
+m.stock.write_off("hexgrid.off");
