@@ -50,7 +50,7 @@ function polygon(sides, size, center, depth)
 	}
 }
 
-for(var i = 0; i < 10; ++i)
-polygon(6, 1, {x:10, y:10 + (4 * i)}, 8);
+for(var i = 0; i < 6; ++i)
+	polygon(6, 3, {x:10, y:10 + (10 * i)}, 9);
 
 m.stock.write_off("hexgrid.off");
