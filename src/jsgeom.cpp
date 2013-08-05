@@ -257,6 +257,29 @@ Handle<Value> to_object(const Arguments& args)
 		return ThrowException(String::New(ex.what()));
 	}
 }
+Handle<Value> read_off(const Arguments& args)
+{
+	HandleScope handle_scope;
+	
+	try
+	{
+		auto self = js::unwrap<polyhedron_t>(args);
+		
+		auto filename = js::to_string(args[0]);
+		std::ifstream is(filename);
+		is >> geom::format::off >> *self;
+		return {};
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
+	return {};
+}
 Handle<Value> write_off(const Arguments& args)
 {
 	HandleScope handle_scope;
@@ -267,7 +290,7 @@ Handle<Value> write_off(const Arguments& args)
 		
 		auto filename = js::to_string(args[0]);
 		std::ofstream os(filename);
-		write_off(os, *self);
+		os << geom::format::off << *self;
 		return {};
 	}
 	catch(const js::error& ex)
@@ -532,6 +555,7 @@ void bind(v8::Handle<v8::Object> global)
 	prototype->Set("empty"_sym, FunctionTemplate::New(empty)->GetFunction());
 	prototype->Set("explode"_sym, FunctionTemplate::New(explode)->GetFunction());
 	prototype->Set("to_object"_sym, FunctionTemplate::New(to_object)->GetFunction());
+	prototype->Set("read_off"_sym, FunctionTemplate::New(read_off)->GetFunction());
 	prototype->Set("write_off"_sym, FunctionTemplate::New(write_off)->GetFunction());
 	prototype->Set("glide"_sym, FunctionTemplate::New(glide)->GetFunction());
 	prototype->Set("volume"_sym, FunctionTemplate::New(volume)->GetFunction());
