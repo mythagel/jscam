@@ -31,6 +31,7 @@
 #include "geom/ops.h"
 #include "geom/primitives.h"
 #include "geom/translate.h"
+#include "geom/query.h"
 #include <fstream>
 
 using namespace v8;
@@ -535,6 +536,90 @@ Handle<Value> make_cone(const Arguments& args)
 	}
 }
 
+Handle<Value> intersects(const Arguments& args)
+{
+	HandleScope handle_scope;
+	
+	try
+	{
+		auto p0 = js::unwrap<polyhedron_t>(args[0]->ToObject());
+		auto p1 = js::unwrap<polyhedron_t>(args[1]->ToObject());
+		
+		auto result = Boolean::New(intersects(*p0, *p1));
+		
+		return handle_scope.Close(result);
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
+}
+Handle<Value> distance(const Arguments& args)
+{
+	HandleScope handle_scope;
+	
+	try
+	{
+		auto poly = js::unwrap<polyhedron_t>(args[0]->ToObject());
+
+		auto p1 = args[1]->ToObject();
+		auto p1x = p1->Get("x"_sym);
+		auto p1y = p1->Get("y"_sym);
+		auto p1z = p1->Get("z"_sym);
+        query::point_3 p = {js::to_double(p1x), js::to_double(p1y), js::to_double(p1z)};
+		
+		auto result = Number::New(distance(*poly, p));
+		
+		return handle_scope.Close(result);
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
+}
+Handle<Value> bounding_box(const Arguments& args)
+{
+	HandleScope handle_scope;
+	
+	try
+	{
+		auto poly = js::unwrap<polyhedron_t>(args[0]->ToObject());
+
+		auto result = bounding_box(*poly);
+		auto min = Object::New();
+        min->Set("x"_sym, Number::New(result.min.x));
+        min->Set("y"_sym, Number::New(result.min.y));
+        min->Set("z"_sym, Number::New(result.min.z));
+
+		auto max = Object::New();
+        max->Set("x"_sym, Number::New(result.max.x));
+        max->Set("y"_sym, Number::New(result.max.y));
+        max->Set("z"_sym, Number::New(result.max.z));
+
+		auto bbox = Object::New();
+        bbox->Set("min"_sym, min);
+        bbox->Set("max"_sym, max);
+		
+		return handle_scope.Close(bbox);
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
+}
+
 void bind(v8::Handle<v8::Object> global)
 {
 	auto name = "Polyhedron"_sym;
@@ -568,6 +653,10 @@ void bind(v8::Handle<v8::Object> global)
 	global->Set("make_sphere"_sym, FunctionTemplate::New(make_sphere)->GetFunction());
 	global->Set("make_box"_sym, FunctionTemplate::New(make_box)->GetFunction());
 	global->Set("make_cone"_sym, FunctionTemplate::New(make_cone)->GetFunction());
+
+	global->Set("intersects"_sym, FunctionTemplate::New(intersects)->GetFunction());
+	global->Set("distance"_sym, FunctionTemplate::New(distance)->GetFunction());
+	global->Set("bounding_box"_sym, FunctionTemplate::New(bounding_box)->GetFunction());
 }
 
 }
