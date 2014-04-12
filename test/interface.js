@@ -59,7 +59,7 @@ m.dwell(5, "hello");
 m.comment("hello");
 m.rapid({x: 100});
 m.linear({x: 0});
-m.arc();
+m.arc("clockwise", {i:1, k:0});
 //m.plunge
 m.push_state();
 m.push_state();
