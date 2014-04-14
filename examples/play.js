@@ -1,4 +1,5 @@
 "use strict";
+load("../lib/gcode.js");
 
 var mill = {
 	type: "mill",
@@ -63,3 +64,4 @@ function polygon(sides, size, center, depth)
 polygon(6, 10, {x:25, y:25}, 3);
 
 m.stock.write_off("play.off");
+print(generate_gcode(m.generate()));
