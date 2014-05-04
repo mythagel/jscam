@@ -4,7 +4,7 @@ MACRO(JSCAM_TEST testname)
 	ADD_DEPENDENCIES(check ${testname})
 ENDMACRO()
 
-FOREACH(test basic simple model interface push_state simple_stock bbox)
+FOREACH(test basic simple model interface push_state simple_stock bbox args)
 	JSCAM_TEST(${test})
 ENDFOREACH()
 
