@@ -45,6 +45,9 @@
     - Portability of scripts has to be considered. It is desired that scripts be self-contained so they can easily be regenerated on different systems.
 
 ### Code ###
+ * Remove platform code
+    - Replace with boost
+    - Add additional bindings from boost::fs
  * Bindings
     - Cleanup (e.g. Arc).
     - Generalise
