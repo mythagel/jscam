@@ -48,9 +48,12 @@
  * Remove platform code
     - Replace with boost
     - Add additional bindings from boost::fs
+    - Need functions to enumerate path.
  * Bindings
     - Cleanup (e.g. Arc).
     - Generalise
        - Functions to convert js arrays and objects to axes etc.
  * Tests for V8 comparisions String::New vs String::NewSymbol and comparisions wrt, JSON::parse
  * Investigate issues with nested file inclusion
+ * segfault if tools is undefined in mill object - ensure checking is struct.
+
