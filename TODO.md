@@ -47,7 +47,7 @@
 ### Code ###
  * Remove platform code
     - Replace with boost
-    - Add additional bindings from boost::fs
+    - Add additional js bindings from boost::fs
     - Need functions to enumerate path.
  * Bindings
     - Cleanup (e.g. Arc).
