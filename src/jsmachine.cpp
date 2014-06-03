@@ -1403,8 +1403,9 @@ Handle<Value> machine_ctor(const Arguments& args)
 				machine_config.axes = axes;
 		}
 
+        auto tools = config->Get("tools"_sym)->ToObject();
+        if(!tools.IsEmpty())
 		{
-			auto tools = config->Get("tools"_sym)->ToObject();
 			auto tids = tools->GetPropertyNames();
 			for(auto tid : js::array(tids))
 			{
