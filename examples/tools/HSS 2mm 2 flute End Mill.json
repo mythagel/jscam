@@ -1,0 +1,13 @@
+{
+	"name": "HSS 2mm 2 flute End Mill",
+	"type": "mill",
+	"center_cutting": true,
+	"flutes": 2,
+	"flute_length": 25,
+	"cutting_length": 20,
+	"mill_diameter": 2,
+	"shank_diameter": 5,
+	"core_diameter": 1,
+	"length": 60
+}
+
