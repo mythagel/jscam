@@ -1,48 +1,65 @@
 <html>
 	<head>
-	<title>canvas</title>
+        <meta charset="utf-8">
+        <title>canvas</title>
+        <script src="three.js"></script>
+        <script src="TrackballControls.js"></script>
 	</head>
 	
 	<body>
-	<script src="three.min.js"></script>
 	<script>
 
     var camera, scene, renderer;
-    var geometry, material, mesh;
+    var mouseX = 0, mouseY = 0;
 
     init();
     animate();
 
     function init() {
+        camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 2000 );
+        camera.position.z = 100;
 
-        camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-        camera.position.z = 1000;
+        controls = new THREE.TrackballControls( camera );
+        controls.rotateSpeed = 5.0;
+        controls.zoomSpeed = 5;
+        controls.panSpeed = 2;
+        controls.noZoom = false;
+        controls.noPan = false;
+        controls.staticMoving = true;
+        controls.dynamicDampingFactor = 0.3;
 
         scene = new THREE.Scene();
 
-        geometry = new THREE.CubeGeometry( 200, 200, 200 );
-        material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
+        var ambient = new THREE.AmbientLight( 0xeeeeee );
+        scene.add( ambient );
 
-        mesh = new THREE.Mesh( geometry, material );
-        scene.add( mesh );
+        //geometry = new THREE.CubeGeometry( 200, 200, 200 );
+        //material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
+        //mesh = new THREE.Mesh( geometry, material );
+        //scene.add( mesh );
 
-        renderer = new THREE.CanvasRenderer();
+        var geometry = new THREE.Geometry();
+        geometry.vertices.push(new THREE.Vector3(-10, 0, 0));
+        geometry.vertices.push(new THREE.Vector3(0, 10, 0));
+        geometry.vertices.push(new THREE.Vector3(10, 0, 0));
+        var material = new THREE.LineBasicMaterial({
+            color: 0x0000ff
+        });
+        var line = new THREE.Line(geometry, material);
+        scene.add(line);
+
+        renderer = new THREE.WebGLRenderer();
         renderer.setSize( window.innerWidth, window.innerHeight );
 
         document.body.appendChild( renderer.domElement );
-
     }
 
     function animate() {
-
-        // note: three.js includes requestAnimationFrame shim
         requestAnimationFrame( animate );
 
-        mesh.rotation.x += 0.01;
-        mesh.rotation.y += 0.02;
-
-        renderer.render( scene, camera );
-
+        controls.update();
+        camera.lookAt(scene.position);
+        renderer.render(scene, camera);
     }
 
 	</script>
