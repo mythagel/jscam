@@ -7,6 +7,6 @@ ENDIF()
 #INCLUDE_DIRECTORIES(${CXXCAM_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/deps/cxxcam/include)
 
-ADD_EXECUTABLE(${PROJECT_NAME} jscam.cpp jsmachine.cpp jsgeom.cpp js.cpp platform.cpp)
+ADD_EXECUTABLE(${PROJECT_NAME} jscam.cpp jsmachine.cpp jsgeom.cpp jsrs274ngc.cpp js.cpp platform.cpp)
 
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} v8 cxxcam)
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} v8 cxxcam rs274ngc)
