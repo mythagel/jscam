@@ -27,6 +27,7 @@
 #include <memory>
 #include <vector>
 #include <cmath>
+#include <cstring>
 #include "rs274ngc/rs274ngc.hh"
 
 using namespace v8;
@@ -39,7 +40,7 @@ namespace jsrs274ngc
 class js_rs274ngc : public rs274ngc
 {
 private:
-    Handle<Object> object;
+    Persistent<Object> object;
 
 	Plane       _active_plane = Plane::XY;
 	int               _active_slot = 1;
@@ -80,7 +81,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("offset_origin"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -99,7 +100,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("units"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -146,7 +147,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("plane"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -168,7 +169,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("rapid_rate"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -190,7 +191,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("feed_rate"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -211,7 +212,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("feed_reference"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -227,7 +228,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("motion_mode"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -249,7 +250,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("cutter_radius_comp"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -264,7 +265,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("cutter_radius_comp_start"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -279,7 +280,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("cutter_radius_comp_stop"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -293,7 +294,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("speed_feed_sync_start"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -306,7 +307,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("speed_feed_sync_stop"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -320,7 +321,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("rapid"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -337,7 +338,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("arc"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -388,7 +389,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("linear"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -405,7 +406,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("probe"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -441,7 +442,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("dwell"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -457,7 +458,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("spindle_start_clockwise"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -472,7 +473,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("spindle_start_counterclockwise"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -487,7 +488,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("spindle_stop"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -506,7 +507,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("spindle_speed"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -527,7 +528,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("spindle_orient"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -544,7 +545,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("tool_length_offset"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -559,7 +560,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("tool_change"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -576,7 +577,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("tool_select"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -596,7 +597,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("tool"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -621,7 +622,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("tool_max"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -639,7 +640,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("axis_clamp"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -654,7 +655,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("axis_unclamp"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -670,7 +671,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("comment"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -686,7 +687,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("feed_override_disable"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -699,7 +700,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("feed_override_enable"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -713,7 +714,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("speed_override_disable"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -726,7 +727,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("speed_override_enable"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -740,7 +741,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("coolant_flood_off"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -755,7 +756,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("coolant_flood_on"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -775,7 +776,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("coolant_mist_off"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -790,7 +791,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("coolant_mist_on"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -810,7 +811,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("message"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -826,7 +827,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("pallet_shuttle"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -840,7 +841,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("probe_off"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -853,7 +854,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("probe_on"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -871,7 +872,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("probe_value"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -889,7 +890,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("program_optional_stop"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -902,7 +903,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("program_end"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -915,7 +916,7 @@ private:
     	HandleScope handle_scope;
 
         auto fn = object->Get("program_stop"_sym);
-        if(!fn.IsEmpty())
+        if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
 
@@ -926,7 +927,21 @@ private:
 
 	virtual void get_parameter_filename(char* filename, size_t max_size) const override
 	{
-	    filename[0] = 0;
+        filename[0] = 0;
+
+        HandleScope handle_scope;
+
+        auto fn = object->Get("get_parameter_filename"_sym);
+        if(fn->IsFunction())
+        {
+            Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
+
+            Handle<Value> args[0];
+            auto result = func->Call(object, 0, args);
+            auto file = js::to_string(result);
+            if (file.size() < max_size)
+                strcpy(filename, file.c_str());
+        }
 	}
 	virtual Position current_position() const override
 	{
@@ -938,12 +953,36 @@ private:
 	}
 
 public:
-	js_rs274ngc()
+	js_rs274ngc(Handle<Object> object)
+     : object(Persistent<Object>::New(object))
 	{
-	    init();
 	}
-	virtual ~js_rs274ngc() = default;
+	virtual ~js_rs274ngc()
+    {
+        object.Dispose();
+        object.Clear();
+    }
 };
+
+Handle<Value> init(const Arguments& args)
+{
+	HandleScope handle_scope;
+	
+	try
+	{
+		auto self = js::unwrap<js_rs274ngc>(args);
+		self->init();
+		return {};
+	}
+	catch(const js::error& ex)
+	{
+		return ThrowException(Exception::Error(String::New(ex.what())));
+	}
+	catch(const std::exception& ex)
+	{
+		return ThrowException(String::New(ex.what()));
+	}
+}
 
 Handle<Value> synch(const Arguments& args)
 {
@@ -1178,7 +1217,7 @@ Handle<Value> rs274ngc_ctor(const Arguments& args)
 
 	try
 	{
-		auto rs274 = std::unique_ptr<js_rs274ngc>(new js_rs274ngc{/*TODO js object!*/});
+		auto rs274 = std::unique_ptr<js_rs274ngc>(new js_rs274ngc{args.This()});
 		js::wrap_object<js_rs274ngc>(args.This(), rs274.get());
         rs274.release();
 	}
@@ -1206,6 +1245,7 @@ void bind(v8::Handle<v8::Object> global)
 	
 	instance_template->SetInternalFieldCount(1);
 
+	prototype->Set("init"_sym, FunctionTemplate::New(init)->GetFunction());
 	prototype->Set("synch"_sym, FunctionTemplate::New(synch)->GetFunction());
 	prototype->Set("read"_sym, FunctionTemplate::New(read)->GetFunction());
 	prototype->Set("execute"_sym, FunctionTemplate::New(execute)->GetFunction());
