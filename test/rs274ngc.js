@@ -9,6 +9,8 @@ ngc.on_linear = function(pos) {
 
 ngc.init();
 
+print("XXXX: " + ngc.Units.METRIC);
+
 var res = ngc.read("G01 X100 f100");
 print(res);
 res = ngc.execute();

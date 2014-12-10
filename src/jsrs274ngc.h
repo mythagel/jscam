@@ -32,149 +32,148 @@ namespace jsrs274ngc
 /*
 API Sketch
 
+// Types
 var Position = {
     x:0,y:0,z:0,
     a:0,b:0,c:0
 };
-
-Units = {
-    Imperial: 0,
-    Metric: 1
-};
-
-Plane = {
-	XY: 0,
-	YZ: 1,
-	XZ: 2
-};
-
-FeedReference = {
-	Workpiece: 0,
-	XYZ: 1
-};
-
-Motion = {
-	Exact_Stop: 0,
-	Exact_Path: 1,
-	Continuous: 2
-};
-
-Direction = {
-	Stop: 0,
-	Clockwise: 1,
-	CounterClockwise: 2
-};
-
 var Tool = {
     id: 0;
     length: 0.0;
     diameter: 0.0;
 };
 
-Axis = {
-	X:0, Y:1, Z:2,
-	A:3, B:4, C:5
-};
-
 rs274ngc
 {
-	void init()
+    Units = {
+        IMPERIAL: 0,
+        METRIC: 1
+    };
 
-	void offset_origin(const Position& pos)
-	
-	void units(Units u)
-	Units units() const
-	
-	void plane(Plane pl)
-	Plane plane() const
-	
-	void rapid_rate(double rate)
-	double rapid_rate() const
-	
-	void feed_rate(double rate)
-	double feed_rate() const
-	void feed_reference(FeedReference reference)
-	
-	void motion_mode(Motion mode)
-	Motion motion_mode() const
-	
-	void cutter_radius_comp(double radius)
-	void cutter_radius_comp_start(Side direction)
-	void cutter_radius_comp_stop()
-	
-	void speed_feed_sync_start()
-	void speed_feed_sync_stop()
-	
-	void rapid(const Position& pos)
-	void arc(double end0, double end1, double axis0, double axis1, int rotation, double end_point, double a, double b, double c)
-	void linear(const Position& pos)
-	void probe(const Position& pos)
-	void dwell(double seconds)
+    Plane = {
+	    XY: 0,
+	    YZ: 1,
+	    XZ: 2
+    };
 
-	void spindle_start_clockwise()
-	void spindle_start_counterclockwise()
-	void spindle_stop()
-	Direction spindle_state() const
-	void spindle_speed(double r)
-	double spindle_speed() const
-	void spindle_orient(double orientation, Direction direction)
+    FeedReference = {
+	    WORKPIECE: 0,
+	    XYZ: 1
+    };
 
-	void tool_length_offset(double length)
-	void tool_change(int slot)
-	void tool_select(int i)
-	int tool_slot() const
-	Tool tool(int pocket) const
-	unsigned int tool_max() const
+    Motion = {
+	    EXACT_STOP: 0,
+	    EXACT_PATH: 1,
+	    CONTINUOUS: 2
+    };
 
-	void axis_clamp(Axis axis)
-	void axis_unclamp(Axis axis)
+    Direction = {
+	    STOP: 0,
+	    CLOCKWISE: 1,
+	    COUNTERCLOCKWISE: 2
+    };
 
-	void comment(const char *s)
+    Axis = {
+	    X:0, Y:1, Z:2,
+	    A:3, B:4, C:5
+    };
 
-	void feed_override_disable()
-	void feed_override_enable()
-
-	void speed_override_disable()
-	void speed_override_enable()
-
-	void coolant_flood_off()
-	void coolant_flood_on()
-	bool coolant_flood() const
-	
-	void coolant_mist_off()
-	void coolant_mist_on()
-	bool coolant_mist() const
-
-	void message(const char *s)
-
-	void pallet_shuttle()
-
-	void probe_off()
-	void probe_on()
-	Position probe_position() const
-	double probe_value() const
-
-	void program_optional_stop()
-	void program_end()
-	void program_stop()
-
-	void get_parameter_filename(char* filename, size_t max_size) const
-	Position current_position() const
-	bool queue_empty() const
-	
-public:
+	void init();
 	void synch();
 	int read(const char * command);
 	int execute();
 	void reset();
 	void exit();
 	void load_tool_table();
-
-	[0-11] active_g_codes(int * codes);
-	[0-6] active_m_codes(int * codes);
-	[0-2] active_settings(double * settings);
-
+	[0-11] active_g_codes();
+	[0-6] active_m_codes();
+	[0-2] active_settings();
 	string line_text();
+
+	Units units()
+	Plane plane()
+	double rapid_rate()
+	double feed_rate()
+	Motion motion_mode()
+	Direction spindle_state()
+	double spindle_speed()
+	int tool_slot()
+	bool coolant_flood()
+	bool coolant_mist()
+	Position probe_position()
+	Position current_position()
+	bool queue_empty()
+
+    // functions set by js interface
+	unsigned int get_tool_max()
+	Tool get_tool(int pocket)
+	double get_probe_value()
+	void get_parameter_filename(char* filename, size_t max_size)
+	
+	// callbacks if set
+	void on_offset_origin(const Position& pos)
+	
+	void on_units(Units u)
+	
+	void on_plane(Plane pl)
+	
+	void on_rapid_rate(double rate)
+	
+	void on_feed_rate(double rate)
+	void on_feed_reference(FeedReference reference)
+	
+	void on_motion_mode(Motion mode)
+	
+	void on_cutter_radius_comp(double radius)
+	void on_cutter_radius_comp_start(Side direction)
+	void on_cutter_radius_comp_stop()
+	
+	void on_speed_feed_sync_start()
+	void on_speed_feed_sync_stop()
+	
+	void on_rapid(const Position& pos)
+	void on_arc(double end0, double end1, double axis0, double axis1, int rotation, double end_point, double a, double b, double c)
+	void on_linear(const Position& pos)
+	void on_probe(const Position& pos)
+	void on_dwell(double seconds)
+
+	void on_spindle_start_clockwise()
+	void on_spindle_start_counterclockwise()
+	void on_spindle_stop()
+	void on_spindle_speed(double r)
+	void on_spindle_orient(double orientation, Direction direction)
+
+	void on_tool_length_offset(double length)
+	void on_tool_change(int slot)
+	void on_tool_select(int i)
+
+	void on_axis_clamp(Axis axis)
+	void on_axis_unclamp(Axis axis)
+
+	void on_comment(const char *s)
+
+	void on_feed_override_disable()
+	void on_feed_override_enable()
+
+	void on_speed_override_disable()
+	void on_speed_override_enable()
+
+	void on_coolant_flood_off()
+	void on_coolant_flood_on()
+	
+	void on_coolant_mist_off()
+	void on_coolant_mist_on()
+
+	void on_message(const char *s)
+
+	void on_pallet_shuttle()
+
+	void on_probe_off()
+	void on_probe_on()
+
+	void on_program_optional_stop()
+	void on_program_end()
+	void on_program_stop()
 }
 
 */

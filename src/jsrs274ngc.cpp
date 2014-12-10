@@ -1494,6 +1494,51 @@ Handle<Value> rs274ngc_ctor(const Arguments& args)
 		auto rs274 = std::unique_ptr<js_rs274ngc>(new js_rs274ngc{args.This()});
 		js::wrap_object<js_rs274ngc>(args.This(), rs274.get());
         rs274.release();
+        
+        // Bind enums
+        {
+            auto jsenum = Object::New();
+            jsenum->Set("IMPERIAL"_sym, Number::New(static_cast<int>(Units::Imperial)));
+            jsenum->Set("METRIC"_sym, Number::New(static_cast<int>(Units::Metric)));
+            args.This()->Set("Units"_sym, jsenum);
+        }
+        {
+            auto jsenum = Object::New();
+            jsenum->Set("XY"_sym, Number::New(static_cast<int>(Plane::XY)));
+            jsenum->Set("YZ"_sym, Number::New(static_cast<int>(Plane::YZ)));
+            jsenum->Set("XZ"_sym, Number::New(static_cast<int>(Plane::XZ)));
+            args.This()->Set("Plane"_sym, jsenum);
+        }
+        {
+            auto jsenum = Object::New();
+            jsenum->Set("WORKPIECE"_sym, Number::New(static_cast<int>(FeedReference::Workpiece)));
+            jsenum->Set("XYZ"_sym, Number::New(static_cast<int>(FeedReference::XYZ)));
+            args.This()->Set("FeedReference"_sym, jsenum);
+        }
+        {
+            auto jsenum = Object::New();
+            jsenum->Set("EXACT_STOP"_sym, Number::New(static_cast<int>(Motion::Exact_Stop)));
+            jsenum->Set("EXACT_PATH"_sym, Number::New(static_cast<int>(Motion::Exact_Path)));
+            jsenum->Set("CONTINUOUS"_sym, Number::New(static_cast<int>(Motion::Continuous)));
+            args.This()->Set("Motion"_sym, jsenum);
+        }
+        {
+            auto jsenum = Object::New();
+            jsenum->Set("STOP"_sym, Number::New(static_cast<int>(Direction::Stop)));
+            jsenum->Set("CLOCKWISE"_sym, Number::New(static_cast<int>(Direction::Clockwise)));
+            jsenum->Set("COUNTERCLOCKWISE"_sym, Number::New(static_cast<int>(Direction::CounterClockwise)));
+            args.This()->Set("Direction"_sym, jsenum);
+        }
+        {
+            auto jsenum = Object::New();
+            jsenum->Set("X"_sym, Number::New(static_cast<int>(Axis::X)));
+            jsenum->Set("Y"_sym, Number::New(static_cast<int>(Axis::Y)));
+            jsenum->Set("Z"_sym, Number::New(static_cast<int>(Axis::Z)));
+            jsenum->Set("A"_sym, Number::New(static_cast<int>(Axis::A)));
+            jsenum->Set("B"_sym, Number::New(static_cast<int>(Axis::B)));
+            jsenum->Set("C"_sym, Number::New(static_cast<int>(Axis::C)));
+            args.This()->Set("Axis"_sym, jsenum);
+        }
 	}
 	catch(const js::error& ex)
 	{
