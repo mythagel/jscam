@@ -22,6 +22,7 @@
 #include <iostream>
 #include "jsmachine.h"
 #include "jsgeom.h"
+#include "jsrs274ngc.h"
 #include "platform.h"
 
 using namespace v8;
@@ -50,6 +51,7 @@ int main(int argc, char* argv[])
 		auto global = context->Global();
 		jsmachine::bind(global);
 		jsgeom::bind(global);
+		jsrs274ngc::bind(global);
 	
 		if(args.empty())
 		{
