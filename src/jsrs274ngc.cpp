@@ -64,7 +64,7 @@ private:
 	{
 	}
 
-    Handle<Object> wrap_Position(const Position& pos)
+    static Handle<Object> wrap_Position(const Position& pos)
     {
 		auto jspos = Object::New();
         jspos->Set("x"_sym, Number::New(pos.x));
@@ -80,7 +80,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("offset_origin"_sym);
+        auto fn = object->Get("on_offset_origin"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -99,7 +99,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("units"_sym);
+        auto fn = object->Get("on_units"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -146,7 +146,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("plane"_sym);
+        auto fn = object->Get("on_plane"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -168,7 +168,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("rapid_rate"_sym);
+        auto fn = object->Get("on_rapid_rate"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -190,7 +190,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("feed_rate"_sym);
+        auto fn = object->Get("on_feed_rate"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -211,7 +211,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("feed_reference"_sym);
+        auto fn = object->Get("on_feed_reference"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -227,7 +227,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("motion_mode"_sym);
+        auto fn = object->Get("on_motion_mode"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -249,7 +249,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("cutter_radius_comp"_sym);
+        auto fn = object->Get("on_cutter_radius_comp"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -264,7 +264,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("cutter_radius_comp_start"_sym);
+        auto fn = object->Get("on_cutter_radius_comp_start"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -279,7 +279,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("cutter_radius_comp_stop"_sym);
+        auto fn = object->Get("on_cutter_radius_comp_stop"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -293,7 +293,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("speed_feed_sync_start"_sym);
+        auto fn = object->Get("on_speed_feed_sync_start"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -306,7 +306,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("speed_feed_sync_stop"_sym);
+        auto fn = object->Get("on_speed_feed_sync_stop"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -320,7 +320,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("rapid"_sym);
+        auto fn = object->Get("on_rapid"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -337,7 +337,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("arc"_sym);
+        auto fn = object->Get("on_arc"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -388,7 +388,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("linear"_sym);
+        auto fn = object->Get("on_linear"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -405,7 +405,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("probe"_sym);
+        auto fn = object->Get("on_probe"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -441,7 +441,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("dwell"_sym);
+        auto fn = object->Get("on_dwell"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -457,7 +457,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("spindle_start_clockwise"_sym);
+        auto fn = object->Get("on_spindle_start_clockwise"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -472,7 +472,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("spindle_start_counterclockwise"_sym);
+        auto fn = object->Get("on_spindle_start_counterclockwise"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -487,7 +487,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("spindle_stop"_sym);
+        auto fn = object->Get("on_spindle_stop"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -506,7 +506,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("spindle_speed"_sym);
+        auto fn = object->Get("on_spindle_speed"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -527,7 +527,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("spindle_orient"_sym);
+        auto fn = object->Get("on_spindle_orient"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -544,7 +544,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("tool_length_offset"_sym);
+        auto fn = object->Get("on_tool_length_offset"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -559,7 +559,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("tool_change"_sym);
+        auto fn = object->Get("on_tool_change"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -576,7 +576,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("tool_select"_sym);
+        auto fn = object->Get("on_tool_select"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -596,7 +596,7 @@ private:
 	    Tool t;
     	HandleScope handle_scope;
 
-        auto fn = object->Get("tool"_sym);
+        auto fn = object->Get("get_tool"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -621,7 +621,7 @@ private:
 	    unsigned int max = 1;
     	HandleScope handle_scope;
 
-        auto fn = object->Get("tool_max"_sym);
+        auto fn = object->Get("get_tool_max"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -639,7 +639,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("axis_clamp"_sym);
+        auto fn = object->Get("on_axis_clamp"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -654,7 +654,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("axis_unclamp"_sym);
+        auto fn = object->Get("on_axis_unclamp"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -670,7 +670,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("comment"_sym);
+        auto fn = object->Get("on_comment"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -686,7 +686,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("feed_override_disable"_sym);
+        auto fn = object->Get("on_feed_override_disable"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -699,7 +699,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("feed_override_enable"_sym);
+        auto fn = object->Get("on_feed_override_enable"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -713,7 +713,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("speed_override_disable"_sym);
+        auto fn = object->Get("on_speed_override_disable"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -726,7 +726,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("speed_override_enable"_sym);
+        auto fn = object->Get("on_speed_override_enable"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -740,7 +740,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("coolant_flood_off"_sym);
+        auto fn = object->Get("on_coolant_flood_off"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -755,7 +755,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("coolant_flood_on"_sym);
+        auto fn = object->Get("on_coolant_flood_on"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -775,7 +775,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("coolant_mist_off"_sym);
+        auto fn = object->Get("on_coolant_mist_off"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -790,7 +790,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("coolant_mist_on"_sym);
+        auto fn = object->Get("on_coolant_mist_on"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -810,7 +810,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("message"_sym);
+        auto fn = object->Get("on_message"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -826,7 +826,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("pallet_shuttle"_sym);
+        auto fn = object->Get("on_pallet_shuttle"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -840,7 +840,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("probe_off"_sym);
+        auto fn = object->Get("on_probe_off"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -853,7 +853,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("probe_on"_sym);
+        auto fn = object->Get("on_probe_on"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -871,7 +871,7 @@ private:
 	    double val = 1.0;
     	HandleScope handle_scope;
 
-        auto fn = object->Get("probe_value"_sym);
+        auto fn = object->Get("get_probe_value"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -889,7 +889,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("program_optional_stop"_sym);
+        auto fn = object->Get("on_program_optional_stop"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -902,7 +902,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("program_end"_sym);
+        auto fn = object->Get("on_program_end"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -915,7 +915,7 @@ private:
 	{
     	HandleScope handle_scope;
 
-        auto fn = object->Get("program_stop"_sym);
+        auto fn = object->Get("on_program_stop"_sym);
         if(fn->IsFunction())
         {
             Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
@@ -949,7 +949,7 @@ private:
 	}
 	virtual bool queue_empty() const override
 	{
-	    return 1;
+	    return true;
 	}
 
 public:
@@ -957,10 +957,284 @@ public:
      : object(Persistent<Object>::New(object))
 	{
 	}
+	
 	virtual ~js_rs274ngc()
     {
         object.Dispose();
         object.Clear();
+    }
+    
+    static Handle<Value> units(const Arguments& args)
+    {
+	    HandleScope handle_scope;
+	
+	    try
+	    {
+		    auto self = js::unwrap<js_rs274ngc>(args);
+		
+		    auto result = Number::New(static_cast<int>(self->units()));
+		    return handle_scope.Close(result);
+	    }
+	    catch(const js::error& ex)
+	    {
+		    return ThrowException(Exception::Error(String::New(ex.what())));
+	    }
+	    catch(const std::exception& ex)
+	    {
+		    return ThrowException(String::New(ex.what()));
+	    }
+    }
+
+    static Handle<Value> plane(const Arguments& args)
+    {
+	    HandleScope handle_scope;
+	
+	    try
+	    {
+		    auto self = js::unwrap<js_rs274ngc>(args);
+		
+		    auto result = Number::New(static_cast<int>(self->plane()));
+		    return handle_scope.Close(result);
+	    }
+	    catch(const js::error& ex)
+	    {
+		    return ThrowException(Exception::Error(String::New(ex.what())));
+	    }
+	    catch(const std::exception& ex)
+	    {
+		    return ThrowException(String::New(ex.what()));
+	    }
+    }
+
+    static Handle<Value> rapid_rate(const Arguments& args)
+    {
+	    HandleScope handle_scope;
+	
+	    try
+	    {
+		    auto self = js::unwrap<js_rs274ngc>(args);
+		
+		    auto result = Number::New(self->rapid_rate());
+		    return handle_scope.Close(result);
+	    }
+	    catch(const js::error& ex)
+	    {
+		    return ThrowException(Exception::Error(String::New(ex.what())));
+	    }
+	    catch(const std::exception& ex)
+	    {
+		    return ThrowException(String::New(ex.what()));
+	    }
+    }
+
+    static Handle<Value> feed_rate(const Arguments& args)
+    {
+	    HandleScope handle_scope;
+	
+	    try
+	    {
+		    auto self = js::unwrap<js_rs274ngc>(args);
+		
+		    auto result = Number::New(self->feed_rate());
+		    return handle_scope.Close(result);
+	    }
+	    catch(const js::error& ex)
+	    {
+		    return ThrowException(Exception::Error(String::New(ex.what())));
+	    }
+	    catch(const std::exception& ex)
+	    {
+		    return ThrowException(String::New(ex.what()));
+	    }
+    }
+
+    static Handle<Value> motion_mode(const Arguments& args)
+    {
+	    HandleScope handle_scope;
+	
+	    try
+	    {
+		    auto self = js::unwrap<js_rs274ngc>(args);
+		
+		    auto result = Number::New(static_cast<int>(self->motion_mode()));
+		    return handle_scope.Close(result);
+	    }
+	    catch(const js::error& ex)
+	    {
+		    return ThrowException(Exception::Error(String::New(ex.what())));
+	    }
+	    catch(const std::exception& ex)
+	    {
+		    return ThrowException(String::New(ex.what()));
+	    }
+    }
+
+    static Handle<Value> spindle_state(const Arguments& args)
+    {
+	    HandleScope handle_scope;
+	
+	    try
+	    {
+		    auto self = js::unwrap<js_rs274ngc>(args);
+		
+		    auto result = Number::New(static_cast<int>(self->spindle_state()));
+		    return handle_scope.Close(result);
+	    }
+	    catch(const js::error& ex)
+	    {
+		    return ThrowException(Exception::Error(String::New(ex.what())));
+	    }
+	    catch(const std::exception& ex)
+	    {
+		    return ThrowException(String::New(ex.what()));
+	    }
+    }
+
+    static Handle<Value> spindle_speed(const Arguments& args)
+    {
+	    HandleScope handle_scope;
+	
+	    try
+	    {
+		    auto self = js::unwrap<js_rs274ngc>(args);
+		
+		    auto result = Number::New(self->spindle_speed());
+		    return handle_scope.Close(result);
+	    }
+	    catch(const js::error& ex)
+	    {
+		    return ThrowException(Exception::Error(String::New(ex.what())));
+	    }
+	    catch(const std::exception& ex)
+	    {
+		    return ThrowException(String::New(ex.what()));
+	    }
+    }
+
+    static Handle<Value> tool_slot(const Arguments& args)
+    {
+	    HandleScope handle_scope;
+	
+	    try
+	    {
+		    auto self = js::unwrap<js_rs274ngc>(args);
+		
+		    auto result = Number::New(self->tool_slot());
+		    return handle_scope.Close(result);
+	    }
+	    catch(const js::error& ex)
+	    {
+		    return ThrowException(Exception::Error(String::New(ex.what())));
+	    }
+	    catch(const std::exception& ex)
+	    {
+		    return ThrowException(String::New(ex.what()));
+	    }
+    }
+
+    static Handle<Value> coolant_flood(const Arguments& args)
+    {
+	    HandleScope handle_scope;
+	
+	    try
+	    {
+		    auto self = js::unwrap<js_rs274ngc>(args);
+		
+		    auto result = Boolean::New(self->coolant_flood());
+		    return handle_scope.Close(result);
+	    }
+	    catch(const js::error& ex)
+	    {
+		    return ThrowException(Exception::Error(String::New(ex.what())));
+	    }
+	    catch(const std::exception& ex)
+	    {
+		    return ThrowException(String::New(ex.what()));
+	    }
+    }
+
+    static Handle<Value> coolant_mist(const Arguments& args)
+    {
+	    HandleScope handle_scope;
+	
+	    try
+	    {
+		    auto self = js::unwrap<js_rs274ngc>(args);
+		
+		    auto result = Boolean::New(self->coolant_mist());
+		    return handle_scope.Close(result);
+	    }
+	    catch(const js::error& ex)
+	    {
+		    return ThrowException(Exception::Error(String::New(ex.what())));
+	    }
+	    catch(const std::exception& ex)
+	    {
+		    return ThrowException(String::New(ex.what()));
+	    }
+    }
+
+    static Handle<Value> probe_position(const Arguments& args)
+    {
+	    HandleScope handle_scope;
+	
+	    try
+	    {
+		    auto self = js::unwrap<js_rs274ngc>(args);
+		
+		    auto result = wrap_Position(self->probe_position());
+		    return handle_scope.Close(result);
+	    }
+	    catch(const js::error& ex)
+	    {
+		    return ThrowException(Exception::Error(String::New(ex.what())));
+	    }
+	    catch(const std::exception& ex)
+	    {
+		    return ThrowException(String::New(ex.what()));
+	    }
+    }
+
+    static Handle<Value> current_position(const Arguments& args)
+    {
+	    HandleScope handle_scope;
+	
+	    try
+	    {
+		    auto self = js::unwrap<js_rs274ngc>(args);
+		
+		    auto result = wrap_Position(self->current_position());
+		    return handle_scope.Close(result);
+	    }
+	    catch(const js::error& ex)
+	    {
+		    return ThrowException(Exception::Error(String::New(ex.what())));
+	    }
+	    catch(const std::exception& ex)
+	    {
+		    return ThrowException(String::New(ex.what()));
+	    }
+    }
+
+    static Handle<Value> queue_empty(const Arguments& args)
+    {
+	    HandleScope handle_scope;
+	
+	    try
+	    {
+		    auto self = js::unwrap<js_rs274ngc>(args);
+		
+		    auto result = Boolean::New(self->queue_empty());
+		    return handle_scope.Close(result);
+	    }
+	    catch(const js::error& ex)
+	    {
+		    return ThrowException(Exception::Error(String::New(ex.what())));
+	    }
+	    catch(const std::exception& ex)
+	    {
+		    return ThrowException(String::New(ex.what()));
+	    }
     }
 };
 
@@ -1244,6 +1518,20 @@ void bind(v8::Handle<v8::Object> global)
 	auto prototype = tpl->PrototypeTemplate();
 	
 	instance_template->SetInternalFieldCount(1);
+
+    prototype->Set("units"_sym, FunctionTemplate::New(js_rs274ngc::units)->GetFunction());
+    prototype->Set("plane"_sym, FunctionTemplate::New(js_rs274ngc::plane)->GetFunction());
+    prototype->Set("rapid_rate"_sym, FunctionTemplate::New(js_rs274ngc::rapid_rate)->GetFunction());
+    prototype->Set("feed_rate"_sym, FunctionTemplate::New(js_rs274ngc::feed_rate)->GetFunction());
+    prototype->Set("motion_mode"_sym, FunctionTemplate::New(js_rs274ngc::motion_mode)->GetFunction());
+    prototype->Set("spindle_state"_sym, FunctionTemplate::New(js_rs274ngc::spindle_state)->GetFunction());
+    prototype->Set("spindle_speed"_sym, FunctionTemplate::New(js_rs274ngc::spindle_speed)->GetFunction());
+    prototype->Set("tool_slot"_sym, FunctionTemplate::New(js_rs274ngc::tool_slot)->GetFunction());
+    prototype->Set("coolant_flood"_sym, FunctionTemplate::New(js_rs274ngc::coolant_flood)->GetFunction());
+    prototype->Set("coolant_mist"_sym, FunctionTemplate::New(js_rs274ngc::coolant_mist)->GetFunction());
+    prototype->Set("probe_position"_sym, FunctionTemplate::New(js_rs274ngc::probe_position)->GetFunction());
+    prototype->Set("current_position"_sym, FunctionTemplate::New(js_rs274ngc::current_position)->GetFunction());
+    prototype->Set("queue_empty"_sym, FunctionTemplate::New(js_rs274ngc::queue_empty)->GetFunction());
 
 	prototype->Set("init"_sym, FunctionTemplate::New(init)->GetFunction());
 	prototype->Set("synch"_sym, FunctionTemplate::New(synch)->GetFunction());

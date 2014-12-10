@@ -1,9 +1,9 @@
 var ngc = new rs274ngc();
 
-ngc.units = function(u) {
+ngc.on_units = function(u) {
     print("Units " + u);
 }
-ngc.linear = function(pos) {
+ngc.on_linear = function(pos) {
     print("Linear: " + pos.x);
 }
 
