@@ -1,0 +1,121 @@
+<html>
+	<head>
+        <meta charset="utf-8">
+        <title>canvas</title>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r69/three.min.js"></script>
+        <script>THREE.TrackballControls=function(e,t){function S(e){if(n.enabled===false)return;window.removeEventListener("keydown",S);u=o;if(o!==r.NONE){return}else if(e.keyCode===n.keys[r.ROTATE]&&!n.noRotate){o=r.ROTATE}else if(e.keyCode===n.keys[r.ZOOM]&&!n.noZoom){o=r.ZOOM}else if(e.keyCode===n.keys[r.PAN]&&!n.noPan){o=r.PAN}}function x(e){if(n.enabled===false)return;o=u;window.addEventListener("keydown",S,false)}function T(e){if(n.enabled===false)return;e.preventDefault();e.stopPropagation();if(o===r.NONE){o=e.button}if(o===r.ROTATE&&!n.noRotate){f.copy(E(e.pageX,e.pageY));l.copy(f)}else if(o===r.ZOOM&&!n.noZoom){c.copy(w(e.pageX,e.pageY));h.copy(c)}else if(o===r.PAN&&!n.noPan){v.copy(w(e.pageX,e.pageY));m.copy(v)}document.addEventListener("mousemove",N,false);document.addEventListener("mouseup",C,false);n.dispatchEvent(y)}function N(e){if(n.enabled===false)return;e.preventDefault();e.stopPropagation();if(o===r.ROTATE&&!n.noRotate){l.copy(E(e.pageX,e.pageY))}else if(o===r.ZOOM&&!n.noZoom){h.copy(w(e.pageX,e.pageY))}else if(o===r.PAN&&!n.noPan){m.copy(w(e.pageX,e.pageY))}}function C(e){if(n.enabled===false)return;e.preventDefault();e.stopPropagation();o=r.NONE;document.removeEventListener("mousemove",N);document.removeEventListener("mouseup",C);n.dispatchEvent(b)}function k(e){if(n.enabled===false)return;e.preventDefault();e.stopPropagation();var t=0;if(e.wheelDelta){t=e.wheelDelta/40}else if(e.detail){t=-e.detail/3}c.y+=t*.01;n.dispatchEvent(y);n.dispatchEvent(b)}function L(e){if(n.enabled===false)return;switch(e.touches.length){case 1:o=r.TOUCH_ROTATE;f.copy(E(e.touches[0].pageX,e.touches[0].pageY));l.copy(f);break;case 2:o=r.TOUCH_ZOOM_PAN;var t=e.touches[0].pageX-e.touches[1].pageX;var i=e.touches[0].pageY-e.touches[1].pageY;d=p=Math.sqrt(t*t+i*i);var s=(e.touches[0].pageX+e.touches[1].pageX)/2;var u=(e.touches[0].pageY+e.touches[1].pageY)/2;v.copy(w(s,u));m.copy(v);break;default:o=r.NONE}n.dispatchEvent(y)}function A(e){if(n.enabled===false)return;e.preventDefault();e.stopPropagation();switch(e.touches.length){case 1:l.copy(E(e.touches[0].pageX,e.touches[0].pageY));break;case 2:var t=e.touches[0].pageX-e.touches[1].pageX;var i=e.touches[0].pageY-e.touches[1].pageY;d=Math.sqrt(t*t+i*i);var s=(e.touches[0].pageX+e.touches[1].pageX)/2;var u=(e.touches[0].pageY+e.touches[1].pageY)/2;m.copy(w(s,u));break;default:o=r.NONE}}function O(e){if(n.enabled===false)return;switch(e.touches.length){case 1:l.copy(E(e.touches[0].pageX,e.touches[0].pageY));f.copy(l);break;case 2:p=d=0;var t=(e.touches[0].pageX+e.touches[1].pageX)/2;var i=(e.touches[0].pageY+e.touches[1].pageY)/2;m.copy(w(t,i));v.copy(m);break}o=r.NONE;n.dispatchEvent(b)}var n=this;var r={NONE:-1,ROTATE:0,ZOOM:1,PAN:2,TOUCH_ROTATE:3,TOUCH_ZOOM_PAN:4};this.object=e;this.domElement=t!==undefined?t:document;this.enabled=true;this.screen={left:0,top:0,width:0,height:0};this.rotateSpeed=1;this.zoomSpeed=1.2;this.panSpeed=.3;this.noRotate=false;this.noZoom=false;this.noPan=false;this.noRoll=false;this.staticMoving=false;this.dynamicDampingFactor=.2;this.minDistance=0;this.maxDistance=Infinity;this.keys=[65,83,68];this.target=new THREE.Vector3;var i=1e-6;var s=new THREE.Vector3;var o=r.NONE,u=r.NONE,a=new THREE.Vector3,f=new THREE.Vector3,l=new THREE.Vector3,c=new THREE.Vector2,h=new THREE.Vector2,p=0,d=0,v=new THREE.Vector2,m=new THREE.Vector2;this.target0=this.target.clone();this.position0=this.object.position.clone();this.up0=this.object.up.clone();var g={type:"change"};var y={type:"start"};var b={type:"end"};this.handleResize=function(){if(this.domElement===document){this.screen.left=0;this.screen.top=0;this.screen.width=window.innerWidth;this.screen.height=window.innerHeight}else{var e=this.domElement.getBoundingClientRect();var t=this.domElement.ownerDocument.documentElement;this.screen.left=e.left+window.pageXOffset-t.clientLeft;this.screen.top=e.top+window.pageYOffset-t.clientTop;this.screen.width=e.width;this.screen.height=e.height}};this.handleEvent=function(e){if(typeof this[e.type]=="function"){this[e.type](e)}};var w=function(){var e=new THREE.Vector2;return function(t,r){e.set((t-n.screen.left)/n.screen.width,(r-n.screen.top)/n.screen.height);return e}}();var E=function(){var e=new THREE.Vector3;var t=new THREE.Vector3;var r=new THREE.Vector3;return function(i,s){r.set((i-n.screen.width*.5-n.screen.left)/(n.screen.width*.5),(n.screen.height*.5+n.screen.top-s)/(n.screen.height*.5),0);var o=r.length();if(n.noRoll){if(o<Math.SQRT1_2){r.z=Math.sqrt(1-o*o)}else{r.z=.5/o}}else if(o>1){r.normalize()}else{r.z=Math.sqrt(1-o*o)}a.copy(n.object.position).sub(n.target);e.copy(n.object.up).setLength(r.y);e.add(t.copy(n.object.up).cross(a).setLength(r.x));e.add(a.setLength(r.z));return e}}();this.rotateCamera=function(){var e=new THREE.Vector3,t=new THREE.Quaternion;return function(){var r=Math.acos(f.dot(l)/f.length()/l.length());if(r){e.crossVectors(f,l).normalize();r*=n.rotateSpeed;t.setFromAxisAngle(e,-r);a.applyQuaternion(t);n.object.up.applyQuaternion(t);l.applyQuaternion(t);if(n.staticMoving){f.copy(l)}else{t.setFromAxisAngle(e,r*(n.dynamicDampingFactor-1));f.applyQuaternion(t)}}}}();this.zoomCamera=function(){if(o===r.TOUCH_ZOOM_PAN){var e=p/d;p=d;a.multiplyScalar(e)}else{var e=1+(h.y-c.y)*n.zoomSpeed;if(e!==1&&e>0){a.multiplyScalar(e);if(n.staticMoving){c.copy(h)}else{c.y+=(h.y-c.y)*this.dynamicDampingFactor}}}};this.panCamera=function(){var e=new THREE.Vector2,t=new THREE.Vector3,r=new THREE.Vector3;return function(){e.copy(m).sub(v);if(e.lengthSq()){e.multiplyScalar(a.length()*n.panSpeed);r.copy(a).cross(n.object.up).setLength(e.x);r.add(t.copy(n.object.up).setLength(e.y));n.object.position.add(r);n.target.add(r);if(n.staticMoving){v.copy(m)}else{v.add(e.subVectors(m,v).multiplyScalar(n.dynamicDampingFactor))}}}}();this.checkDistances=function(){if(!n.noZoom||!n.noPan){if(a.lengthSq()>n.maxDistance*n.maxDistance){n.object.position.addVectors(n.target,a.setLength(n.maxDistance))}if(a.lengthSq()<n.minDistance*n.minDistance){n.object.position.addVectors(n.target,a.setLength(n.minDistance))}}};this.update=function(){a.subVectors(n.object.position,n.target);if(!n.noRotate){n.rotateCamera()}if(!n.noZoom){n.zoomCamera()}if(!n.noPan){n.panCamera()}n.object.position.addVectors(n.target,a);n.checkDistances();n.object.lookAt(n.target);if(s.distanceToSquared(n.object.position)>i){n.dispatchEvent(g);s.copy(n.object.position)}};this.reset=function(){o=r.NONE;u=r.NONE;n.target.copy(n.target0);n.object.position.copy(n.position0);n.object.up.copy(n.up0);a.subVectors(n.object.position,n.target);n.object.lookAt(n.target);n.dispatchEvent(g);s.copy(n.object.position)};this.domElement.addEventListener("contextmenu",function(e){e.preventDefault()},false);this.domElement.addEventListener("mousedown",T,false);this.domElement.addEventListener("mousewheel",k,false);this.domElement.addEventListener("DOMMouseScroll",k,false);this.domElement.addEventListener("touchstart",L,false);this.domElement.addEventListener("touchend",O,false);this.domElement.addEventListener("touchmove",A,false);window.addEventListener("keydown",S,false);window.addEventListener("keyup",x,false);this.handleResize();this.update()};THREE.TrackballControls.prototype=Object.create(THREE.EventDispatcher.prototype)</script>
+	</head>
+	
+	<body>
+	<script>
+   
+    var camera, scene, renderer;
+    var mouseX = 0, mouseY = 0;
+
+    init();
+    animate();
+
+function spiral(geometry, center, steps, loops, a, b, rotation)
+{
+	var step = 2 * Math.PI / steps;
+	var end = 2 * Math.PI * loops;
+	
+	var bbox = {min: {x:Number.MAX_VALUE, y:Number.MAX_VALUE, z:Number.MAX_VALUE}, max: {x:Number.MIN_VALUE, y:Number.MIN_VALUE, z:Number.MIN_VALUE}};
+	
+	for (var angle = 0; angle < end; angle += step)
+	{
+		var pos = (a + b * (angle + rotation));
+		x = center.x + pos * Math.cos(angle);
+		y = center.y + pos * Math.sin(angle);
+		z = 0;
+
+		geometry.vertices.push(new THREE.Vector3(x, y, z));
+		if(x < bbox.min.x)
+		    bbox.min.x = x;
+		if(y < bbox.min.y)
+		    bbox.min.y = y;
+		if(z < bbox.min.z)
+		    bbox.min.z = z;
+		if(x > bbox.max.x)
+		    bbox.max.x = x;
+		if(y > bbox.max.y)
+		    bbox.max.y = y;
+		if(z > bbox.max.z)
+		    bbox.max.z = z;
+	}
+	
+	return bbox;
+}
+
+
+    function init() {
+        camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 2000 );
+        camera.position.z = 100;
+
+        controls = new THREE.TrackballControls( camera );
+        controls.rotateSpeed = 5.0;
+        controls.zoomSpeed = 5;
+        controls.panSpeed = 2;
+        controls.noZoom = false;
+        controls.noPan = false;
+        controls.staticMoving = true;
+        controls.dynamicDampingFactor = 0.3;
+
+        scene = new THREE.Scene();
+
+        var ambient = new THREE.AmbientLight( 0xeeeeee );
+        scene.add( ambient );
+
+        //geometry = new THREE.CubeGeometry( 200, 200, 200 );
+        //material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
+        //mesh = new THREE.Mesh( geometry, material );
+        //scene.add( mesh );
+
+        var blue = new THREE.LineBasicMaterial({
+            color: 0x0000ff
+        });
+        var red = new THREE.LineBasicMaterial({
+            color: 0xff0000
+        });
+        var green = new THREE.LineBasicMaterial({
+            color: 0x00ff00
+        });
+
+        {
+            var geometry = new THREE.Geometry();
+            spiral(geometry, {x:10,y:0}, 32, 10, 0, 10, 0);
+            var line = new THREE.Line(geometry, blue);
+            scene.add(line);
+        }
+        {
+            var geometry = new THREE.Geometry();
+            spiral(geometry, {x:20,y:0}, 32, 5, 0, 10, 0);
+            var line = new THREE.Line(geometry, red);
+            scene.add(line);
+        }
+        {
+            var geometry = new THREE.Geometry();
+            spiral(geometry, {x:30,y:0}, 32, 10, 0, 3, 0);
+            var line = new THREE.Line(geometry, green);
+            scene.add(line);
+        }
+
+        renderer = new THREE.WebGLRenderer();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+
+        document.body.appendChild( renderer.domElement );
+    }
+
+    function animate() {
+        requestAnimationFrame( animate );
+
+        controls.update();
+        camera.lookAt(scene.position);
+        renderer.render(scene, camera);
+    }
+
+	</script>
+	</body>
+</html>
+
+
