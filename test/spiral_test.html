@@ -81,21 +81,17 @@ function spiral(geometry, center, steps, loops, a, b, rotation)
             color: 0x00ff00
         });
 
+        var steps = 64;
+        var loops = 10;
         {
             var geometry = new THREE.Geometry();
-            spiral(geometry, {x:10,y:0}, 32, 10, 0, 10, 0);
+            spiral(geometry, {x:0,y:0}, steps, loops, 0, 10, 0);
             var line = new THREE.Line(geometry, blue);
             scene.add(line);
         }
         {
             var geometry = new THREE.Geometry();
-            spiral(geometry, {x:20,y:0}, 32, 5, 0, 10, 0);
-            var line = new THREE.Line(geometry, red);
-            scene.add(line);
-        }
-        {
-            var geometry = new THREE.Geometry();
-            spiral(geometry, {x:30,y:0}, 32, 10, 0, 3, 0);
+            spiral(geometry, {x:0,y:0}, steps, loops, 0, 10, 2*3.14159*10);
             var line = new THREE.Line(geometry, green);
             scene.add(line);
         }
