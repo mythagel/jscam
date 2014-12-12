@@ -82,16 +82,42 @@ function spiral(geometry, center, steps, loops, a, b, rotation)
         });
 
         var steps = 64;
-        var loops = 10;
-        {
+        var tool_r = 0.5; // 1mm tool
+        //var loops = 10;
+        var stepover = 0.5; //mm
+        if(stepover >= (tool_r*2))
+            alert("Cannot have 100% stepover!");
+        var final_radius = 11;   //22mm diameter circle
+        var radius = final_radius-tool_r; //mm
+        var loops = radius/((tool_r*2)-stepover);
+        //var radius = /*a*/0 + /*b*/10 * ((loops * 2*Math.PI) + /*start_theta*/0);
+        var b = radius/(loops * 2*Math.PI);
+        document.writeln(radius);
+        document.writeln(b);
+        {   // tool path
             var geometry = new THREE.Geometry();
-            spiral(geometry, {x:0,y:0}, steps, loops, 0, 10, 0);
-            var line = new THREE.Line(geometry, blue);
+            spiral(geometry, {x:0,y:0}, steps, loops, 0, b, 0);
+            var line = new THREE.Line(geometry, red);
             scene.add(line);
+
+            geometry = new THREE.CircleGeometry( radius, 64 );
+            geometry.vertices.shift();
+            scene.add( new THREE.Line( geometry, red ) );
         }
+        {   // tool
+            var geometry = new THREE.CircleGeometry( tool_r, 64 );
+            geometry.vertices.shift();
+            scene.add( new THREE.Line( geometry, green ) );
+        }
+        {   // final radius
+            var geometry = new THREE.CircleGeometry( final_radius, 64 );
+            geometry.vertices.shift();
+            scene.add( new THREE.Line( geometry, blue ) );
+        }
+        if(false)
         {
             var geometry = new THREE.Geometry();
-            spiral(geometry, {x:0,y:0}, steps, loops, 0, 10, 2*3.14159*10);
+            spiral(geometry, {x:0,y:0}, steps, loops, 0, b, 2*3.14159*10);
             var line = new THREE.Line(geometry, green);
             scene.add(line);
         }
