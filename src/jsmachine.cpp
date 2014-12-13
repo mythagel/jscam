@@ -1302,40 +1302,41 @@ Handle<Value> plunge(const Arguments&)
 	}
 	return {};
 }
+
+auto word2js(const gcode::Word& word) -> Handle<Object>
+{
+    auto js_word = Object::New();
+
+    auto c = to_string(word);
+    js_word->Set(String::NewSymbol(c.c_str(), c.size()), Number::New(word.Value()));
+
+    if(!word.Comment().empty())
+        js_word->Set("comment"_sym, String::New(word.Comment().c_str(), word.Comment().size()));
+
+    return js_word;
+};
+auto block2js(const Machine::block_t& block) -> Handle<Array>
+{
+    if(block.empty())
+        return Array::New();
+
+    auto js_block = Array::New(block.words.size() + (block.comment.empty() ? 0 : 1));
+
+    for(std::size_t w = 0; w != block.words.size(); ++w)
+        js_block->Set(w, word2js(block.words[w]));
+
+    if(!block.comment.empty())
+        js_block->Set(block.words.size(), String::New(block.comment.c_str(), block.comment.size()));
+
+    return js_block;
+};
+
 Handle<Value> generate(const Arguments& args)
 {
 	HandleScope handle_scope;
 	auto machine = js::unwrap<Machine>(args);
 	
 	using gcode::Word;
-	
-	auto word2js = [](const Word& word) -> Handle<Object>
-	{
-		auto js_word = Object::New();
-		
-		auto c = to_string(word);
-		js_word->Set(String::NewSymbol(c.c_str(), c.size()), Number::New(word.Value()));
-		
-		if(!word.Comment().empty())
-			js_word->Set("comment"_sym, String::New(word.Comment().c_str(), word.Comment().size()));
-		
-		return js_word;
-	};
-	auto block2js = [word2js](const Machine::block_t& block) -> Handle<Array>
-	{
-		if(block.empty())
-			return Array::New();
-		
-		auto js_block = Array::New(block.words.size() + (block.comment.empty() ? 0 : 1));
-
-		for(std::size_t w = 0; w != block.words.size(); ++w)
-			js_block->Set(w, word2js(block.words[w]));
-		
-		if(!block.comment.empty())
-			js_block->Set(block.words.size(), String::New(block.comment.c_str(), block.comment.size()));
-		
-		return js_block;
-	};
 	
 	try
 	{
@@ -1562,6 +1563,32 @@ Handle<Value> machine_ctor(const Arguments& args)
 			}
 		}
 		
+        {   // hold reference for gcode callback.
+            auto object = Persistent<Object>::New(args.This());
+            object->Set("on_gcode"_sym, config->Get("on_gcode"_sym));
+            auto gcode_callback = [object](const std::vector<gcode::Word>& line, const std::string& comment)
+            {
+                auto fn = object->Get("on_gcode"_sym);
+                if(fn->IsFunction())
+                {
+                    Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
+                    Handle<Value> args[1];
+
+                    auto js_block = Array::New(line.size() + (comment.empty() ? 0 : 1));
+
+                    for(std::size_t w = 0; w != line.size(); ++w)
+                        js_block->Set(w, word2js(line[w]));
+
+                    if(!comment.empty())
+                        js_block->Set(line.size(), String::New(comment.c_str(), comment.size()));
+                    args[0] = js_block;
+                    func->Call(object, 1, args);
+                }
+            };
+
+            machine_config.gcode_callback = gcode_callback;
+        }
+
 		auto machine = machine_config.Construct();
 		js::wrap_object<Machine>(args.This(), machine.release());
 	}
