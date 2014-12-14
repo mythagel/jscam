@@ -55,6 +55,7 @@ private:
 	Position program_pos;
 
 	double            _spindle_speed = 0.0;
+	double            _spindle_mode = 0.0;
 	Direction   _spindle_turning = Direction::Stop;
 	double            _traverse_rate = 60;
 
@@ -522,6 +523,27 @@ private:
 	virtual double spindle_speed() const override
 	{
 	    return _spindle_speed;
+	}
+	virtual void spindle_mode(double r) override
+	{
+    	HandleScope handle_scope;
+
+        auto fn = object->Get("on_spindle_mode"_sym);
+        if(fn->IsFunction())
+        {
+            Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(fn);
+
+            Handle<Value> args[1];
+            args[0] = Number::New(r);
+            
+            func->Call(object, 1, args);
+        }
+        
+        _spindle_mode = r;
+	}
+	virtual double spindle_mode() const override
+	{
+	    return _spindle_mode;
 	}
 	virtual void spindle_orient(double orientation, Direction direction) override
 	{
