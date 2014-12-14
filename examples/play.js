@@ -26,12 +26,30 @@ var mill = {
 var stock = {};
 stock.model = make_box({x:0, y:0, z:0}, {x:50, y:50, z:10});
 
+var steps = [];
+
 var ngc = new rs274ngc();
 ngc.on_rapid = function(pos) {
-    print("Rapid: " + JSON.stringify(pos));
+    pos.motion = "rapid";
+    steps.push(pos);
 }
 ngc.on_linear = function(pos) {
-    print("Linear: " + JSON.stringify(pos));
+    pos.motion = "linear";
+    steps.push(pos);
+}
+ngc.on_arc = function(end0, end1, axis0, axis1, rotation, end_point, a, b, c) {
+    var pos = {};
+    pos.motion = "arc";
+    pos.end0 = end0;
+    pos.end1 = end1;
+    pos.axis0 = axis0;
+    pos.axis1 = axis1;
+    pos.rotation = rotation;
+    pos.end_point = end_point;
+    pos.a = a;
+    pos.b = b;
+    pos.c = c;
+    steps.push(pos);
 }
 ngc.init();
 
