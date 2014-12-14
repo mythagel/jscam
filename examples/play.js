@@ -27,18 +27,19 @@ var stock = {};
 stock.model = make_box({x:0, y:0, z:0}, {x:50, y:50, z:10});
 
 var ngc = new rs274ngc();
-ngc.on_units = function(u) {
-    print("Units " + u);
+ngc.on_rapid = function(pos) {
+    print("Rapid: " + JSON.stringify(pos));
 }
 ngc.on_linear = function(pos) {
-    print("Linear: " + pos.x);
+    print("Linear: " + JSON.stringify(pos));
 }
 ngc.init();
 
 
 mill.on_gcode = function(line) {
-    print(JSON.stringify(line));
-    var res = ngc.read(GCODE.generate_line(line));
+    var code = GCODE.generate_line(line);
+    print(code)
+    var res = ngc.read(code);
     res = ngc.execute();
 }
 
@@ -80,4 +81,4 @@ function polygon(sides, size, center, depth)
 polygon(6, 10, {x:25, y:25}, 3);
 
 m.stock.write_off("play.off");
-print(GCODE.generate(m.generate()));
+//print(GCODE.generate(m.generate()));
