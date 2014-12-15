@@ -55,6 +55,50 @@ Position_Cartesian Position_Cartesian_js(Handle<Object> o)
     pos.Z = units::length{js::to_double(o->Get("z"_sym)) * units::millimeters};
     return pos;
 }
+math::vector_3 vector3_js(Handle<Object> o)
+{
+    math::vector_3 v;
+    v.x = js::to_double(o->Get("x"_sym));
+    v.y = js::to_double(o->Get("y"_sym));
+    v.z = js::to_double(o->Get("z"_sym));
+    return v;
+}
+
+static Handle<Object> wrap_step(const path::step& step)
+{
+    using units::length_mm;
+    auto s = Object::New();
+
+    auto pos = Object::New();
+    pos->Set("x"_sym, Number::New(length_mm(step.position.x).value()));
+    pos->Set("y"_sym, Number::New(length_mm(step.position.y).value()));
+    pos->Set("z"_sym, Number::New(length_mm(step.position.z).value()));
+    s->Set("pos"_sym, pos);
+
+    auto quat = Object::New();
+    quat->Set("x"_sym, Number::New(step.orientation.R_component_2()));
+    quat->Set("y"_sym, Number::New(step.orientation.R_component_3()));
+    quat->Set("z"_sym, Number::New(step.orientation.R_component_4()));
+    quat->Set("a"_sym, Number::New(step.orientation.R_component_1()));
+    s->Set("quat"_sym, quat);
+
+    return s;
+}
+static Handle<Object> wrap_path(const path::path_t& path)
+{
+    using units::length_mm;
+    using units::plane_angle_deg;
+    auto p = Object::New();
+
+    auto steps = Array::New(path.path.size());
+    for(std::size_t s = 0; s < path.path.size(); ++s)
+        steps->Set(s, wrap_step(path.path[s]));
+    p->Set("path"_sym, steps);
+    p->Set("length"_sym, Number::New(length_mm(path.length).value()));
+    p->Set("angular_length"_sym, Number::New(plane_angle_deg(path.angular_length).value()));
+
+    return p;
+}
 
 Handle<Value> expand_linear(const Arguments& args)
 {
@@ -75,7 +119,7 @@ Handle<Value> expand_linear(const Arguments& args)
         auto steps_per_mm = js::to_uint32(args[3]);
 
         auto path = path::expand_linear(start, end, geometry, steps_per_mm);
-		auto result = Object::New();
+		auto result = wrap_path(path);
 		
 		return handle_scope.Close(result);
 	}
@@ -108,7 +152,7 @@ Handle<Value> expand_rotary(const Arguments& args)
         auto steps_per_degree = js::to_uint32(args[3]);
 
         auto path = path::expand_rotary(start, end, geometry, steps_per_degree);
-		auto result = Object::New();
+		auto result = wrap_path(path);
 		
 		return handle_scope.Close(result);
 	}
@@ -122,7 +166,7 @@ Handle<Value> expand_rotary(const Arguments& args)
 	}
 }
 
-/*Handle<Value> expand_arc(const Arguments& args)
+Handle<Value> expand_arc(const Arguments& args)
 {
 	HandleScope handle_scope;
 	
@@ -131,7 +175,10 @@ Handle<Value> expand_rotary(const Arguments& args)
         auto start = Position_js(args[0]->ToObject());
         auto end = Position_js(args[1]->ToObject());
         auto center = Position_Cartesian_js(args[2]->ToObject());
-        auto axes = js::to_string(args[3]);
+        auto clockwise = js::to_bool(args[3]);
+        auto plane = vector3_js(args[4]->ToObject());
+        auto turns = js::to_double(args[5]);
+        auto axes = js::to_string(args[6]);
 	    limits::AvailableAxes geometry;
         {
             std::vector<Axis::Type> available;
@@ -141,8 +188,8 @@ Handle<Value> expand_rotary(const Arguments& args)
         }
         auto steps_per_degree = js::to_uint32(args[3]);
 
-        auto path = path::expand_arc(start, end, center, geometry, steps_per_degree);
-		auto result = Object::New();
+        auto path = path::expand_arc(start, end, center, clockwise ? path::ArcDirection::Clockwise : path::ArcDirection::CounterClockwise, plane, turns, geometry, steps_per_degree);
+		auto result = wrap_path(path);
 		
 		return handle_scope.Close(result);
 	}
@@ -154,13 +201,13 @@ Handle<Value> expand_rotary(const Arguments& args)
 	{
 		return ThrowException(String::New(ex.what()));
 	}
-}*/
+}
 
 void bind(v8::Handle<v8::Object> global)
 {
 	global->Set("expand_linear"_sym, FunctionTemplate::New(expand_linear)->GetFunction());
 	global->Set("expand_rotary"_sym, FunctionTemplate::New(expand_rotary)->GetFunction());
-	//global->Set("expand_arc"_sym, FunctionTemplate::New(expand_arc)->GetFunction());
+	global->Set("expand_arc"_sym, FunctionTemplate::New(expand_arc)->GetFunction());
 }
 
 }

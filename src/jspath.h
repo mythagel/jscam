@@ -47,12 +47,7 @@ path_t expand_linear(start {xyzabc}, end {xyzabc}, geometry "XYZABC", steps_per_
 
 path_t expand_rotary(start {xyzabc}, end {xyzabc}, geometry "XYZABC", steps_per_degree = 10);
 
-ArcDirection = {
-	Clockwise = 0,
-	CounterClockwise = 1
-};
-
-path_t expand_arc(start {xyzabc}, end {xyzabc}, center {xyz}, ArcDirection dir, plane {xyz}, turns 1, geometry "XYZABC", steps_per_mm = 10);
+path_t expand_arc(start {xyzabc}, end {xyzabc}, center {xyz}, clockwise = true, plane {xyz}, turns 1, geometry "XYZABC", steps_per_mm = 10);
 
 
 */
