@@ -30,26 +30,56 @@ var steps = [];
 
 var ngc = new rs274ngc();
 ngc.on_rapid = function(pos) {
-    pos.motion = "rapid";
-    steps.push(pos);
+    var path = expand_linear(ngc.current_position(), pos, mill.axes, 10);
+    path.motion = "rapid";
+    steps.push(path);
+    print(JSON.stringify(path));
 }
 ngc.on_linear = function(pos) {
-    pos.motion = "linear";
-    steps.push(pos);
+    var path = expand_linear(ngc.current_position(), pos, mill.axes, 10);
+    path.motion = "linear";
+    steps.push(path);
+    print(JSON.stringify(path));
 }
-ngc.on_arc = function(end0, end1, axis0, axis1, rotation, end_point, a, b, c) {
-    var pos = {};
-    pos.motion = "arc";
-    pos.end0 = end0;
-    pos.end1 = end1;
-    pos.axis0 = axis0;
-    pos.axis1 = axis1;
-    pos.rotation = rotation;
-    pos.end_point = end_point;
-    pos.a = a;
-    pos.b = b;
-    pos.c = c;
-    steps.push(pos);
+ngc.on_arc = function(end0, end1, axis0, axis1, loops, end_point, a, b, c) {
+    var end = {};
+    var center = {x:0,y:0,z:0};
+    var plane = {x:0,y:0,z:0};
+
+    switch(ngc.plane()) {
+        case ngc.Plane.XY:
+            end.x = end0;
+            end.y = end1;
+            end.z = end_point;
+            center.x = axis0;
+            center.y = axis1;
+            plane.z = 1;
+            break;
+        case ngc.Plane.YZ:
+            end.x = end_point;
+            end.y = end0;
+            end.z = end1;
+            center.y = axis0;
+            center.z = axis1;
+            plane.x = 1;
+            break;
+        case ngc.Plane.XZ:
+            end.x = end1;
+            end.y = end_point;
+            end.z = end0;
+            center.x = axis1;
+            center.z = axis0;
+            plane.y = 1;
+            break;
+    }
+    end.a = a;
+    end.b = b;
+    end.c = c;
+
+    var path = expand_arc(ngc.current_position(), end, center, loops<0, plane, Math.abs(loops), mill.axes, 10);
+    path.motion = "arc";
+    steps.push(path);
+    print(JSON.stringify(path));
 }
 ngc.init();
 
@@ -69,6 +99,9 @@ m.spindle_on(250);
 
 m.rapid({z:11});
 m.rapid({x:0, y:0});
+
+m.rapid({x:25, y:25});
+m.arc("clockwise", {x: 25, y: 25, z: 11, i:-2, j:-2, turns: 1});
 
 //for(var i = 0; i < 11; ++i)
 //{
