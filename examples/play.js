@@ -33,13 +33,13 @@ ngc.on_rapid = function(pos) {
     var path = expand_linear(ngc.current_position(), pos, mill.axes, 10);
     path.motion = "rapid";
     steps.push(path);
-    print(JSON.stringify(path));
+//    print(JSON.stringify(path));
 }
 ngc.on_linear = function(pos) {
     var path = expand_linear(ngc.current_position(), pos, mill.axes, 10);
     path.motion = "linear";
     steps.push(path);
-    print(JSON.stringify(path));
+//    print(JSON.stringify(path));
 }
 ngc.on_arc = function(end0, end1, axis0, axis1, loops, end_point, a, b, c) {
     var end = {};
@@ -79,7 +79,7 @@ ngc.on_arc = function(end0, end1, axis0, axis1, loops, end_point, a, b, c) {
     var path = expand_arc(ngc.current_position(), end, center, loops<0, plane, Math.abs(loops), mill.axes, 10);
     path.motion = "arc";
     steps.push(path);
-    print(JSON.stringify(path));
+//    print(JSON.stringify(path));
 }
 ngc.init();
 
@@ -133,3 +133,19 @@ polygon(6, 10, {x:25, y:25}, 3);
 
 m.stock.write_off("play.off");
 //print(GCODE.generate(m.generate()));
+
+print("function model(scene) {");
+print("  var geometry = new THREE.Geometry();");
+steps.forEach(function(step) {
+    step.path.forEach(function(pos) {
+        print("  geometry.vertices.push(new THREE.Vector3(" + pos.pos.x + "," + pos.pos.y + "," + pos.pos.z + "));");
+    });
+    print("  {");
+    if(step.motion == "rapid")
+        print("    var line = new THREE.Line(geometry, red);");
+    else
+        print("    var line = new THREE.Line(geometry, green);");
+    print("    scene.add(line);");
+    print("  }");
+});
+print("}");
