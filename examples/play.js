@@ -101,7 +101,7 @@ m.rapid({z:11});
 m.rapid({x:0, y:0});
 
 m.rapid({x:25, y:25});
-m.arc("clockwise", {x: 25, y: 25, z: 11, i:-2, j:-2, turns: 1});
+m.arc("clockwise", {x: 25, y: 25, z: 3, i:-2, j:-2, turns: 5});
 
 //for(var i = 0; i < 11; ++i)
 //{
@@ -135,12 +135,12 @@ m.stock.write_off("play.off");
 //print(GCODE.generate(m.generate()));
 
 print("function model(scene) {");
-print("  var geometry = new THREE.Geometry();");
 steps.forEach(function(step) {
-    step.path.forEach(function(pos) {
-        print("  geometry.vertices.push(new THREE.Vector3(" + pos.pos.x + "," + pos.pos.y + "," + pos.pos.z + "));");
-    });
     print("  {");
+    print("    var geometry = new THREE.Geometry();");
+    step.path.forEach(function(pos) {
+        print("    geometry.vertices.push(new THREE.Vector3(" + pos.pos.x + "," + pos.pos.y + "," + pos.pos.z + "));");
+    });
     if(step.motion == "rapid")
         print("    var line = new THREE.Line(geometry, red);");
     else
