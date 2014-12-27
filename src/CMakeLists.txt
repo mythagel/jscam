@@ -5,7 +5,7 @@ ENDIF()
 # it is probably incredibly obvious why this doesn't work
 # but i'll have to look into it later.
 #INCLUDE_DIRECTORIES(${CXXCAM_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/deps/cxxcam/include)
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/deps/cxxcam/include ${PROJECT_SOURCE_DIR}/deps/rs274ngc/include)
 
 ADD_EXECUTABLE(${PROJECT_NAME} jscam.cpp jsmachine.cpp jsgeom.cpp jsrs274ngc.cpp js.cpp platform.cpp jspath.cpp)
 

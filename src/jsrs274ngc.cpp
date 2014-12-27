@@ -28,7 +28,7 @@
 #include <vector>
 #include <cmath>
 #include <cstring>
-#include "rs274ngc/rs274ngc.hh"
+#include "rs274ngc.hh"
 
 using namespace v8;
 
