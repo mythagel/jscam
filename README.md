@@ -12,4 +12,4 @@ See [rc-car](https://github.com/mythagel/rc-car) as the development example of p
 `jscam` is usable as a procedural gcode generator.
 `partc` is not yet operational. Procedural code for machining operations is not yet developed and interfaces for model feedback from `cxxcam` for motion planning do not yet exist.
 
-Under active development.
+**DEPRECATED IN FAVOUR OF nc_tools**
