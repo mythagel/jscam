@@ -275,7 +275,7 @@ Handle<Value> write(const Arguments& args)
 			return ThrowException(String::New("Unable to open file for writing."));
 	
 		auto content = to_string(args[1]);
-		bool result = ofs.write(content.c_str(), content.size());
+		bool result = !ofs.write(content.c_str(), content.size()).fail();
 		
 		return handle_scope.Close(Boolean::New(result));
 	}

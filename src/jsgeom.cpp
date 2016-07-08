@@ -238,10 +238,10 @@ Handle<Value> to_object(const Arguments& args)
 		for(std::size_t f = 0; f != poly_object.faces.size(); ++f)
 		{
 			auto& fce = poly_object.faces[f];
-			auto face = Array::New(fce.size());
+			auto face = Array::New(fce.vertices.size());
 		
 			for(std::size_t f = 0; f != poly_object.faces.size(); ++f)
-				face->Set(f, Number::New(fce[f]));
+				face->Set(f, Number::New(fce.vertices[f]));
 		
 			faces->Set(f, face);
 		}
